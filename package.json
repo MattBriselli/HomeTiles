@@ -1,0 +1,24 @@
+{
+  "name": "newtab",
+  "version": "1.0.0",
+  "description": "A chrome plugin by Brslli Labs<br/> Lead developer: Matt Briselli<br/>",
+  "main": "newTab.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattBriselli/HomeTiles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MattBriselli/HomeTiles/issues"
+  },
+  "homepage": "https://github.com/MattBriselli/HomeTiles#readme",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "moment": "^2.19.2",
+    "requirejs": "^2.3.5"
+  }
+}

@@ -1,0 +1,17 @@
+body {
+    background-color: blue;
+}
+
+.editMode {
+    position: absolute;
+    display: inline-block;
+    width: 10px;
+    height: 25px;
+    top: 5px;
+    right: 5px;
+    
+    i {
+        font-family: FontAwesome;
+        cursor: pointer;
+    }
+}
