@@ -1,0 +1,14 @@
+.editMode {
+    position: absolute;
+    display: inline-block;
+    width: 10px;
+    height: 25px;
+    top: 5px;
+    right: 5px;
+}
+.editMode i {
+    font-family: FontAwesome;
+}
+body {
+    background-color: blue;
+}
