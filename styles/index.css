@@ -2,16 +2,21 @@ body {
     background-color: blue;
 }
 
-.editMode {
+.editMode i {
+    font-family: FontAwesome;
     position: absolute;
-    display: inline-block;
-    width: 10px;
-    height: 25px;
-    top: 5px;
-    right: 5px;
-    
-    i {
-        font-family: FontAwesome;
-        cursor: pointer;
-    }
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    z-index: 5;
+}
+.editPanel {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    background-color: pink;
+    right: -16%;
+    z-index: 4;
+    margin-top: -15px;
+    border: 1px solid #ccc;
 }
