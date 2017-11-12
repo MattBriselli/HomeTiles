@@ -118,6 +118,12 @@ require([
                             windDir(wData["wind"]["deg"]));
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
                     }
+                    if (wData["rain"]) {
+                        fB.find(".rain").text()
+                    }
+                    if (wData["snow"]) {
+                        fB.find(".snow").text()
+                    }
                     fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
                     // fB.find(".feel").html("Feels Like: " +
                         // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
@@ -226,7 +232,7 @@ require([
             _prefLoader = function _prefLoader(data) {
                 if (data && data.length != 0) {
                     for (index in data) {
-                        $(".editBody input[name='"+data[index]+"']").attr("checked", "checked");
+                        $(".editBody input."+data[index]).attr("checked", "checked");
                     }
                 }
             },

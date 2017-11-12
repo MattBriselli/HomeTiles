@@ -56,7 +56,6 @@ body {
     display: inline-block;
     margin: 5px 10px 5px 18%;
 }
-
 .editBody .subtitle {
     font-size: 15px;
     font-weight: bold;
@@ -72,13 +71,16 @@ body {
 .editBody .rButton div, .editBody .rButton input {
     display: inline-block;
 }
+.editBody .background input {
+    width: 85%;
+    margin: 5px 0px 0px 7%;
+}
 .editBody .reset {
     cursor: pointer;
     padding: 3px;
     border: 1px solid black;
     border-radius: 5px;
     width: 104px;
-
 }
 /*
  * END STYLES FOR THE LEFTBAR
@@ -196,7 +198,7 @@ body {
 .tile .front .top img {
     /*condition image*/
     display: inline-block;
-    position: fixed;
+    position: absolute;
     height: 130px;
     width: 130px;
     margin-top: 10px;
