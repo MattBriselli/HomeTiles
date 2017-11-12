@@ -38,7 +38,7 @@ requirejs([
                             url += "?zip=" + _stored["weather"+index]["zipcode"] + "," + _stored["weather"+index]["country"];
                         } else {
                             //lets go with malibu
-                            url += "?zip=22201,us"
+                            url += "?zip=90210,us"
                         }
                         url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
 
@@ -73,14 +73,17 @@ requirejs([
                     //Load tile's top stuff
                     tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
                     tile.find(".conditions").text(wData["weather"][0]["description"]);
+                    tile.find(".clouds").text("Cloud Cover: " + wData["clouds"]["all"] +"%");
                     var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
                     condSrc += wData["weather"][0]["icon"] + ".png";
                     tile.find("img.condition").attr("src", condSrc);
                     //Load tile's bottom left
                     var fB = tile.find(".front .bottom");
                     fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
-                    fB.find(".high").html(tempConvert(wData["main"]["temp_max"]));
-                    fB.find(".low").html(tempConvert(wData["main"]["temp_min"]));
+                    fB.find(".high").html(tempConvert(wData["main"]["temp_max"])+"<br/>High");
+                    fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
+                    fB.find(".sunrise div").html(moment.utc(wData["sys"]["sunrise"]).format("HH:MM"));
+                    fB.find(".sunset div").html(moment.utc(wData["sys"]["sunset"]).format("HH:MM"));
                     _tileCommon(tile, index);
                 }
                 function tempConvert(temp, scale) {

@@ -5,7 +5,13 @@ body {
     position: absolute;
     margin: 11px 0px 0px 50px;
 }
-
+/*
+ * END GENERAL STYLES
+ *
+ *
+ *
+ * STYLES FOR THE LEFTBAR
+ */
 .editMode i {
     font-family: FontAwesome;
     position: absolute;
@@ -28,11 +34,20 @@ body {
     width: 100%;
     height: 100%;
 }
-
-.editPanel .title {
+.editBody .title {
     font-size: 24px;
     margin: 15px 0 0 21%;
 }
+.editBody {
+    
+}
+/*
+ * END STYLES FOR THE LEFTBAR
+ *
+ *
+ *
+ * GENERAL STYLES FOR THE TILES
+ */
 .tile {
     display: inline-block;
     height: 350px;
@@ -72,18 +87,21 @@ body {
     position: relative;
     width: 100%;
 }
-
-
-
-/*WEATHER STYLES*/
+/*
+ * END GENERAL STYLES FOR THE TILES
+ *
+ *
+ *
+ * STYLES FOR THE WEATHER TILE
+ */
 .tile .weather .front .top {
-    height: 30%;
+    height: 40%;
     width: 100%;
     background-color: lightgrey;
     z-index: 2;
 }
 .tile .weather .front .bottom {
-    height: 70%;
+    height: 60%;
     width: 100%;
     background-color: aquamarine;
 }
@@ -94,32 +112,44 @@ body {
     display: inline-block;
 }
 .tile .temp {
-    font-size: 45px;
+    font-size: 40px;
     width: auto;
-    margin-top: 40%;
+    margin: 40% 0 0 8%;
+    font-weight: bold;
+}
+.tile .low, .tile .high {
+    display: inline-block;
+    width: auto;
+    font-size: 14px;
 }
 .tile .low {
-
+    margin-left: 8%;
+    float: left;
 }
 .tile .high {
-
+    float: right;
+    margin-right: 5%;
 }
-.tile .weather .front .bottom .right {
+.weather .sunrise, .weather .sunset {
+    width: auto;
+    display: inline-block;
+}
+.weather .front .bottom .right {
     height: 100%;
     width: 50%;
     float: right;
     display: inline-block;
 }
-.tile .weather .location {
+.weather .location {
     font: 24px Arial;
-    margin: 10% 0 0 3%;
+    margin: 15% 0 0 3%;
 }
-.tile .location, .tile .conditions {
+.tile .location, .tile .conditions, .tile .clouds {
     width: 50%;
     display: inline-block;
     float: left;
 }
-.tile .conditions {
+.tile .conditions, .tile .clouds {
     text-transform: capitalize;
     font-size: 14px;
     margin-left: 3%;
@@ -128,13 +158,17 @@ body {
     /*condition image*/
     display: inline-block;
     position: fixed;
-    height: 115px;
-    width: 115px;
+    height: 130px;
+    width: 130px;
+    margin-top: 10px;
 }
-/*END WEATHER STYLES*/
-
-
-/*STOCK STYLES*/
+/*
+ * END STYLES FOR THE WEATHER TILE
+ *
+ *
+ *
+ * STYLES FOR THE STOCK TILE
+ */
 .tile .stock {
 }
 .tile .back {
