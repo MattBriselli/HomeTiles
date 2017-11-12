@@ -24,13 +24,10 @@ requirejs([
                 _bindListener();
             },
             _weatherCall = function _weatherCall(index) {
-                var tempData = {"index": index};
-                $.get("tileTmpl/weather.tmpl", function (data) {
-                    
+                $.get("tiles/weather.html", function(tmpl) {
                     if (_stored.hasOwnProperty("weather") && !oldData(_stored["weather"])) {
-                        //there's old data or no data
-                        tempData["weather"] = _stored["weather"];
-                        $(".tileBody").append(data);
+                        //there's old data that's still good
+                        tileStyler(_stored["weather"], tmpl);
                         
                     } else {
                         var url = "http://api.openweathermap.org/data/2.5/weather";
@@ -51,10 +48,11 @@ requirejs([
                         .done(function(wData) {
                             wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
                             _dataStore("weather", wData);
+                            tileStyler(wData, tmpl);
                         })
                         .fail(function(error) {
                             console.log("ERROR");
-                            console.log("FAILED TO GET WEATHER data");
+                            console.log("FAILED TO GET WEATHER DATA");
                         });
                     }
                 });
@@ -68,21 +66,35 @@ requirejs([
                         return (now.diff(old, "minutes") > 30);
                     }
                 }
+                function tileStyler(wData, tmpl) {
+                    console.log(wData, tmpl);
+                    $(".tileBody").append(tmpl);
+                }
             },
             _stockLoader = function _stockLoader(index) {
-                var apiKey = "LRRFZ6VVIF8ODL1D";
-                console.log(apiKey);
+                $.get("tiles/stock.html", function(tmpl) {
+                    var apiKey = "LRRFZ6VVIF8ODL1D";
+                    console.log(apiKey);
+                    $(".tileBody").append(tmpl);
+                });
+            },
+            _spotifyLoader = function _spotifyLoader(index) {
+
+
             },
             _bindListener = function _bindListener() {
                 $(".editMode .fa-pencil").on("click", function() {
                     if ($(".editPanel").css("right") == "0px" || $(".editPanel").css("right") == "0%") {
                         direction = '-19%';
+                        $(".tile").removeClass("sort");
                     } else {
                         direction = '0%';
+                        $(".tile").addClass("sort");
                     }
                     $(".editPanel").animate({
                         "right": direction
                     }, 500);
+                    $(".tile.sort").off("mousedown", _tileSort).on("mousedown", _tileSort);
                 });
                 $(".editMode .fa").on("mouseover", function(e) {
 
@@ -129,6 +141,11 @@ requirejs([
                     _stored[keyS] = value;
                     _tileLoader(value);
                 });
+            }
+            _tileSort = function _tileSort(e) {
+                console.log(e.currentTarget);
+                $()
+
             };
         $(document).ready(function() {
             _init();
