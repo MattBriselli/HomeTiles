@@ -27,18 +27,17 @@ require([
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
-                    console.log(_stored["weather"+index]);
-                    if (_stored.hasOwnProperty("weather"+index) && !oldData(_stored["weather"+index])) {
+                    if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
                         //there's old data that's still good
-                        tileStyler(_stored["weather"+index], tmpl);
+                        tileStyler(_stored["weather"][index], tmpl);
                         changer();
                         
                     } else {
                         var url = "http://api.openweathermap.org/data/2.5/weather";
-                        if (_stored.hasOwnProperty("weather"+index) && _stored["weather"+index].hasOwnProperty("zipcode") &&
-                            _stored["weather"+index].hasOwnProperty("country")) {
+                        if (_stored["weather"] && _stored["weather"][index] && _configs["weather"] && _configs["weather"][index] &&
+                            _configs["weather"][index]["zipcode"] && _configs["weather"][index]["country"]) {
                             //the user has assigned values
-                            url += "?zip=" + _stored["weather"+index]["zipcode"] + "," + _stored["weather"+index]["country"];
+                            url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
                         } else {
                             //lets go with malibu
                             url += "?zip=90210,us"
@@ -51,7 +50,10 @@ require([
                         })
                         .done(function(wData) {
                             wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
-                            _dataStore("weather"+index, wData);
+                            var newObj = {"weather": {}};
+                            newObj["weather"][index] = wData;
+
+                            _dataStore(newObj);
                             tileStyler(wData, tmpl);
                             changer();
                         })
@@ -74,16 +76,20 @@ require([
                 function changer() {
                     $(".weather .back button").on("click", function(e) {
                         var target = $(e.currentTarget),
-                            index = target.parents(".tile").data("index"),
+                            ind = target.parents(".tile").data("index"),
                             zip = target.parent().find(".zipcode").val(),
                             count = target.parent().find(".country").val();
                         if (zip != "" && count != "") {
-                            chrome.storage.sync.remove("weather"+index, function() {
-                                _stored["weather"+index] = {};
-                                _stored["weather"+index]["zipcode"] = zip;
-                                _stored["weather"+index]["country"] = count;
-                                _dataStore("weather"+index, _stored["weather"+index], index);
-                            });
+                            _configs["weather"][ind]["zipcode"] = zip;
+                            _configs["weather"][ind]["country"] = count;
+
+                            var newObj = {"weather": {}};
+                            newObj["weather"][ind] = _stored["weather"][ind]
+
+                            _stored["weather"][ind] = {};
+                            
+                            _dataStore(newObj, ind);
+                            _weatherCall(ind);
                         }
                     });
                 }
@@ -189,7 +195,9 @@ require([
                 $(".editMode .fa").on("mouseover", function(e) {
 
                 });
-                $(".reset").on("click", chrome.storage.sync.clear());
+                $(".reset").on("click", function() {
+                    chrome.storage.sync.clear()
+                });
             },
             _tileLoader = function _tileLoader(data, index) {
                 if (typeof index == "number") {
@@ -200,6 +208,7 @@ require([
                     });
                 }
                 function switcher(elem, index) {
+                    console.log(elem, index);
                     switch (elem) {
                         case "weather":
                             _weatherCall(index);
@@ -225,37 +234,36 @@ require([
                     //null loads all of the data
                     console.log("Data Loaded: ");
                     console.log(items);
-                    if (items) {
-                        _prefs = items["prefs"];
-                        _configs = items["configs"];
-                        if (items.hasOwnProperty("prefs")) {
-                            _prefLoader(items["prefs"]);
-                        } else {
-                            _dataStore("prefs", {"unit": "imperial"});
-                            _prefs = {"unit": "imperial"};
-                        }
-                        if (items.hasOwnProperty("tiles")) {
-                            _stored = items;
-                            _tileLoader(items["tiles"]);
-                        } else {
-                            _dataStore("tiles", ["weather", "stock"]);
-                            _tileLoader(["weather", "stock"]);
-                        }
+                    _prefs = items["prefs"];
+                    _configs = items["configs"];
+                    if (items.hasOwnProperty("prefs")) {
+                        _prefLoader(items["prefs"]);
                     } else {
-                        //the user hasn't set preferences, let's give them some defaults
-                        _dataStore("prefs", [{"unit": "imperial"}]);
-                        _dataStore("tiles", ["weather", "stock"]);
+                        _dataStore( {"prefs": {"unit": "imperial"}} );
+                        _prefs = {"unit": "imperial"};
+                    }
+                    if (!items.hasOwnProperty("configs")) {
+                        var loadObj = {"configs": {"weather": {0: {}}}};
+                        loadObj["configs"]["weather"][0]["country"] = "us";
+                        loadObj["configs"]["weather"][0]["zipcode"] = 90210;
+                        _dataStore(loadObj);
+                        _configs = loadObj["configs"];
+                    }
+
+                    if (items.hasOwnProperty("tiles")) {
+                        _stored = items;
+                        _tileLoader(items["tiles"]);
+                    } else {
+                        _dataStore( {"tiles": ["weather", "stock"]} );
                         _tileLoader(["weather", "stock"]);
                     }
                 });
             },
-            _dataStore = function _dataStore(keyS, value, index) {
-                data = {};
-                //weird things happened with single line object init and assignment
-                data[keyS] = value;
-                chrome.storage.sync.set(data, function() {
+            _dataStore = function _dataStore(obj, index) {
+                chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log("STORED: "+keyS+" as "+value);
+                    console.log(obj);
+                    console.log("STORED: "+obj+" and "+index);
                 });
             }
             _tileSort = function _tileSort(e) {
