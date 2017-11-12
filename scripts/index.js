@@ -21,7 +21,6 @@ require([
              */
             _init = function _init() {
                 _stored = {};
-
                 _dataLoader(null);
                 _bindListener();
             },
@@ -178,9 +177,24 @@ require([
                 newTile.attr("data-index", index);
                 newTile.css("backgroundColor", "yellow");
 
-                $(".tile[data-index='"+index+"']").length != 0 ?
-                    $(".tile[data-index='"+index+"']").replaceWith(newTile) :
-                    $(".tileBody").append(newTile);
+                if ($(".tile[data-index='"+index+"']").length != 0) {
+                    //a simple replacement
+                    $(".tile[data-index='"+index+"']").replaceWith(newTile);
+                } else {
+                    //order matters, the user sets that preference
+                    if (index == 0) {
+                        //0 will always be first
+                        $(".tileBody").prepend(newTile);
+                    } else if ($(".tile[data-index='"+parseInt(index-1)+"']").length != 0) {
+                        $(".tile[data-index='"+parseInt(index-1)+"']").after(newTile);
+                    } else if ($(".tile[data-index='"+parseInt(index+1)+"']").length != 0) {
+                        $(".tile[data-index='"+parseInt(index+1)+"']").before(newTile);
+                    } else {
+                        //very weird order, just stick it at the end and hope for the best
+                        $(".tileBody").append(newTile);
+                    }
+                }
+                    
             },
             _bindListener = function _bindListener() {
                 $(".editMode .fa-bars").on("click", function() {
