@@ -24,11 +24,13 @@ requirejs([
                 _bindListener();
             },
             _weatherCall = function _weatherCall(index) {
+                var tempData = {"index": index};
                 $.get("tileTmpl/weather.tmpl", function (data) {
-                    console.log(data);
                     
                     if (_stored.hasOwnProperty("weather") && !oldData(_stored["weather"])) {
                         //there's old data or no data
+                        tempData["weather"] = _stored["weather"];
+                        $(".tileBody").append(data);
                         
                     } else {
                         var url = "http://api.openweathermap.org/data/2.5/weather";
