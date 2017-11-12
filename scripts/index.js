@@ -171,23 +171,22 @@ require([
                         console.log(data)
                         var dataSet = data["Time Series (60min)"],
                             _ = require("underscore"),
-                            minD = Math.pow(10, 9),
+                            minD = Number.MAX_SAFE_INTEGER,
                             maxD = 0,
-                            time,
                             newest = _.values(dataSet)[0];
-
-                        console.log(newest);
 
                         for (var j in dataSet) {
                             var targ = dataSet[j];
 
-                            if (targ["low"] < minD) {
-                                minD = targ["low"];
+                            if (targ["3. low"] < minD) {
+                                minD = targ["3. low"];
                             }
-                            if (targ["high"] < minD) {
-                                maxD = targ["high"];
+                            if (targ["2. high"] > maxD) {
+                                maxD = targ["2. high"];
                             }
                         }
+
+                        console.log(newest, minD, maxD);
 
                         tileStyler(data, tmpl);
                     })
@@ -210,11 +209,6 @@ require([
 
                         _tileCommon(tile, index);
                     }
-                });
-            },
-            _spotifyLoader = function _spotifyLoader(index) {
-                $.get("tiles/spotify.html", function(tmpl) {
-                    _tileCommon(tmpl, index);
                 });
             },
             _tileCommon = function _tileCommon(tile, index) {
