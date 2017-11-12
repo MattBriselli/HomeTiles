@@ -160,8 +160,6 @@ require([
             },
             _spotifyLoader = function _spotifyLoader(index) {
                 $.get("tiles/spotify.html", function(tmpl) {
-                    var apiKey = "LRRFZ6VVIF8ODL1D";
-                    console.log(apiKey);
                     _tileCommon(tmpl, index);
                 });
             },
@@ -172,7 +170,10 @@ require([
                 });
                 newTile.attr("data-index", index);
                 newTile.css("backgroundColor", "yellow");
-                $(".tileBody").append(newTile);
+
+                $(".tile[data-index='"+index+"']").length != 0 ?
+                    $(".tile[data-index='"+index+"']").replaceWith(newTile) :
+                    $(".tileBody").append(newTile);
             },
             _bindListener = function _bindListener() {
                 $(".editMode .fa-bars").on("click", function() {
@@ -208,7 +209,6 @@ require([
                     });
                 }
                 function switcher(elem, index) {
-                    console.log(elem, index);
                     switch (elem) {
                         case "weather":
                             _weatherCall(index);
@@ -233,7 +233,6 @@ require([
                 chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
                     console.log("Data Loaded: ");
-                    console.log(items);
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     if (items.hasOwnProperty("prefs")) {
@@ -262,7 +261,6 @@ require([
             _dataStore = function _dataStore(obj, index) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log(obj);
                     console.log("STORED: "+obj+" and "+index);
                 });
             }
