@@ -301,7 +301,8 @@ require([
                         var oldI = e.oldIndex,
                             newI = e.newIndex,
                             target = $(e.currentTarget);
-                        console.log(oldI, newI);
+                        //need to reorder the _config, _stored and data-indexes
+                        
                     }
                 });
             };
