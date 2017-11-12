@@ -84,7 +84,7 @@ requirejs([
                     fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
 
                     if (_prefs["unit"] == "imperial"){
-                        fB.find(".wind").text("Wind " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
+                        fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
                             "mph " + windDir(wData["wind"]["deg"]));
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
                     } else {
@@ -93,7 +93,8 @@ requirejs([
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
                     }
                     fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
-                    fB.find(".feel").text(realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
+                    fB.find(".feel").html("Feels Like: " +
+                        realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
 
                     _tileCommon(tile, index);
                 }
@@ -111,10 +112,15 @@ requirejs([
                     dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
                     return dirArr[dir];
                 }
-                function realFeel(temp, humid) {
+                function realFeel(t, h) {
                     // source https://en.wikipedia.org/wiki/Heat_index
+                    t = parseFloat(tempConvert(t));
+                    console.log(t, h);
                     if (_prefs["unit"] == "imperial") {
-
+                        return ((-42.379+(2.04901523*t)+(10.1433127*h)+(-0.22475541*t*h) +
+                            (-6.83783*Math.pow(10, -3)*t*t)+(-5.481717*Math.pow(10,-2)*h*h)+
+                            (1.22874*Math.pow(10,-3)*t*t*h)+(8.5282*Math.pow(10,-4)*t*h*h)+
+                            (-1.99*Math.pow(10,-6)*t*t*h*h)).toPrecision(3) + " &#8457;");
                     } else {
 
                     }
