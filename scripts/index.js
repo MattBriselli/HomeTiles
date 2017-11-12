@@ -1,19 +1,18 @@
-requirejs([
+require([
     "node_modules/jquery/src/jquery",
     "node_modules/underscore/underscore",
     "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable",
-    "scripts/weather",
+    "node_modules/sortablejs/Sortable"
     ],
     function(
         $,
         _,
         moment,
-        Sortable,
-        Weather
+        Sortable
     ){
         var _stored,
             _prefs,
+            _weather,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -21,6 +20,8 @@ requirejs([
              */
             _init = function _init() {
                 _stored = {};
+
+                _weather = $()
 
                 _dataLoader(null);
                 _bindListener();
@@ -93,8 +94,8 @@ requirejs([
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
                     }
                     fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
-                    fB.find(".feel").html("Feels Like: " +
-                        realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
+                    // fB.find(".feel").html("Feels Like: " +
+                        // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
 
                     _tileCommon(tile, index);
                 }
