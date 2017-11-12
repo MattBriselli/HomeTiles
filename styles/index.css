@@ -38,6 +38,25 @@ body {
     font-size: 24px;
     margin: 15px 0 0 21%;
 }
+.editBody .title.tiles {
+    margin: 75px 0 0 30%;
+}
+.editBody .tiles:not(.title) {
+    width: 80%;
+    border: 1px solid black;
+    height: auto;
+    margin: 0 10%;
+}
+.editBody .tiles button {
+    display: inline-block;
+    float: right;
+    margin: 5px 20% 0 0;
+}
+.editBody .tiles .subtitle {
+    display: inline-block;
+    margin: 5px 10px 5px 18%;
+}
+
 .editBody .subtitle {
     font-size: 15px;
     font-weight: bold;
@@ -129,12 +148,16 @@ body {
     margin: 40% 0 0 8%;
     font-weight: bold;
 }
+.tile .tempB {
+    width: 100%;
+    height: 40px;
+}
 .tile .low, .tile .high {
     display: inline-block;
     width: auto;
     font-size: 14px;
 }
-.tile .low {
+.tile .low, .tile .sunrise {
     margin-left: 8%;
     float: left;
 }
@@ -142,9 +165,16 @@ body {
     float: right;
     margin-right: 5%;
 }
-.weather .sunrise, .weather .sunset {
+.weather .sunrise, .weather .sunset, .sunset div, .sunset i, .sunrise div, .sunrise i {
     width: auto;
     display: inline-block;
+}
+.tile .sunrise, .tile .sunset {
+    margin-top: 5px;
+}
+.tile .sunset {
+    margin-right: 10%;
+    float: right;
 }
 .weather .front .bottom .right {
     height: 100%;
