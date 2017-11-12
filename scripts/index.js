@@ -82,8 +82,15 @@ requirejs([
                     fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
                     fB.find(".high").html(tempConvert(wData["main"]["temp_max"])+"<br/>High");
                     fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
-                    fB.find(".sunrise div").html(moment.utc(wData["sys"]["sunrise"]).format("HH:MM"));
-                    fB.find(".sunset div").html(moment.utc(wData["sys"]["sunset"]).format("HH:MM"));
+
+                    if (_prefs["unit"] == "imperial"){
+                        fB.find(".wind").text("Wind " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
+                            "mph " + windDir(wData["wind"]["deg"]));
+                    } else {
+                        fB.find(".wind").text("Wind " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
+                            windDir(wData["wind"]["deg"]));
+                    }
+
                     _tileCommon(tile, index);
                 }
                 function tempConvert(temp) {
@@ -93,6 +100,12 @@ requirejs([
                     } else {
                         return (temp - 273.15).toPrecision(3) + " &#8451;";
                     }
+                }
+                function windDir(dir) {
+                    dir = (dir/27.5).toPrecision(1);
+                    // there are 27.5 degrees separating each of the depth 3 direction
+                    dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+                    return dirArr[dir];
                 }
             },
             _stockLoader = function _stockLoader(index) {
@@ -194,8 +207,7 @@ requirejs([
                 chrome.storage.sync.set(data, function() {
                     //null loads all of the data
                     console.log("STORED: "+keyS+" as "+value);
-                    _stored[keyS] = value;
-                    _tileLoader(value);
+                    setTimeout(_tileLoader(value), 500);
                 });
             }
             _tileSort = function _tileSort(e) {

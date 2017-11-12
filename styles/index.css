@@ -81,7 +81,7 @@ body {
  */
 .tile {
     display: inline-block;
-    height: 350px;
+    height: 300px;
     width: 300px;
     background-color: white;
     margin: 10px;
@@ -126,13 +126,13 @@ body {
  * STYLES FOR THE WEATHER TILE
  */
 .tile .weather .front .top {
-    height: 40%;
+    height: 50%;
     width: 100%;
     background-color: lightgrey;
     z-index: 2;
 }
 .tile .weather .front .bottom {
-    height: 60%;
+    height: 50%;
     width: 100%;
     background-color: aquamarine;
 }
@@ -140,12 +140,13 @@ body {
     height: 100%;
     width: 50%;
     float: left;
-    display: inline-block;
+    border-right: 1px solid #ccc;
+        display: inline-block;
 }
 .tile .temp {
     font-size: 40px;
     width: auto;
-    margin: 40% 0 0 8%;
+    margin: 25% 0 0 8%;
     font-weight: bold;
 }
 .tile .tempB {
@@ -157,24 +158,13 @@ body {
     width: auto;
     font-size: 14px;
 }
-.tile .low, .tile .sunrise {
+.tile .low {
     margin-left: 8%;
     float: left;
 }
 .tile .high {
     float: right;
     margin-right: 5%;
-}
-.weather .sunrise, .weather .sunset, .sunset div, .sunset i, .sunrise div, .sunrise i {
-    width: auto;
-    display: inline-block;
-}
-.tile .sunrise, .tile .sunset {
-    margin-top: 5px;
-}
-.tile .sunset {
-    margin-right: 10%;
-    float: right;
 }
 .weather .front .bottom .right {
     height: 100%;
