@@ -91,8 +91,8 @@ requirejs([
 
             },
             _bindListener = function _bindListener() {
-                $(".editMode .fa-pencil").on("click", function() {
-                    if ($(".editPanel").css("right") == "0px" || $(".editPanel").css("right") == "0%") {
+                $(".editMode .fa-bars").on("click", function() {
+                    if ($(".editPanel").css("left") == "0px" || $(".editPanel").css("left") == "0%") {
                         direction = '-19%';
                         $(".tile").removeClass("sort");
                     } else {
@@ -100,16 +100,16 @@ requirejs([
                         $(".tile").addClass("sort");
                     }
                     $(".editPanel").animate({
-                        "right": direction
+                        "left": direction
+                    }, 500);
+                    $(".body").animate({
+                        "left": (19)+parseFloat(direction) + "%",
+                        "width": (81-parseInt(direction) + "%")
                     }, 500);
                     $(".tile.sort").on("mousedown", _tileSort);
                 });
                 $(".editMode .fa").on("mouseover", function(e) {
 
-                });
-                console.log($(".tileBody")[0]);
-                Sortable($(".tileBody")[0], {
-                    draggable: ".tile.sort"
                 });
             },
             _tileLoader = function _tileLoader(data) {
