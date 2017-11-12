@@ -70,12 +70,26 @@ requirejs([
                 function tileStyler(wData, tmpl) {
                     console.log(wData);
                     var tile = $(tmpl);
+                    //Load tile's top stuff
                     tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
                     tile.find(".conditions").text(wData["weather"][0]["description"]);
-                    var condImg = "<img src=" + "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
-                    condImg += wData["weather"][0]["icon"] + ".png></img>";
-                    tile.find(".front .top").append(condImg);
+                    var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
+                    condSrc += wData["weather"][0]["icon"] + ".png";
+                    tile.find("img.condition").attr("src", condSrc);
+                    //Load tile's bottom left
+                    var fB = tile.find(".front .bottom");
+                    fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
+                    fB.find(".high").html(tempConvert(wData["main"]["temp_max"]));
+                    fB.find(".low").html(tempConvert(wData["main"]["temp_min"]));
                     _tileCommon(tile, index);
+                }
+                function tempConvert(temp, scale) {
+                    if (!scale) {
+                        //let's assume F bc i'm american
+                        return (1.8 * (temp - 273) + 32).toPrecision(3) + " &#8457;";
+                    } else {
+                        return (temp - 273.15).toPrecision(3) + " &#8451;";
+                    }
                 }
             },
             _stockLoader = function _stockLoader(index) {
@@ -105,7 +119,7 @@ requirejs([
                 $(".editMode .fa-bars").on("click", function() {
                     if ($(".editPanel").css("left") == "0px" || $(".editPanel").css("left") == "0%") {
                         direction = '-19%';
-                        $(".tile").removeClass("sort");
+                        $(".tile").removeClass("sort mousedown");
                     } else {
                         direction = '0%';
                         $(".tile").addClass("sort");

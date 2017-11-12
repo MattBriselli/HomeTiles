@@ -82,6 +82,34 @@ body {
     background-color: lightgrey;
     z-index: 2;
 }
+.tile .weather .front .bottom {
+    height: 70%;
+    width: 100%;
+    background-color: aquamarine;
+}
+.tile .weather .front .bottom .left {
+    height: 100%;
+    width: 50%;
+    float: left;
+    display: inline-block;
+}
+.tile .temp {
+    font-size: 45px;
+    width: auto;
+    margin-top: 40%;
+}
+.tile .low {
+
+}
+.tile .high {
+
+}
+.tile .weather .front .bottom .right {
+    height: 100%;
+    width: 50%;
+    float: right;
+    display: inline-block;
+}
 .tile .weather .location {
     font: 24px Arial;
     margin: 10% 0 0 3%;
