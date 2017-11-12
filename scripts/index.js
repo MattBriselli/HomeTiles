@@ -25,16 +25,16 @@ requirejs([
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
-                    if (_stored.hasOwnProperty("weather") && !oldData(_stored["weather"])) {
+                    if (_stored.hasOwnProperty("weather"+index) && !oldData(_stored["weather"+index])) {
                         //there's old data that's still good
-                        tileStyler(_stored["weather"], tmpl);
+                        tileStyler(_stored["weather"+index], tmpl);
                         
                     } else {
                         var url = "http://api.openweathermap.org/data/2.5/weather";
-                        if (_stored.hasOwnProperty("weather") && _stored["weather"].hasOwnProperty("zipcode") &&
-                            _stored["weather"].hasOwnProperty("country")) {
+                        if (_stored.hasOwnProperty("weather"+index) && _stored["weather"+index].hasOwnProperty("zipcode") &&
+                            _stored["weather"+index].hasOwnProperty("country")) {
                             //the user has assigned values
-                            url += "?zip=" + _stored["weather"]["zipcode"] + "," + _stored["weather"]["country"];
+                            url += "?zip=" + _stored["weather"+index]["zipcode"] + "," + _stored["weather"+index]["country"];
                         } else {
                             //lets go with malibu
                             url += "?zip=22201,us"
@@ -47,7 +47,7 @@ requirejs([
                         })
                         .done(function(wData) {
                             wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
-                            _dataStore("weather", wData);
+                            _dataStore("weather"+index, wData);
                             tileStyler(wData, tmpl);
                         })
                         .fail(function(error) {
@@ -68,18 +68,26 @@ requirejs([
                 }
                 function tileStyler(wData, tmpl) {
                     console.log(wData, tmpl);
-                    $(".tileBody").append(tmpl);
+                    _tileCommon(tmpl, index);
                 }
             },
             _stockLoader = function _stockLoader(index) {
                 $.get("tiles/stock.html", function(tmpl) {
                     var apiKey = "LRRFZ6VVIF8ODL1D";
                     console.log(apiKey);
-                    $(".tileBody").append(tmpl);
+                    _tileCommon(tmpl, index);
                 });
             },
             _spotifyLoader = function _spotifyLoader(index) {
-
+                $.get("tiles/spotify.html", function(tmpl) {
+                    var apiKey = "LRRFZ6VVIF8ODL1D";
+                    console.log(apiKey);
+                    _tileCommon(tmpl, index);
+                });
+            },
+            _tileCommon = function _tileCommon(tile, index) {
+                $(tile).find(".front").attr("data-index", index);
+                $(".tileBody").append(tile);
 
             },
             _bindListener = function _bindListener() {
@@ -94,10 +102,14 @@ requirejs([
                     $(".editPanel").animate({
                         "right": direction
                     }, 500);
-                    $(".tile.sort").off("mousedown", _tileSort).on("mousedown", _tileSort);
+                    $(".tile.sort").on("mousedown", _tileSort);
                 });
                 $(".editMode .fa").on("mouseover", function(e) {
 
+                });
+                console.log($(".tileBody")[0]);
+                Sortable($(".tileBody")[0], {
+                    draggable: ".tile.sort"
                 });
             },
             _tileLoader = function _tileLoader(data) {
@@ -127,7 +139,7 @@ requirejs([
                         _tileLoader(items["tiles"]);
                     } else {
                         //the user hasn't set preferences, let's give them some times
-                        _store("tiles", ["weather", "stock"]);
+                        _dataStore("tiles", ["weather0", "stock"]);
                     }
                 });
             },
@@ -143,8 +155,12 @@ requirejs([
                 });
             }
             _tileSort = function _tileSort(e) {
-                console.log(e.currentTarget);
-                $()
+                e.stopImmediatePropagation();
+                var target = $(e.currentTarget);
+                target.addClass("mousedown");
+                target.on("mouseup", function(e) {
+                    $(".tile").removeClass("mousedown");
+                });
 
             };
         $(document).ready(function() {
