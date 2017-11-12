@@ -279,7 +279,17 @@ require([
                 target.on("mouseup", function(e) {
                     $(".tile").removeClass("mousedown");
                 });
-
+                var tiles = $(".tileBody");
+                Sortable.create(tiles[0], {
+                    animation: 150,
+                    draggable: ".tile.sort",
+                    onUpdate: function(e) {
+                        var oldI = e.oldIndex,
+                            newI = e.newIndex,
+                            target = $(e.currentTarget);
+                        console.log(oldI, newI);
+                    }
+                });
             };
         $(document).ready(function() {
             _init();
