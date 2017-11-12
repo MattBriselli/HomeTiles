@@ -9,7 +9,6 @@
         "newtab": "index.html"
     },
     "permissions": [
-      "storage",
-      "identity"
+      "storage", "geolocation"
     ]
 }

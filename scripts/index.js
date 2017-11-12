@@ -10,16 +10,16 @@ requirejs([
         moment,
         Sortable
     ){
-        var _permissions,
-            _stored,
-            _cards,
+        var _stored,
             /*
              * a brslli labs application
              * made by Matt Briselli
              * brslli.com
              */
             _init = function _init() {
-                _loader();
+                _stored = {};
+
+                _loader(null);
                 _bindListener();
             },
             _weatherCall = function _weatherCall() {
@@ -29,7 +29,7 @@ requirejs([
                     type: "GET"
                 })
                 .done(function(wData) {
-                    console.log(wData, _permissions);
+                    console.log(wData);
                 })
                 .fail(function(error) {
                     console.log("ERROR");
@@ -54,21 +54,27 @@ requirejs([
 
                 });
             },
-            _loader = function _loader() {
-                chrome.storage.sync.get(null, function(items) {
+            _loader = function _loader(keyL) {
+                chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
                     _stored = items;
-                    if (items) {
+                    if (items && items.hasOwnProperty("tiles")) {
                         console.log(items);
+                    } else {
+                        //the user hasn't set preferences, let's give them some times
+                        _store("tiles", ["weather", "stock"]);
                     }
                 });
-                chrome.storage.sync.remove("zipcode", function(items) {
+            },
+            _store = function _store(keyS, value) {
+                data = {};
+                //weird things happened with single line object init and assignment
+                data[keyS] = value;
+                chrome.storage.sync.set(data, function() {
                     //null loads all of the data
-                    _stored = items;
-                    if (true) {
-
-                    }
+                    console.log("STORED: "+keyS+" as "+value);
                 });
+                _stored[keyS] = value;
             };
         $(document).ready(function() {
             _init();
