@@ -2,17 +2,13 @@ requirejs([
     "node_modules/jquery/src/jquery",
     "node_modules/underscore/underscore",
     "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable",
-    "node_modules/handlebars/dist/handlebars",
-    "node_modules/text/text"
+    "node_modules/sortablejs/Sortable"
     ],
     function(
         $,
         _,
         moment,
-        Sortable,
-        Handlebars,
-        text
+        Sortable
     ){
         var _stored,
             _weatherTmpl,
@@ -27,37 +23,39 @@ requirejs([
                 _dataLoader(null);
                 _bindListener();
             },
-            _weatherCall = function _weatherCall() {
-                $(".tileBody").load("tileTmpl/weather.tmpl");
-                
-                if (_stored.hasOwnProperty("weather") && !oldData(_stored["weather"])) {
-                    //there's old data or no data
+            _weatherCall = function _weatherCall(index) {
+                $.get("tileTmpl/weather.tmpl", function (data) {
+                    console.log(data);
                     
-                } else {
-                    var url = "http://api.openweathermap.org/data/2.5/weather";
-                    if (_stored.hasOwnProperty("weather") && _stored["weather"].hasOwnProperty("zipcode") &&
-                        _stored["weather"].hasOwnProperty("country")) {
-                        //the user has assigned values
-                        url += "?zip=" + _stored["weather"]["zipcode"] + "," + _stored["weather"]["country"];
+                    if (_stored.hasOwnProperty("weather") && !oldData(_stored["weather"])) {
+                        //there's old data or no data
+                        
                     } else {
-                        //lets go with malibu
-                        url += "?zip=22201,us"
-                    }
-                    url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
+                        var url = "http://api.openweathermap.org/data/2.5/weather";
+                        if (_stored.hasOwnProperty("weather") && _stored["weather"].hasOwnProperty("zipcode") &&
+                            _stored["weather"].hasOwnProperty("country")) {
+                            //the user has assigned values
+                            url += "?zip=" + _stored["weather"]["zipcode"] + "," + _stored["weather"]["country"];
+                        } else {
+                            //lets go with malibu
+                            url += "?zip=22201,us"
+                        }
+                        url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
 
-                    $.ajax({
-                        url: url,
-                        type: "GET"
-                    })
-                    .done(function(wData) {
-                        wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
-                        _dataStore("weather", wData);
-                    })
-                    .fail(function(error) {
-                        console.log("ERROR");
-                        console.log("FAILED TO GET WEATHER data");
-                    });
-                }
+                        $.ajax({
+                            url: url,
+                            type: "GET"
+                        })
+                        .done(function(wData) {
+                            wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
+                            _dataStore("weather", wData);
+                        })
+                        .fail(function(error) {
+                            console.log("ERROR");
+                            console.log("FAILED TO GET WEATHER data");
+                        });
+                    }
+                });
 
                 function oldData(dataWT) {
                     if (!dataWT.hasOwnProperty("time")) {
@@ -69,7 +67,7 @@ requirejs([
                     }
                 }
             },
-            _stockLoader = function _stockLoader() {
+            _stockLoader = function _stockLoader(index) {
                 var apiKey = "LRRFZ6VVIF8ODL1D";
                 console.log(apiKey);
             },
@@ -93,7 +91,7 @@ requirejs([
                     data.forEach(function(elem, index) {
                         switch (elem) {
                             case "weather":
-                                _weatherCall();
+                                _weatherCall(index);
                                 break;
                             case "stock":
                                 _stockLoader();

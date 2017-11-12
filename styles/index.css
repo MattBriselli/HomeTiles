@@ -17,7 +17,7 @@ body {
     background-color: pink;
     right: -19%;
     z-index: 4;
-    margin-top: 25px;
+    top: 35px;
 }
 .editPanel .editBody {
     border: 1px solid black;
@@ -28,4 +28,18 @@ body {
 .editPanel .title {
     font-size: 24px;
     margin: 15px 0 0 21%;
+}
+.tile {
+    display: inline-block;
+    height: 250px;
+    width: 250px;
+    background-color: white;
+}
+.tile i {
+    display: inline-block;
+    position: relative;
+    float: right;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
 }
