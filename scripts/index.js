@@ -10,7 +10,8 @@ require([
         moment,
         Sortable
     ){
-        var _stored,
+        var _,
+            _stored,
             _prefs,
             _configs,
             _weather,
@@ -83,10 +84,13 @@ require([
                             _configs["weather"][ind]["country"] = count;
 
                             var newObj = {"weather": {}};
-                            newObj["weather"][ind] = _stored["weather"][ind]
+                            newObj["weather"][ind] = _stored["weather"][ind];
+                            newObj["configs"] = {"weather": {}};
+                            newObj["configs"]["weather"][ind] = _configs["weather"][ind];
 
                             _stored["weather"][ind] = {};
                             
+                            _dataStore(newObj, ind);
                             _dataStore(newObj, ind);
                             _weatherCall(ind);
                         }
@@ -159,9 +163,66 @@ require([
             },
             _stockLoader = function _stockLoader(index) {
                 $.get("tiles/stock.html", function(tmpl) {
-                    var apiKey = "LRRFZ6VVIF8ODL1D";
-                    console.log(apiKey);
-                    _tileCommon(tmpl, index);
+                    var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
+                        keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
+                    url += "ADBE" +"&interval=60min&apikey=" + keys[0] 
+                    $.ajax({
+                        url: url,
+                        type: "GET"
+                    })
+                    .done(function(data) {
+                        var dataSet = data["Time Series (60min)"],
+                            minD = Math.pow(10, 9),
+                            maxD = 0,
+                            time;
+
+                        for (var j in dataSet) {
+                            var targ = dataSet[j],
+                                newTime = moment(j, "YYYY-MM-DD HH:mm:ss");
+                            
+                            if (!time) {
+                                time = newTime;
+                            }
+
+
+
+                            if (newTime.diff(time) > 0) {
+                                //want to get the most recent data
+                                time = newTime;
+                            }
+
+                            if (targ["low"] < minD) {
+                                minD = targ["low"];
+                            }
+                            if (targ["high"] < minD) {
+                                maxD = targ["high"];
+                            }
+                        }
+
+                        var newest = dataSet[time.format("YYYY-MM-DD HH:mm:ss")];
+
+                        tileStyler(data, tmpl);
+                        console.log(newest);
+                    })
+                    .fail(function(error) {
+                        console.log('ERROR');
+                        console.log(error);
+                        console.log('FAILED TO LOAD STOCK DATA');
+                    });
+                    
+
+
+                    function tileStyler(wData, tmpl) {
+                        var tile = $(tmpl),
+                            tF = tile.find(".top .front");
+                        if (_configs && _configs["stock"]) {
+                            for (var i=0; i<_configs["stock"].length; i++) {
+
+                            }
+                        }
+
+                        _tileCommon(tile, index);
+                    }
                 });
             },
             _spotifyLoader = function _spotifyLoader(index) {
@@ -194,7 +255,6 @@ require([
                         $(".tileBody").append(newTile);
                     }
                 }
-                    
             },
             _bindListener = function _bindListener() {
                 $(".editMode .fa-bars").on("click", function() {
@@ -269,6 +329,8 @@ require([
                         loadObj["configs"]["weather"][0]["zipcode"] = 90210;
                         _dataStore(loadObj);
                         _configs = loadObj["configs"];
+
+                        console.log("doesn't have");
                     }
 
                     if (items.hasOwnProperty("tiles")) {
@@ -302,7 +364,7 @@ require([
                             newI = e.newIndex,
                             target = $(e.currentTarget);
                         //need to reorder the _config, _stored and data-indexes
-                        
+
                     }
                 });
             };
