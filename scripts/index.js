@@ -112,6 +112,7 @@ require([
                         fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
                             "mph " + windDir(wData["wind"]["deg"]));
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
+                        fB.find(".pressure").text("Barometric Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
                     } else {
                         fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
                             windDir(wData["wind"]["deg"]));
@@ -233,6 +234,7 @@ require([
                 chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
                     console.log("Data Loaded: ");
+                    console.log(keyL, items);
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     if (items.hasOwnProperty("prefs")) {

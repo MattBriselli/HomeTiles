@@ -201,10 +201,24 @@ body {
     width: 130px;
     margin-top: 10px;
 }
-.weather .feel, .weather .wind, .weather .humidity, .weather .visibility {
+.weather .feel, .weather .wind, .weather .humidity, .weather .visibility, 
+.weather .pressure, .weather .rain, .weather .snow {
     font-size: 14px;
     margin-left: 10px;
-
+}
+.weather .humidity {
+    margin-top: 20px;
+}
+.weather .back .title {
+    margin: -5% 0 10% 28%;
+    font-size: 25px;
+}
+.weather .back .subtitle {
+    margin-left: 41%;
+}
+.weather .back input {
+    margin-left: 25%;
+    width: 50%;
 }
 /*
  * END STYLES FOR THE WEATHER TILE
