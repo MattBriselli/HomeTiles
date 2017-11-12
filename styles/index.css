@@ -72,6 +72,13 @@ body {
 .editBody .rButton div, .editBody .rButton input {
     display: inline-block;
 }
+.editBody .reset {
+    cursor: pointer;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+}
 /*
  * END STYLES FOR THE LEFTBAR
  *

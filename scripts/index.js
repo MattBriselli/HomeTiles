@@ -12,6 +12,7 @@ require([
     ){
         var _stored,
             _prefs,
+            _configs,
             _weather,
             /*
              * a brslli labs application
@@ -21,13 +22,12 @@ require([
             _init = function _init() {
                 _stored = {};
 
-                _weather = $()
-
                 _dataLoader(null);
                 _bindListener();
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
+                    console.log(_stored["weather"+index]);
                     if (_stored.hasOwnProperty("weather"+index) && !oldData(_stored["weather"+index])) {
                         //there's old data that's still good
                         tileStyler(_stored["weather"+index], tmpl);
@@ -82,7 +82,6 @@ require([
                                 _stored["weather"+index] = {};
                                 _stored["weather"+index]["zipcode"] = zip;
                                 _stored["weather"+index]["country"] = count;
-                                console.log(_stored["weather"+index]);
                                 _dataStore("weather"+index, _stored["weather"+index], index);
                             });
                         }
@@ -190,9 +189,10 @@ require([
                 $(".editMode .fa").on("mouseover", function(e) {
 
                 });
+                $(".reset").on("click", chrome.storage.sync.clear());
             },
             _tileLoader = function _tileLoader(data, index) {
-                if (index) {
+                if (typeof index == "number") {
                     switcher(data, index);
                 } else if (data && data.length != 0) {
                     data.forEach(function(elem, index) {
@@ -227,21 +227,25 @@ require([
                     console.log(items);
                     if (items) {
                         _prefs = items["prefs"];
+                        _configs = items["configs"];
                         if (items.hasOwnProperty("prefs")) {
                             _prefLoader(items["prefs"]);
                         } else {
                             _dataStore("prefs", {"unit": "imperial"});
+                            _prefs = {"unit": "imperial"};
                         }
                         if (items.hasOwnProperty("tiles")) {
                             _stored = items;
                             _tileLoader(items["tiles"]);
                         } else {
                             _dataStore("tiles", ["weather", "stock"]);
+                            _tileLoader(["weather", "stock"]);
                         }
                     } else {
                         //the user hasn't set preferences, let's give them some defaults
                         _dataStore("prefs", [{"unit": "imperial"}]);
                         _dataStore("tiles", ["weather", "stock"]);
+                        _tileLoader(["weather", "stock"]);
                     }
                 });
             },
@@ -252,8 +256,6 @@ require([
                 chrome.storage.sync.set(data, function() {
                     //null loads all of the data
                     console.log("STORED: "+keyS+" as "+value);
-                    console.log(value, index);
-                    _tileLoader(value, index);
                 });
             }
             _tileSort = function _tileSort(e) {
