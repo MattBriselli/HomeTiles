@@ -86,10 +86,14 @@ requirejs([
                     if (_prefs["unit"] == "imperial"){
                         fB.find(".wind").text("Wind " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
                             "mph " + windDir(wData["wind"]["deg"]));
+                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
                     } else {
-                        fB.find(".wind").text("Wind " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
+                        fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
                             windDir(wData["wind"]["deg"]));
+                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
                     }
+                    fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
+                    fB.find(".feel").text(realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
 
                     _tileCommon(tile, index);
                 }
@@ -106,6 +110,14 @@ requirejs([
                     // there are 27.5 degrees separating each of the depth 3 direction
                     dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
                     return dirArr[dir];
+                }
+                function realFeel(temp, humid) {
+                    // source https://en.wikipedia.org/wiki/Heat_index
+                    if (_prefs["unit"] == "imperial") {
+
+                    } else {
+
+                    }
                 }
             },
             _stockLoader = function _stockLoader(index) {
