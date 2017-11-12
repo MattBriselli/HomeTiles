@@ -2,16 +2,17 @@ requirejs([
     "node_modules/jquery/src/jquery",
     "node_modules/underscore/underscore",
     "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable"
+    "node_modules/sortablejs/Sortable",
+    "scripts/weather",
     ],
     function(
         $,
         _,
         moment,
-        Sortable
+        Sortable,
+        Weather
     ){
         var _stored,
-            _weatherTmpl,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -86,9 +87,11 @@ requirejs([
                 });
             },
             _tileCommon = function _tileCommon(tile, index) {
-                $(tile).find(".front").attr("data-index", index);
-                $(".tileBody").append(tile);
-
+                var newTile = $(tile).find(".tile");
+                console.log(newTile, tile, index);
+                newTile.attr("data-index", index);
+                newTile.css("backgroundColor", "yellow");
+                $(".tileBody").append(newTile);
             },
             _bindListener = function _bindListener() {
                 $(".editMode .fa-bars").on("click", function() {
@@ -120,7 +123,7 @@ requirejs([
                                 _weatherCall(index);
                                 break;
                             case "stock":
-                                _stockLoader();
+                                _stockLoader(index);
                                 break;
                             default:
                                 // statements_def
