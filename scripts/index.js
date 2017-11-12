@@ -68,8 +68,14 @@ requirejs([
                     }
                 }
                 function tileStyler(wData, tmpl) {
-                    console.log(wData, tmpl);
-                    _tileCommon(tmpl, index);
+                    console.log(wData);
+                    var tile = $(tmpl);
+                    tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
+                    tile.find(".conditions").text(wData["weather"][0]["description"]);
+                    var condImg = "<img src=" + "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
+                    condImg += wData["weather"][0]["icon"] + ".png></img>";
+                    tile.find(".front .top").append(condImg);
+                    _tileCommon(tile, index);
                 }
             },
             _stockLoader = function _stockLoader(index) {
@@ -88,7 +94,9 @@ requirejs([
             },
             _tileCommon = function _tileCommon(tile, index) {
                 var newTile = $(tile).find(".tile");
-                console.log(newTile, tile, index);
+                newTile.find(".fa").on("click", function() {
+                    $(newTile).find(".front, .back").toggle();
+                });
                 newTile.attr("data-index", index);
                 newTile.css("backgroundColor", "yellow");
                 $(".tileBody").append(newTile);

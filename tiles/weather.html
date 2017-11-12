@@ -1,13 +1,23 @@
 <div class="wrapper">
     <div class="tile">
         <div class="weather">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-            <div class="front">
-                
+            <div class="top">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
-            <div class="back">
-                <input type="text" class="zipcode">
-                <input type="text" name="country">
+            <div class="front">
+                <div class="top">
+                    <div class="location"></div>
+                    <div class="conditions"></div>
+                </div>
+            </div>
+            <div class="back" style="display: none;">
+                <div>
+                    <div class="title">Zipcode</div>
+                    <input type="text" class="zipcode">
+                    <div class="title">Country</div>
+                    <input type="text" name="country">
+                    <button type="save">Save</button>
+                </div>
             </div>
         </div>
     </div>

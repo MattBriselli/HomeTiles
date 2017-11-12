@@ -38,7 +38,8 @@ body {
     height: 350px;
     width: 300px;
     background-color: white;
-    margin: 10px
+    margin: 10px;
+    vertical-align: top;
 }
 .tile.sort {
     cursor: grab;
@@ -49,14 +50,73 @@ body {
     cursor: grabbing;
     cursor: -moz-grabbing;
 }
-.tile i {
+.tile .top {
     display: inline-block;
     position: relative;
+    background-color: transparent;
+    width: 100%;
+    z-index: 10;
+}
+.tile .top i {
+    position: absolute;
     float: right;
+    cursor: pointer;
     top: 5px;
     right: 5px;
-    cursor: pointer;
 }
 .tile .back {
     display: none;
+    margin-top: 25%;
 }
+.tile .back .buttonBar {
+    position: relative;
+    width: 100%;
+}
+
+
+
+/*WEATHER STYLES*/
+.tile .weather .front .top {
+    height: 30%;
+    width: 100%;
+    background-color: lightgrey;
+    z-index: 2;
+}
+.tile .weather .location {
+    font: 24px Arial;
+    margin: 10% 0 0 3%;
+}
+.tile .location, .tile .conditions {
+    width: 50%;
+    display: inline-block;
+    float: left;
+}
+.tile .conditions {
+    text-transform: capitalize;
+    font-size: 14px;
+    margin-left: 3%;
+}
+.tile .front .top img {
+    /*condition image*/
+    display: inline-block;
+    position: fixed;
+    height: 115px;
+    width: 115px;
+}
+/*END WEATHER STYLES*/
+
+
+/*STOCK STYLES*/
+.tile .stock {
+}
+.tile .back {
+    width: auto;
+}
+.tile .back .content {
+    position: absolute;
+}
+.tile .stock input {
+    width: 100%;
+    margin-left: 5%;
+}
+/*END STOCK STYLES*/
