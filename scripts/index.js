@@ -2,15 +2,18 @@ require([
     "node_modules/jquery/src/jquery",
     "node_modules/underscore/underscore",
     "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable"
+    "node_modules/sortablejs/Sortable",
+    "node_modules/aws-sdk/index"
     ],
     function(
         $,
         _,
         moment,
-        Sortable
+        Sortable,
+        aws
+        
     ){
-        var _,
+        var aws,
             _stored,
             _prefs,
             _configs,
@@ -24,6 +27,8 @@ require([
                 _stored = {};
                 _dataLoader(null);
                 _bindListener();
+
+                console.log(_);
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
@@ -165,7 +170,7 @@ require([
                 $.get("tiles/stock.html", function(tmpl) {
                     var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
                         keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
-                    url += "ADBE" +"&interval=60min&apikey=" + keys[0] 
+                    url += _configs["stock"].join(",") +"&interval=60min&apikey=" + keys[0];
                     $.ajax({
                         url: url,
                         type: "GET"
@@ -175,6 +180,8 @@ require([
                             minD = Math.pow(10, 9),
                             maxD = 0,
                             time;
+
+                        console.log(dataSet)
 
                         for (var j in dataSet) {
                             var targ = dataSet[j],
@@ -314,7 +321,7 @@ require([
                 chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
                     console.log("Data Loaded: ");
-                    console.log(keyL, items);
+                    console.log(items);
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     if (items.hasOwnProperty("prefs")) {
@@ -327,10 +334,9 @@ require([
                         var loadObj = {"configs": {"weather": {0: {}}}};
                         loadObj["configs"]["weather"][0]["country"] = "us";
                         loadObj["configs"]["weather"][0]["zipcode"] = 90210;
+                        loadObj["configs"]["stock"] = ["DOWJ", "NYSE", "AAPL", "GOOG"];
                         _dataStore(loadObj);
                         _configs = loadObj["configs"];
-
-                        console.log("doesn't have");
                     }
 
                     if (items.hasOwnProperty("tiles")) {

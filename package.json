@@ -2,7 +2,7 @@
   "name": "newtab",
   "version": "1.0.0",
   "description": "A chrome plugin by Brslli Labs<br/> Lead developer: Matt Briselli<br/>",
-  "main": "newTab.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
