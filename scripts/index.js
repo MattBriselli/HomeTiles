@@ -13,6 +13,7 @@ requirejs([
         Weather
     ){
         var _stored,
+            _prefs,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -68,7 +69,6 @@ requirejs([
                     }
                 }
                 function tileStyler(wData, tmpl) {
-                    console.log(wData);
                     var tile = $(tmpl);
                     //Load tile's top stuff
                     tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
@@ -86,8 +86,8 @@ requirejs([
                     fB.find(".sunset div").html(moment.utc(wData["sys"]["sunset"]).format("HH:MM"));
                     _tileCommon(tile, index);
                 }
-                function tempConvert(temp, scale) {
-                    if (!scale) {
+                function tempConvert(temp) {
+                    if (_prefs["unit"] == "imperial") {
                         //let's assume F bc i'm american
                         return (1.8 * (temp - 273) + 32).toPrecision(3) + " &#8457;";
                     } else {
@@ -157,16 +157,32 @@ requirejs([
                     });
                 }
             },
+            _prefLoader = function _prefLoader(data) {
+                if (data && data.length != 0) {
+                    for (index in data) {
+                        $(".editBody input[name='"+data[index]+"']").attr("checked", "checked");
+                    }
+                }
+            },
             _dataLoader = function _dataLoader(keyL) {
                 chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
                     console.log("Data Loaded: ");
                     console.log(items);
-                    if (items && items.hasOwnProperty("tiles")) {
-                        _stored = items;
-                        _tileLoader(items["tiles"]);
+                    if (items) {
+                        _prefs = items["prefs"];
+                        if (items.hasOwnProperty("prefs")) {
+                            _prefLoader(items["prefs"]);
+                        } else {
+                            _dataStore("prefs", {"unit": "imperial"});
+                        }
+                        if (items.hasOwnProperty("tiles")) {
+                            _stored = items;
+                            _tileLoader(items["tiles"]);
+                        }
                     } else {
-                        //the user hasn't set preferences, let's give them some times
+                        //the user hasn't set preferences, let's give them some defaults
+                        _dataStore("prefs", [{"unit": "imperial"}]);
                         _dataStore("tiles", ["weather0", "stock"]);
                     }
                 });
