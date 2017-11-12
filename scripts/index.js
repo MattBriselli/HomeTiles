@@ -1,20 +1,14 @@
 require([
     "node_modules/jquery/src/jquery",
-    "node_modules/underscore/underscore",
     "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable",
-    "node_modules/aws-sdk/index"
+    "node_modules/sortablejs/Sortable"
     ],
     function(
         $,
-        _,
         moment,
-        Sortable,
-        aws
-        
+        Sortable
     ){
-        var aws,
-            _stored,
+        var _stored,
             _prefs,
             _configs,
             _weather,
@@ -26,9 +20,7 @@ require([
             _init = function _init() {
                 _stored = {};
                 _dataLoader(null);
-                _bindListener();
-
-                console.log(_);
+                _bindListener(); 
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
@@ -170,33 +162,24 @@ require([
                 $.get("tiles/stock.html", function(tmpl) {
                     var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
                         keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
-                    url += _configs["stock"].join(",") +"&interval=60min&apikey=" + keys[0];
+                    url += "GOOG" +"&interval=60min&apikey=" + keys[0];
                     $.ajax({
                         url: url,
                         type: "GET"
                     })
                     .done(function(data) {
+                        console.log(data)
                         var dataSet = data["Time Series (60min)"],
+                            _ = require("underscore"),
                             minD = Math.pow(10, 9),
                             maxD = 0,
-                            time;
+                            time,
+                            newest = _.values(dataSet)[0];
 
-                        console.log(dataSet)
+                        console.log(newest);
 
                         for (var j in dataSet) {
-                            var targ = dataSet[j],
-                                newTime = moment(j, "YYYY-MM-DD HH:mm:ss");
-                            
-                            if (!time) {
-                                time = newTime;
-                            }
-
-
-
-                            if (newTime.diff(time) > 0) {
-                                //want to get the most recent data
-                                time = newTime;
-                            }
+                            var targ = dataSet[j];
 
                             if (targ["low"] < minD) {
                                 minD = targ["low"];
@@ -206,10 +189,7 @@ require([
                             }
                         }
 
-                        var newest = dataSet[time.format("YYYY-MM-DD HH:mm:ss")];
-
                         tileStyler(data, tmpl);
-                        console.log(newest);
                     })
                     .fail(function(error) {
                         console.log('ERROR');
