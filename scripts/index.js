@@ -31,6 +31,7 @@ require([
                     if (_stored.hasOwnProperty("weather"+index) && !oldData(_stored["weather"+index])) {
                         //there's old data that's still good
                         tileStyler(_stored["weather"+index], tmpl);
+                        changer();
                         
                     } else {
                         var url = "http://api.openweathermap.org/data/2.5/weather";
@@ -52,6 +53,7 @@ require([
                             wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
                             _dataStore("weather"+index, wData);
                             tileStyler(wData, tmpl);
+                            changer();
                         })
                         .fail(function(error) {
                             console.log("ERROR");
@@ -62,12 +64,29 @@ require([
 
                 function oldData(dataWT) {
                     if (!dataWT.hasOwnProperty("time")) {
-                        return false;
+                        return true;
                     } else {
                         var now = moment(),
                             old = moment(dataWT["time"], "YYYY-MM-DD-HH-mm");
                         return (now.diff(old, "minutes") > 30);
                     }
+                }
+                function changer() {
+                    $(".weather .back button").on("click", function(e) {
+                        var target = $(e.currentTarget),
+                            index = target.parents(".tile").data("index"),
+                            zip = target.parent().find(".zipcode").val(),
+                            count = target.parent().find(".country").val();
+                        if (zip != "" && count != "") {
+                            chrome.storage.sync.remove("weather"+index, function() {
+                                _stored["weather"+index] = {};
+                                _stored["weather"+index]["zipcode"] = zip;
+                                _stored["weather"+index]["country"] = count;
+                                console.log(_stored["weather"+index]);
+                                _dataStore("weather"+index, _stored["weather"+index], index);
+                            });
+                        }
+                    });
                 }
                 function tileStyler(wData, tmpl) {
                     var tile = $(tmpl);
@@ -172,21 +191,26 @@ require([
 
                 });
             },
-            _tileLoader = function _tileLoader(data) {
-                if (data && data.length != 0) {
+            _tileLoader = function _tileLoader(data, index) {
+                if (index) {
+                    switcher(data, index);
+                } else if (data && data.length != 0) {
                     data.forEach(function(elem, index) {
-                        switch (elem) {
-                            case "weather":
-                                _weatherCall(index);
-                                break;
-                            case "stock":
-                                _stockLoader(index);
-                                break;
-                            default:
-                                // statements_def
-                                break;
-                        }
+                        switcher(elem, index);
                     });
+                }
+                function switcher(elem, index) {
+                    switch (elem) {
+                        case "weather":
+                            _weatherCall(index);
+                            break;
+                        case "stock":
+                            _stockLoader(index);
+                            break;
+                        default:
+                            // statements_def
+                            break;
+                    }
                 }
             },
             _prefLoader = function _prefLoader(data) {
@@ -211,22 +235,25 @@ require([
                         if (items.hasOwnProperty("tiles")) {
                             _stored = items;
                             _tileLoader(items["tiles"]);
+                        } else {
+                            _dataStore("tiles", ["weather", "stock"]);
                         }
                     } else {
                         //the user hasn't set preferences, let's give them some defaults
                         _dataStore("prefs", [{"unit": "imperial"}]);
-                        _dataStore("tiles", ["weather0", "stock"]);
+                        _dataStore("tiles", ["weather", "stock"]);
                     }
                 });
             },
-            _dataStore = function _dataStore(keyS, value) {
+            _dataStore = function _dataStore(keyS, value, index) {
                 data = {};
                 //weird things happened with single line object init and assignment
                 data[keyS] = value;
                 chrome.storage.sync.set(data, function() {
                     //null loads all of the data
                     console.log("STORED: "+keyS+" as "+value);
-                    setTimeout(_tileLoader(value), 500);
+                    console.log(value, index);
+                    _tileLoader(value, index);
                 });
             }
             _tileSort = function _tileSort(e) {
