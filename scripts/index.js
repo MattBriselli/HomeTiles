@@ -20,7 +20,7 @@ require([
             _init = function _init() {
                 _stored = {};
                 _dataLoader(null);
-                _bindListener(); 
+                _bindListener();
             },
             _weatherCall = function _weatherCall(index) {
                 $.get("tiles/weather.html", function(tmpl) {
