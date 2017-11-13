@@ -50,6 +50,9 @@ require([
                             var newObj = {"weather": {}};
                             newObj["weather"][index] = wData;
 
+                            _stored["weather"] = {};
+                            _stored["weather"][index] = wData;
+
                             _dataStore(newObj);
                             tileStyler(wData, tmpl);
                             changer();
