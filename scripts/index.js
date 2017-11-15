@@ -1,12 +1,14 @@
-require([
-    "node_modules/jquery/src/jquery",
-    "node_modules/moment/moment",
-    "node_modules/sortablejs/Sortable"
+define([
+    "jquery",
+    "moment",
+    "Sortable",
+    "underscore"
     ],
     function(
         $,
         moment,
-        Sortable
+        Sortable,
+        _
     ){
         var _stored,
             _prefs,
@@ -142,7 +144,7 @@ require([
                     }
                 }
                 function windDir(dir) {
-                    dir = Math.floor(dir/22.5);
+                    dir = (dir/27.5).toPrecision(1);
                     // there are 27.5 degrees separating each of the depth 3 direction
                     dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
                     return dirArr[dir];
@@ -173,7 +175,6 @@ require([
                     .done(function(data) {
                         console.log(data)
                         var dataSet = data["Time Series (60min)"],
-                            _ = require("underscore"),
                             minD = Number.MAX_SAFE_INTEGER,
                             maxD = 0,
                             newest = _.values(dataSet)[0];
@@ -351,7 +352,7 @@ require([
                     }
                 });
             };
-        $(document).ready(function() {
-            _init();
-        });
+        return {
+            init: _init
+        };
 });
