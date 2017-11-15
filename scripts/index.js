@@ -139,7 +139,5 @@ define("tab", [
                     }
                 });
             };
-        return {
-            init: _init
-        };
+        return _init;
 });
