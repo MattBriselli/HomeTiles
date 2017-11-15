@@ -21,6 +21,7 @@
     "moment": "^2.19.2",
     "requirejs": "^2.3.5",
     "sortablejs": "^1.7.0",
+    "text": "github:requirejs/text",
     "underscore": "^1.8.3"
   }
 }

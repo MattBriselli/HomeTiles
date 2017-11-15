@@ -2,18 +2,24 @@ define([
     "jquery",
     "moment",
     "Sortable",
-    "underscore"
+    "underscore",
+    "text!../tiles/stock.html",
+    "text!../tiles/weather.html"
     ],
     function(
         $,
         moment,
         Sortable,
-        _
+        _,
+        stockTmpl,
+        weatherTmpl
     ){
         var _stored,
             _prefs,
             _configs,
             _weather,
+            _stockTmpl,
+            _weatherTmpl,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -23,48 +29,49 @@ define([
                 _stored = {};
                 _dataLoader(null);
                 _bindListener();
+
+                _stockTmpl = stockTmpl;
+                _weatherTmpl = weatherTmpl;
             },
             _weatherCall = function _weatherCall(index) {
-                $.get("tiles/weather.html", function(tmpl) {
-                    if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
-                        //there's old data that's still good
-                        tileStyler(_stored["weather"][index], tmpl);
-                        changer();
-                        
+                if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
+                    //there's old data that's still good
+                    tileStyler(_stored["weather"][index], _weatherTmpl);
+                    changer();
+                    
+                } else {
+                    var url = "http://api.openweathermap.org/data/2.5/weather";
+                    if (_stored["weather"] && _stored["weather"][index] && _configs["weather"] && _configs["weather"][index] &&
+                        _configs["weather"][index]["zipcode"] && _configs["weather"][index]["country"]) {
+                        //the user has assigned values
+                        url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
                     } else {
-                        var url = "http://api.openweathermap.org/data/2.5/weather";
-                        if (_stored["weather"] && _stored["weather"][index] && _configs["weather"] && _configs["weather"][index] &&
-                            _configs["weather"][index]["zipcode"] && _configs["weather"][index]["country"]) {
-                            //the user has assigned values
-                            url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
-                        } else {
-                            //lets go with malibu
-                            url += "?zip=90210,us"
-                        }
-                        url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
-
-                        $.ajax({
-                            url: url,
-                            type: "GET"
-                        })
-                        .done(function(wData) {
-                            wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
-                            var newObj = {"weather": {}};
-                            newObj["weather"][index] = wData;
-
-                            _stored["weather"] = {};
-                            _stored["weather"][index] = wData;
-
-                            _dataStore(newObj);
-                            tileStyler(wData, tmpl);
-                            changer();
-                        })
-                        .fail(function(error) {
-                            console.log("ERROR");
-                            console.log("FAILED TO GET WEATHER DATA");
-                        });
+                        //lets go with malibu
+                        url += "?zip=90210,us"
                     }
-                });
+                    url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
+
+                    $.ajax({
+                        url: url,
+                        type: "GET"
+                    })
+                    .done(function(wData) {
+                        wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
+                        var newObj = {"weather": {}};
+                        newObj["weather"][index] = wData;
+
+                        _stored["weather"] = {};
+                        _stored["weather"][index] = wData;
+
+                        _dataStore(newObj);
+                        tileStyler(wData, tmpl);
+                        changer();
+                    })
+                    .fail(function(error) {
+                        console.log("ERROR");
+                        console.log("FAILED TO GET WEATHER DATA");
+                    });
+                }
 
                 function oldData(dataWT) {
                     if (!dataWT.hasOwnProperty("time")) {
@@ -164,56 +171,54 @@ define([
                 }
             },
             _stockLoader = function _stockLoader(index) {
-                $.get("tiles/stock.html", function(tmpl) {
-                    var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
-                        keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
-                    url += "GOOG" +"&interval=60min&apikey=" + keys[0];
-                    $.ajax({
-                        url: url,
-                        type: "GET"
-                    })
-                    .done(function(data) {
-                        console.log(data)
-                        var dataSet = data["Time Series (60min)"],
-                            minD = Number.MAX_SAFE_INTEGER,
-                            maxD = 0,
-                            newest = _.values(dataSet)[0];
+                var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
+                    keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
+                url += "GOOG" +"&interval=60min&apikey=" + keys[0];
+                $.ajax({
+                    url: url,
+                    type: "GET"
+                })
+                .done(function(data) {
+                    console.log(data)
+                    var dataSet = data["Time Series (60min)"],
+                        minD = Number.MAX_SAFE_INTEGER,
+                        maxD = 0,
+                        newest = _.values(dataSet)[0];
 
-                        for (var j in dataSet) {
-                            var targ = dataSet[j];
+                    for (var j in dataSet) {
+                        var targ = dataSet[j];
 
-                            if (targ["3. low"] < minD) {
-                                minD = targ["3. low"];
-                            }
-                            if (targ["2. high"] > maxD) {
-                                maxD = targ["2. high"];
-                            }
+                        if (targ["3. low"] < minD) {
+                            minD = targ["3. low"];
                         }
-
-                        console.log(newest, minD, maxD);
-
-                        tileStyler(data, tmpl);
-                    })
-                    .fail(function(error) {
-                        console.log('ERROR');
-                        console.log(error);
-                        console.log('FAILED TO LOAD STOCK DATA');
-                    });
-                    
-
-
-                    function tileStyler(wData, tmpl) {
-                        var tile = $(tmpl),
-                            tF = tile.find(".top .front");
-                        if (_configs && _configs["stock"]) {
-                            for (var i=0; i<_configs["stock"].length; i++) {
-
-                            }
+                        if (targ["2. high"] > maxD) {
+                            maxD = targ["2. high"];
                         }
-
-                        _tileCommon(tile, index);
                     }
+
+                    console.log(newest, minD, maxD);
+
+                    tileStyler(data, _stockTmpl);
+                })
+                .fail(function(error) {
+                    console.log('ERROR');
+                    console.log(error);
+                    console.log('FAILED TO LOAD STOCK DATA');
                 });
+                
+
+
+                function tileStyler(wData, tmpl) {
+                    var tile = $(tmpl),
+                        tF = tile.find(".top .front");
+                    if (_configs && _configs["stock"]) {
+                        for (var i=0; i<_configs["stock"].length; i++) {
+
+                        }
+                    }
+
+                    _tileCommon(tile, index);
+                }
             },
             _tileCommon = function _tileCommon(tile, index) {
                 var newTile = $(tile).find(".tile");
