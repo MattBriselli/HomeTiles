@@ -49,15 +49,20 @@ define("tab", [
                 $(".editMode .fa").on("mouseover", function(e) {
 
                 });
+                $(".units input").on("change", function(e) {
+                    var val = $(e.currentTarget).attr("class");
+                    _prefs["unit"] = val; 
+                    console.log(_prefs);
+                    _dataStore({"prefs": _prefs});
+                });
                 $(".background input").on("blur", function(e) {
                     var link = $(e.currentTarget);
                     
                     if (isValidURL(link.val())) {
                         $("body").css("background-image", "url('"+link.val()+"')");
-                        var backPref = {"prefs": {}};
-                        backPref["prefs"]["back"] = link.val();
                         _prefs["back"] = link.val();
-                        _dataStore(backPref);
+                        console.log(_prefs);
+                        _dataStore({"prefs": _prefs});
                     } else {
                         link.text("Please Enter a Valid Url");
                     }
@@ -101,8 +106,9 @@ define("tab", [
             _prefLoader = function _prefLoader(data) {
                 if (data && data.length != 0) {
                     for (index in data) {
-                        if (index = "back") {
+                        if (index == "back") {
                             $("body").css("background-image", "url('"+data[index]+"')");
+                            $(".background input").val(data[index]);
                         } else {
                             //buttons
                             $(".editBody input."+data[index]).attr("checked", "checked");
