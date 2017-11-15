@@ -28,6 +28,7 @@ define([
                 _prefs = prefs;
                 _configs = configs;
                 _tmpl = tmpl;
+
                 var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
                     keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
                 url += "GOOG" +"&interval=60min&apikey=" + keys[0];
@@ -55,22 +56,21 @@ define([
 
                     console.log(newest, minD, maxD);
 
-                    tileStyler(data);
+                    _tileStyler(data);
                 })
                 .fail(function(error) {
                     console.log('ERROR');
                     console.log(error);
                     console.log('FAILED TO LOAD STOCK DATA');
                 });
+            },
+            _tileStyler = function _tileStyler(wData) {
+                var tile = $(_tmpl),
+                    tF = tile.find(".top .front");
+                if (_configs && _configs["stock"]) {
 
-                function tileStyler(wData) {
-                    var tile = $(_tmpl),
-                        tF = tile.find(".top .front");
-                    if (_configs && _configs["stock"]) {
-                    }
-
-                    tileJs(tile, index);
                 }
+                tileJs(tile, index);
             },
             _dataStore = function _dataStore(obj, index) {
                 chrome.storage.sync.set(obj, function() {
