@@ -67,7 +67,6 @@ define("tab", [
                     if (isValidURL(link.val())) {
                         $("body").css("background-image", "url('"+link.val()+"')");
                         _prefs["back"] = link.val();
-                        console.log(_prefs);
                         _dataStore({"prefs": _prefs});
                     } else {
                         link.text("Please Enter a Valid Url");
@@ -75,7 +74,6 @@ define("tab", [
 
                     function isValidURL(url){
                         var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
                         if(RegExp.test(url)){
                             return true;
                         }else{
@@ -135,8 +133,11 @@ define("tab", [
                     if (items.hasOwnProperty("prefs")) {
                         _prefLoader(items["prefs"]);
                     } else {
-                        _dataStore( {"prefs": {"unit": "imperial"}} );
-                        _prefs = {"unit": "imperial"};
+                        _dataStore( {"prefs": {"unit": "imperial", 
+                            "back": "https://static.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg"}} );
+                        _prefs = {"unit": "imperial", 
+                            "back": "https://static.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg"};
+                        _prefLoader(items["prefs"]);
                     }
                     if (!items.hasOwnProperty("configs")) {
                         var loadObj = {"configs": {"weather": {0: {}}}};
