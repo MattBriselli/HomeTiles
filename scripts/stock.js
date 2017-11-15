@@ -67,9 +67,6 @@ define([
                     var tile = $(_tmpl),
                         tF = tile.find(".top .front");
                     if (_configs && _configs["stock"]) {
-                        for (var i=0; i<_configs["stock"].length; i++) {
-
-                        }
                     }
 
                     tileJs(tile, index);

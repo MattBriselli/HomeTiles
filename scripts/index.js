@@ -49,6 +49,29 @@ define("tab", [
                 $(".editMode .fa").on("mouseover", function(e) {
 
                 });
+                $(".background input").on("blur", function(e) {
+                    var link = $(e.currentTarget);
+                    
+                    if (isValidURL(link.val())) {
+                        $("body").css("background-image", "url('"+link.val()+"')");
+                        var backPref = {"prefs": {}};
+                        backPref["prefs"]["back"] = link.val();
+                        _prefs["back"] = link.val();
+                        _dataStore(backPref);
+                    } else {
+                        link.text("Please Enter a Valid Url");
+                    }
+
+                    function isValidURL(url){
+                        var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+                        if(RegExp.test(url)){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    } 
+                });
                 $(".reset").on("click", function() {
                     chrome.storage.sync.clear()
                 });
@@ -78,7 +101,12 @@ define("tab", [
             _prefLoader = function _prefLoader(data) {
                 if (data && data.length != 0) {
                     for (index in data) {
-                        $(".editBody input."+data[index]).attr("checked", "checked");
+                        if (index = "back") {
+                            $("body").css("background-image", "url('"+data[index]+"')");
+                        } else {
+                            //buttons
+                            $(".editBody input."+data[index]).attr("checked", "checked");
+                        }
                     }
                 }
             },
