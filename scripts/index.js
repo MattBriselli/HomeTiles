@@ -54,6 +54,9 @@ define("tab", [
 
                     _tiles.push(tVal);
                     _dataStore({"tiles": _tiles});
+                    
+                    _configs[tVal][nInd] = {};
+                    _dataStore({"configs": _configs});
                     _tileLoader(tVal, nInd);
                 });
                 $(".units input").on("change", function(e) {
@@ -179,7 +182,7 @@ define("tab", [
                         var oldI = e.oldIndex,
                             newI = e.newIndex,
                             target = $(e.currentTarget);
-                        //need to reorder the _config, _stored and data-indexes
+                        //need to reorder the _configs, _stored and data-indexes
 
                     }
                 });
