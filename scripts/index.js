@@ -17,6 +17,7 @@ define("tab", [
         var _stored,
             _prefs,
             _configs,
+            _tiles,
             _weather,
             /*
              * a brslli labs application
@@ -46,13 +47,18 @@ define("tab", [
                     }, 500);
                     $(".tile.sort").on("mousedown", _tileSort);
                 });
-                $(".editMode .fa").on("mouseover", function(e) {
+                $(".editBody .tiles button").on("click", function(e) {
+                    var target = $(e.currentTarget),
+                        tVal = target.attr("value"),
+                        nInd = $(".tileBody .tile").length;
 
+                    _tiles.push(tVal);
+                    _dataStore({"tiles": _tiles});
+                    _tileLoader(tVal, nInd);
                 });
                 $(".units input").on("change", function(e) {
                     var val = $(e.currentTarget).attr("class");
                     _prefs["unit"] = val; 
-                    console.log(_prefs);
                     _dataStore({"prefs": _prefs});
                 });
                 $(".background input").on("blur", function(e) {
@@ -78,7 +84,9 @@ define("tab", [
                     } 
                 });
                 $(".reset").on("click", function() {
-                    chrome.storage.sync.clear()
+                    chrome.storage.sync.clear();
+                    _stored = {};
+                    _init();
                 });
             },
             _tileLoader = function _tileLoader(data, index) {
@@ -123,6 +131,7 @@ define("tab", [
                     console.log(items);
                     _prefs = items["prefs"];
                     _configs = items["configs"];
+                    _tiles = items["tiles"];
                     if (items.hasOwnProperty("prefs")) {
                         _prefLoader(items["prefs"]);
                     } else {
@@ -131,9 +140,10 @@ define("tab", [
                     }
                     if (!items.hasOwnProperty("configs")) {
                         var loadObj = {"configs": {"weather": {0: {}}}};
+                        loadObj["configs"]["stock"] = {}
                         loadObj["configs"]["weather"][0]["country"] = "us";
                         loadObj["configs"]["weather"][0]["zipcode"] = 90210;
-                        loadObj["configs"]["stock"] = ["DOWJ", "NYSE", "AAPL", "GOOG"];
+                        loadObj["configs"]["stock"][1] = ["DOWJ", "NYSE", "AAPL", "GOOG"];
                         _dataStore(loadObj);
                         _configs = loadObj["configs"];
                     }

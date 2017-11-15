@@ -56,7 +56,7 @@ define([
 
                     console.log(newest, minD, maxD);
 
-                    _tileStyler(data);
+                    _tileStyler(data, index);
                 })
                 .fail(function(error) {
                     console.log('ERROR');
@@ -64,7 +64,7 @@ define([
                     console.log('FAILED TO LOAD STOCK DATA');
                 });
             },
-            _tileStyler = function _tileStyler(wData) {
+            _tileStyler = function _tileStyler(wData, index) {
                 var tile = $(_tmpl),
                     tF = tile.find(".top .front");
                 if (_configs && _configs["stock"]) {
