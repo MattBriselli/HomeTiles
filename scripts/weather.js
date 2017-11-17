@@ -36,7 +36,7 @@ define([
                     
                 } else {
                     var url = "http://api.openweathermap.org/data/2.5/weather";
-                    if (_stored["weather"] && _stored["weather"][index] && _configs["weather"] && _configs["weather"][index] &&
+                    if (_configs["weather"] && _configs["weather"][index] &&
                         _configs["weather"][index]["zipcode"] && _configs["weather"][index]["country"]) {
                         //the user has assigned values
                         url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
@@ -56,7 +56,9 @@ define([
                         var newObj = {"weather": {}};
                         newObj["weather"][index] = wData;
 
-                        _stored["weather"] = {};
+                        if (!_stored["weather"]) {
+                            _stored["weather"] = {};
+                        }
                         _stored["weather"][index] = wData;
 
                         _dataStore(newObj);
@@ -85,17 +87,14 @@ define([
                             zip = target.parent().find(".zipcode").val(),
                             count = target.parent().find(".country").val();
                         if (zip != "" && count != "") {
+                            if (!_configs["weather"][ind]) {
+                                _configs["weather"][ind] = {};
+                            }
                             _configs["weather"][ind]["zipcode"] = zip;
                             _configs["weather"][ind]["country"] = count;
-
-                            var newObj = {"weather": {}};
-                            newObj["weather"][ind] = _stored["weather"][ind];
-                            newObj["configs"] = {"weather": {}};
-                            newObj["configs"]["weather"][ind] = _configs["weather"][ind];
-
                             _stored["weather"][ind] = {};
                             
-                            _dataStore(newObj, ind);
+                            _dataStore({"configs": _configs});
                             _init(ind, _stored, _prefs, _configs);
                         }
                     });
@@ -154,7 +153,6 @@ define([
                 function realFeel(t, h) {
                     // source https://en.wikipedia.org/wiki/Heat_index
                     t = parseFloat(tempConvert(t));
-                    console.log(t, h);
                     if (_prefs["unit"] == "imperial") {
                         return ((-42.379+(2.04901523*t)+(10.1433127*h)+(-0.22475541*t*h) +
                             (-6.83783*Math.pow(10, -3)*t*t)+(-5.481717*Math.pow(10,-2)*h*h)+
@@ -165,10 +163,11 @@ define([
                     }
                 }
             },
-            _dataStore = function _dataStore(obj, index) {
+            _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log("STORED: "+obj+" and "+index);
+                    console.log("STORED: ");
+                    console.log(obj);
                 });
             };
 

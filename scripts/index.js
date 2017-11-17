@@ -144,10 +144,8 @@ define("tab", [
                     }
                     if (!items.hasOwnProperty("configs")) {
                         var loadObj = {"configs": {"weather": {0: {}}}};
-                        loadObj["configs"]["stock"] = {}
                         loadObj["configs"]["weather"][0]["country"] = "us";
                         loadObj["configs"]["weather"][0]["zipcode"] = 90210;
-                        loadObj["configs"]["stock"][1] = ["DOWJ", "NYSE", "AAPL", "GOOG"];
                         _dataStore(loadObj);
                         _configs = loadObj["configs"];
                     }
@@ -156,8 +154,8 @@ define("tab", [
                         _stored = items;
                         _tileLoader(items["tiles"]);
                     } else {
-                        _dataStore( {"tiles": ["weather", "stock"]} );
-                        _tileLoader(["weather", "stock"]);
+                        _dataStore( {"tiles": ["weather"]} );
+                        _tileLoader(["weather"]);
                     }
                 });
             },
