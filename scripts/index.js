@@ -86,7 +86,12 @@ define("tab", [
                 });
                 $(".reset").on("click", function() {
                     chrome.storage.sync.clear();
+                    $(".background input").focus();
+                    $(".background input").val("http://7wallpapers.net/wp-content/uploads/8_Blue-Rose.jpg");
+                    $(".background input").blur();
+                    _configs = {};
                     _stored = {};
+                    $(".tile").remove();
                     _init();
                 });
             },
