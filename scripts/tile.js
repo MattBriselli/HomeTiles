@@ -21,7 +21,7 @@ define([
             _init = function _init(tile, index) {
                 var newTile = $(tile).find(".tile");
                 newTile.find(".fa").on("click", function() {
-                    $(newTile).find(".front, .back").toggle();
+                    $(newTile).find(".front, .back, .fa-trash-o").toggle();
                 });
                 newTile.attr("data-index", index);
                 newTile.css("backgroundColor", "yellow");

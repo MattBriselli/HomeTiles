@@ -118,9 +118,18 @@ body {
 }
 .tile .top i {
     position: absolute;
-    float: right;
     cursor: pointer;
     top: 5px;
+    font-size: 16px;
+}
+.tile .top .fa-trash-o {
+    float: left;
+    left: 5px;
+    font-size: 18px;
+    display: none;
+}
+.tile .top .fa-pencil {
+    float: right;
     right: 5px;
 }
 .tile .back {

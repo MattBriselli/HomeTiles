@@ -91,8 +91,6 @@ define("tab", [
                     $(".background input").focus();
                     $(".background input").val("http://7wallpapers.net/wp-content/uploads/8_Blue-Rose.jpg");
                     $(".background input").blur();
-                    _configs = {};
-                    _stored = {};
                     $(".tile").remove();
                     _init();
                 });
@@ -164,6 +162,7 @@ define("tab", [
                         _stored = items;
                         _tileLoader(items["tiles"]);
                     } else {
+                        _tiles = ["weather"];
                         _dataStore( {"tiles": ["weather"]} );
                         _tileLoader(["weather"]);
                     }
