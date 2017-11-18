@@ -2,7 +2,6 @@ define([
     "jquery",
     "underscore",
     "moment",
-    "Sortable",
     "tile",
     "text!../tiles/weather.html"
     ],
@@ -10,7 +9,6 @@ define([
         $,
         _,
         moment,
-        Sortable,
         tileJs,
         tmpl
     ){
@@ -61,7 +59,7 @@ define([
                         }
                         _stored["weather"][index] = wData;
 
-                        _dataStore(newObj);
+                        _dataStore({"weather": _stored["weather"]});
                         tileStyler(wData);
                         changer();
                     })

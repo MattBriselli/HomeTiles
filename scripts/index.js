@@ -4,7 +4,8 @@ define("tab", [
     "Sortable",
     "underscore",
     "stock",
-    "weather"
+    "weather",
+    "calendar"
     ],
     function(
         $,
@@ -12,7 +13,8 @@ define("tab", [
         Sortable,
         _,
         stockJs,
-        weatherJs
+        weatherJs,
+        calendarJs
     ){
         var _stored,
             _prefs,
@@ -111,6 +113,9 @@ define("tab", [
                         case "stock":
                             stockJs.init(index, _stored, _prefs, _configs);
                             break;
+                        case "calendar":
+                            calendarJs.init(index, _stored, _prefs, _configs);
+                            break;
                         default:
                             // statements_def
                             break;
@@ -164,10 +169,11 @@ define("tab", [
                     }
                 });
             },
-            _dataStore = function _dataStore(obj, index) {
+            _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log("STORED: "+obj+" and "+index);
+                    console.log("STORED: ");
+                    console.log(obj);
                 });
             },
             _tileSort = function _tileSort(e) {
