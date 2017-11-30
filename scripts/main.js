@@ -5,8 +5,7 @@ require.config({
         Sortable: "../node_modules/sortablejs/Sortable",
         underscore: "../node_modules/underscore/underscore-min",
         text: "../node_modules/text/text",
-        tab: "index",
-        calendarCall: "https://apis.google.com/js/api"
+        tab: "index"
     }
 });
 
