@@ -145,6 +145,9 @@ define([
                 function windDir(dir) {
                     dir = (dir/27.5).toPrecision(1);
                     // there are 27.5 degrees separating each of the depth 3 direction
+                    if (dir < 1) {
+                        dir = 1;
+                    }
                     dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
                     return dirArr[dir];
                 }
