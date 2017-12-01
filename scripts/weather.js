@@ -146,8 +146,7 @@ define([
                     dir = Math.round(dir/27.5);
                     // there are 27.5 degrees separating each of the depth 3 direction
                     dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
-                    dir %= dirArr.length;
-                    return dirArr[dir];
+                    return dirArr[dir % dirArr.length];
                 }
                 function realFeel(t, h) {
                     // source https://en.wikipedia.org/wiki/Heat_index
