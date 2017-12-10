@@ -96,24 +96,6 @@ define([
                             }
                         }
                     });
-
-                    $(".weather .back button").off("click").on("click", function(e) {
-                        var target = $(e.currentTarget),
-                            ind = target.parents(".tile").data("index"),
-                            zip = target.parent().find(".zipcode").val(),
-                            count = target.parent().find(".country").val();
-                        if (zip != "" && count != "") {
-                            if (!_configs["weather"][ind]) {
-                                _configs["weather"][ind] = {};
-                            }
-                            _configs["weather"][ind]["zipcode"] = zip;
-                            _configs["weather"][ind]["country"] = count;
-                            _stored["weather"][ind] = {};
-                            
-                            _dataStore({"configs": _configs});
-                            _init(ind, _stored, _prefs, _configs);
-                        }
-                    });
                 }
                 function tileStyler(wData) {
                     var tile = $(_tmpl);
@@ -199,7 +181,27 @@ define([
                             oH = '<div class="subtitle">City</div>\
                                     <input type="text" class="city">\
                                     <button type="save">Save</button>';
-                        console.log(code);
+                        targ.val(code);
+                        targ.parent().find(".options").remove();
+                        code == "US" ?
+                            targ.after(usH) : targ.after(oH);
+                        $(".weather .back button").off("click").on("click", function(e) {
+                            var target = $(e.currentTarget),
+                                ind = target.parents(".tile").data("index"),
+                                zip = target.parent().find(".zipcode").val(),
+                                count = target.parent().find(".country").val();
+                            if (zip != "" && count != "") {
+                                if (!_configs["weather"][ind]) {
+                                    _configs["weather"][ind] = {};
+                                }
+                                _configs["weather"][ind]["zipcode"] = zip;
+                                _configs["weather"][ind]["country"] = count;
+                                _stored["weather"][ind] = {};
+                                
+                                _dataStore({"configs": _configs});
+                                _init(ind, _stored, _prefs, _configs);
+                            }
+                        });
                     });
                 }
             },
