@@ -187,15 +187,19 @@ define([
                 if (rData.length != 0) {
                     var dH = "<div class='options'>";
                     rData.forEach( function(element, index) {
-                        dH += "<div class='"+index+"'>" + element["name"] + "</div>";
+                        dH += "<div class='option' data-code='"+element["code"]+"'>" + element["name"] + "</div>";
                     });
                     dH += "</div>";
                     targ.after(dH);
                     targ.parent().find(".options .option").on("click", function(e) {
-                        var oldH = '<div class="subtitle">Zipcode</div>\
-                        <input type="text" class="zipcode">\
-                        <button type="save">Save</button>';
-
+                        var code = $(e.currentTarget).data("code"),
+                            usH = '<div class="subtitle">Zipcode</div>\
+                                    <input type="text" class="zipcode">\
+                                    <button type="save">Save</button>',
+                            oH = '<div class="subtitle">City</div>\
+                                    <input type="text" class="city">\
+                                    <button type="save">Save</button>';
+                        console.log(code);
                     });
                 }
             },
