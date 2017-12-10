@@ -230,9 +230,19 @@ body {
 .weather .back .subtitle {
     margin-left: 41%;
 }
-.weather .back input {
+.weather .back input, .weather .back .options {
     margin-left: 25%;
     width: 50%;
+}
+.weather .back .options {
+    background-color: white;
+}
+.weather .back .options > div {
+    background-color: white;
+    border: 1px solid black;
+    border-top: 0;
+    padding: 2px 4px;
+    cursor: pointer;
 }
 /*
  * END STYLES FOR THE WEATHER TILE

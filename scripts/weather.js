@@ -16,6 +16,7 @@ define([
             _prefs,
             _configs,
             _tmpl,
+            _cObj,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -79,7 +80,24 @@ define([
                     }
                 }
                 function changer() {
-                    $(".weather .back button").on("click", function(e) {
+                    $(".weather .back input.country").off("keyup").on("keyup", function(e) {
+                        if ($(e.currentTarget).val().length != 0) {
+                            var text = $(e.currentTarget).val();
+                            if (!_cObj) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "../countries.json"
+                                }).done(function(data) {
+                                    _cObj = data;
+                                    _autoComplete($(e.currentTarget), text);
+                                });
+                            } else {
+                                _autoComplete($(e.currentTarget), text);
+                            }
+                        }
+                    });
+
+                    $(".weather .back button").off("click").on("click", function(e) {
                         var target = $(e.currentTarget),
                             ind = target.parents(".tile").data("index"),
                             zip = target.parent().find(".zipcode").val(),
@@ -159,6 +177,26 @@ define([
                     } else {
 
                     }
+                }
+            },
+            _autoComplete = function _autoComplete(targ, text) {
+                targ.parent().find(".options").remove();
+                var rData = _.filter(_cObj, function(elem) {
+                    return (elem["name"].toLowerCase().indexOf(text.toLowerCase()) != -1);
+                });
+                if (rData.length != 0) {
+                    var dH = "<div class='options'>";
+                    rData.forEach( function(element, index) {
+                        dH += "<div class='"+index+"'>" + element["name"] + "</div>";
+                    });
+                    dH += "</div>";
+                    targ.after(dH);
+                    targ.parent().find(".options .option").on("click", function(e) {
+                        var oldH = '<div class="subtitle">Zipcode</div>\
+                        <input type="text" class="zipcode">\
+                        <button type="save">Save</button>';
+
+                    });
                 }
             },
             _dataStore = function _dataStore(obj) {
