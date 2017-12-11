@@ -35,10 +35,16 @@ define([
                     
                 } else {
                     var url = "http://api.openweathermap.org/data/2.5/weather";
-                    if (_configs["weather"] && _configs["weather"][index] &&
-                        _configs["weather"][index]["zipcode"] && _configs["weather"][index]["country"]) {
+                    if (_configs["weather"] && _configs["weather"][index] && _configs["weather"][index]["country"]) {
                         //the user has assigned values
-                        url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
+                        if (_configs["weather"][index]["zipcode"]) {
+                            url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
+                        } else if (_configs["weather"][index]["city"]) {
+                            url += "?q=" + _configs["weather"][index]["city"] + "," + _configs["weather"][index]["country"];
+                        } else  {
+                            //lets go with malibu
+                            url += "?zip=90210,us"
+                        }
                     } else {
                         //lets go with malibu
                         url += "?zip=90210,us"
@@ -189,12 +195,16 @@ define([
                             var target = $(e.currentTarget),
                                 ind = target.parents(".tile").data("index"),
                                 zip = target.parent().find(".zipcode").val(),
+                                city = target.parent().find(".city").val(),
                                 count = target.parent().find(".country").val();
-                            if (zip != "" && count != "") {
+                            if ((zip != "" || city != "") && count != "") {
                                 if (!_configs["weather"][ind]) {
                                     _configs["weather"][ind] = {};
                                 }
-                                _configs["weather"][ind]["zipcode"] = zip;
+                                zip ?
+                                    _configs["weather"][ind]["zipcode"] = zip :
+                                    _configs["weather"][ind]["city"] = city;
+
                                 _configs["weather"][ind]["country"] = count;
                                 _stored["weather"][ind] = {};
                                 
