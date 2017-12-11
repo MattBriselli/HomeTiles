@@ -122,11 +122,12 @@ define([
                         fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
                             "mph " + windDir(wData["wind"]["deg"]));
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
-                        fB.find(".pressure").text("Barometric Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
+                        fB.find(".pressure").text("Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
                     } else {
                         fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
                             windDir(wData["wind"]["deg"]));
                         fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
+                        fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
                     }
                     if (wData["rain"]) {
                         fB.find(".rain").text()
@@ -145,7 +146,7 @@ define([
                         //let's assume F bc i'm american
                         return (1.8 * (temp - 273) + 32).toPrecision(3) + " &#8457;";
                     } else {
-                        return (temp - 273.15).toPrecision(3) + " &#8451;";
+                        return (temp - 273.15).toPrecision(2) + " &#8451;";
                     }
                 }
                 function windDir(dir) {
