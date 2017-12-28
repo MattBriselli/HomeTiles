@@ -130,10 +130,10 @@ define([
                         fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
                     }
                     if (wData["rain"]) {
-                        fB.find(".rain").text()
+                        fB.find(".rain").text();
                     }
                     if (wData["snow"]) {
-                        fB.find(".snow").text()
+                        fB.find(".snow").text();
                     }
                     fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
                     // fB.find(".feel").html("Feels Like: " +
