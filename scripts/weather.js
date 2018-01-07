@@ -207,29 +207,36 @@ define([
 
                         code == "US" ? targ.after(usH) : targ.after(oH);
 
-                        $(".weather .back button").off("click").on("click", function(e) {
-                            var target = $(e.currentTarget),
-                                ind = target.parents(".tile").data("index"),
-                                zip = target.parent().find(".zipcode").val(),
-                                city = target.parent().find("input.city").val(),
-                                count = target.parent().find(".country").val();
-                            if ((zip != "" || city != "") && count != "") {
-                                if (!_configs["weather"][ind]) {
-                                    _configs["weather"][ind] = {};
-                                }
-                                zip ?
-                                    _configs["weather"][ind]["zipcode"] = zip :
-                                    _configs["weather"][ind]["city"] = city;
-
-                                _configs["weather"][ind]["country"] = count;
-                                _stored["weather"][ind] = {};
-                                
-                                _dataStore({"configs": _configs});
-                                _init(ind, _stored, _prefs, _configs);
+                        $(".weather .back button").off("click").on("click", newSaver);
+                        $(".weather .back input").on("keypress", function(e) {
+                            if (e.keyCode == 13) {
+                                newSaver(e);
+                                $(".weather .back input").off("keypress");
                             }
                         });
                     });
                 }
+                function newSaver(e) {
+                    var target = $(e.currentTarget),
+                        ind = target.parents(".tile").data("index"),
+                        zip = target.parent().find(".zipcode").val(),
+                        city = target.parent().find("input.city").val(),
+                        count = target.parent().find(".country").val();
+                    if ((zip != "" || city != "") && count != "") {
+                        if (!_configs["weather"][ind]) {
+                            _configs["weather"][ind] = {};
+                        }
+                        zip ?
+                            _configs["weather"][ind]["zipcode"] = zip :
+                            _configs["weather"][ind]["city"] = city;
+
+                        _configs["weather"][ind]["country"] = count;
+                        _stored["weather"][ind] = {};
+                        
+                        _dataStore({"configs": _configs});
+                        _init(ind, _stored, _prefs, _configs);
+                    }
+                };
             },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
