@@ -24,7 +24,6 @@ define([
                     $(newTile).find(".front, .back, .fa-trash-o").toggle();
                 });
                 newTile.attr("data-index", index);
-                newTile.css("backgroundColor", "yellow");
 
                 if (!error) {
                     //we have data
