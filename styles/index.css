@@ -235,6 +235,9 @@ body {
 .weather .back .subtitle {
     margin-left: 41%;
 }
+.weather .back .subtitle.city {
+    margin-left: 45%;
+}
 .weather .back input, .weather .back .options {
     margin-left: 25%;
     width: 50%;

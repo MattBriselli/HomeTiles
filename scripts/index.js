@@ -55,6 +55,7 @@ define("tab", [
                             var oldI = e.oldIndex,
                                 newI = e.newIndex,
                                 target = $(e.currentTarget);
+                            console.log(oldI, newI);
                             //need to reorder the _configs, _stored and data-indexes
 
                         }

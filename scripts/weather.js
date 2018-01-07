@@ -183,18 +183,30 @@ define([
                     });
                     dH += "</div>";
                     targ.after(dH);
+
+                    if (targ.parent().find(".zipcode").length != 0) {
+                        targ.parent().find(".zipcode").prev().remove();
+                        targ.parent().find(".zipcode").remove();
+                        targ.parent().find(".save").remove();
+                    } else if (targ.parent().find(".city").length != 0) {
+                        targ.parent().find(".city").prev().remove();
+                        targ.parent().find(".city").remove();
+                        targ.parent().find(".save").remove();
+                    } 
+
                     targ.parent().find(".options .option").on("click", function(e) {
                         var code = $(e.currentTarget).data("code"),
                             usH = '<div class="subtitle">Zipcode</div>\
                                     <input type="text" class="zipcode">\
-                                    <button type="save">Save</button>',
-                            oH = '<div class="subtitle">City</div>\
+                                    <button class="save" type="save">Save</button>',
+                            oH = '<div class="subtitle city">City</div>\
                                     <input type="text" class="city">\
-                                    <button type="save">Save</button>';
+                                    <button class="save" type="save">Save</button>';
                         targ.val(code);
                         targ.parent().find(".options").remove();
-                        code == "US" ?
-                            targ.after(usH) : targ.after(oH);
+
+                        code == "US" ? targ.after(usH) : targ.after(oH);
+
                         $(".weather .back button").off("click").on("click", function(e) {
                             var target = $(e.currentTarget),
                                 ind = target.parents(".tile").data("index"),
