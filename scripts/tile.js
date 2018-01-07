@@ -54,7 +54,11 @@ define([
 
                     newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
                         place + "</div></div>");
-                    $(".tileBody").append(newTile);
+                    if ($(".tile[data-index='"+index+"']").length != 0) {
+                        $(".tile[data-index='"+index+"']").replaceWith(newTile);
+                    } else {
+                        $(".tileBody").append(newTile);
+                    }                    
                 }
             };
 
