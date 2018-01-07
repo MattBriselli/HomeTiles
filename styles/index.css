@@ -132,6 +132,11 @@ body {
     float: right;
     right: 5px;
 }
+.tile .top .error {
+    margin-top: 40%;
+    font-size: 22px;
+    text-align: center;
+}
 .tile .back {
     display: none;
     margin-top: 25%;

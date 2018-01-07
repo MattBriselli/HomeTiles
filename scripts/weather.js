@@ -71,8 +71,9 @@ define([
                         changer();
                     })
                     .fail(function(error) {
-                        console.log("ERROR");
-                        console.log("FAILED TO GET WEATHER DATA");
+                        console.log(error);
+                        tileStyler(undefined, _configs["weather"][index]);
+                        console.log("ERROR!!!!! FAILED TO GET WEATHER DATA");
                     });
                 }
 
@@ -103,43 +104,46 @@ define([
                         }
                     });
                 }
-                function tileStyler(wData) {
+                function tileStyler(wData, errorData) {
                     var tile = $(_tmpl);
-                    //Load tile's top stuff
-                    tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
-                    tile.find(".conditions").text(wData["weather"][0]["description"]);
-                    tile.find(".clouds").text("Cloud Cover: " + wData["clouds"]["all"] +"%");
-                    var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
-                    condSrc += wData["weather"][0]["icon"] + ".png";
-                    tile.find("img.condition").attr("src", condSrc);
-                    //Load tile's bottom left
-                    var fB = tile.find(".front .bottom");
-                    fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
-                    fB.find(".high").html(tempConvert(wData["main"]["temp_max"])+"<br/>High");
-                    fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
+                    if (wData) {
+                        //Load tile's top stuff
+                        tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
+                        tile.find(".conditions").text(wData["weather"][0]["description"]);
+                        tile.find(".clouds").text("Cloud Cover: " + wData["clouds"]["all"] +"%");
+                        var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
+                        condSrc += wData["weather"][0]["icon"] + ".png";
+                        tile.find("img.condition").attr("src", condSrc);
+                        //Load tile's bottom left
+                        var fB = tile.find(".front .bottom");
+                        fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
+                        fB.find(".high").html(tempConvert(wData["main"]["temp_max"])+"<br/>High");
+                        fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
 
-                    if (_prefs["unit"] == "imperial"){
-                        fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
-                            "mph " + windDir(wData["wind"]["deg"]));
-                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
-                        fB.find(".pressure").text("Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
+                        if (_prefs["unit"] == "imperial"){
+                            fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
+                                "mph " + windDir(wData["wind"]["deg"]));
+                            fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
+                            fB.find(".pressure").text("Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
+                        } else {
+                            fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
+                                windDir(wData["wind"]["deg"]));
+                            fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
+                            fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
+                        }
+                        if (wData["rain"]) {
+                            fB.find(".rain").text();
+                        }
+                        if (wData["snow"]) {
+                            fB.find(".snow").text();
+                        }
+                        fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
+                        // fB.find(".feel").html("Feels Like: " +
+                            // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
+                        tileJs(tile, index);
                     } else {
-                        fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
-                            windDir(wData["wind"]["deg"]));
-                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
-                        fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
+                        tileJs(tile, index, errorData);
                     }
-                    if (wData["rain"]) {
-                        fB.find(".rain").text();
-                    }
-                    if (wData["snow"]) {
-                        fB.find(".snow").text();
-                    }
-                    fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
-                    // fB.find(".feel").html("Feels Like: " +
-                        // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
-
-                    tileJs(tile, index);
                 }
                 function tempConvert(temp) {
                     if (_prefs["unit"] == "imperial") {

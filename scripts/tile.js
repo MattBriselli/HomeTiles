@@ -18,7 +18,7 @@ define([
              * made by Matt Briselli
              * brslli.com
              */
-            _init = function _init(tile, index) {
+            _init = function _init(tile, index, error) {
                 var newTile = $(tile).find(".tile");
                 newTile.find(".fa-pencil").on("click", function() {
                     $(newTile).find(".front, .back, .fa-trash-o").toggle();
@@ -26,22 +26,31 @@ define([
                 newTile.attr("data-index", index);
                 newTile.css("backgroundColor", "yellow");
 
-                if ($(".tile[data-index='"+index+"']").length != 0) {
-                    //a simple replacement
-                    $(".tile[data-index='"+index+"']").replaceWith(newTile);
-                } else {
-                    //order matters, the user sets that preference
-                    if (index == 0) {
-                        //0 will always be first
-                        $(".tileBody").prepend(newTile);
-                    } else if ($(".tile[data-index='"+parseInt(index-1)+"']").length != 0) {
-                        $(".tile[data-index='"+parseInt(index-1)+"']").after(newTile);
-                    } else if ($(".tile[data-index='"+parseInt(index+1)+"']").length != 0) {
-                        $(".tile[data-index='"+parseInt(index+1)+"']").before(newTile);
+                if (!error) {
+                    //we have data
+                    if ($(".tile[data-index='"+index+"']").length != 0) {
+                        //a simple replacement
+                        $(".tile[data-index='"+index+"']").replaceWith(newTile);
                     } else {
-                        //very weird order, just stick it at the end and hope for the best
-                        $(".tileBody").append(newTile);
+                        //order matters, the user sets that preference
+                        if (index == 0) {
+                            //0 will always be first
+                            $(".tileBody").prepend(newTile);
+                        } else if ($(".tile[data-index='"+parseInt(index-1)+"']").length != 0) {
+                            $(".tile[data-index='"+parseInt(index-1)+"']").after(newTile);
+                        } else if ($(".tile[data-index='"+parseInt(index+1)+"']").length != 0) {
+                            $(".tile[data-index='"+parseInt(index+1)+"']").before(newTile);
+                        } else {
+                            //very weird order, just stick it at the end and hope for the best
+                            $(".tileBody").append(newTile);
+                        }
                     }
+                } else {
+                    //no data, throw an error msg
+                    console.log(error);
+                    newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
+                        (error["city"] ? error["city"] : "Beverly Hills") +"</div></div>");
+                    $(".tileBody").append(newTile);
                 }
             };
 
