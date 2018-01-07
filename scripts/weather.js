@@ -208,8 +208,9 @@ define([
                         code == "US" ? targ.after(usH) : targ.after(oH);
 
                         $(".weather .back button").off("click").on("click", newSaver);
-                        $(".weather .back input").on("keypress", function(e) {
-                            if (e.keyCode == 13) {
+
+                        $(".weather .back input.city, .weather .back input.zipcode").on("keypress", function(e) {
+                            if (e.keyCode == 13 && $(e.currentTarget).val().length != 0) {
                                 newSaver(e);
                                 $(".weather .back input").off("keypress");
                             }
