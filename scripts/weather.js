@@ -70,10 +70,9 @@ define([
                         tileStyler(wData);
                         changer();
                     })
-                    .fail(function(error) {
-                        console.log(error);
+                    .fail(function() {
                         tileStyler(undefined, _configs["weather"][index]);
-                        console.log("ERROR!!!!! FAILED TO GET WEATHER DATA");
+                        changer();
                     });
                 }
 

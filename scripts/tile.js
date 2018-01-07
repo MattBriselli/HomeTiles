@@ -47,7 +47,7 @@ define([
                     }
                 } else {
                     //no data, throw an error msg
-                    var place = (error["city"] ? error["city"] : error["zipcode"]) + ", " + error["country"];
+                    var place = (error["city"] ? error["city"] + ", " + error["country"] : error["zipcode"]);
                     if (!error["country"]) {
                         place = "Beverly Hills, CA";
                     }
