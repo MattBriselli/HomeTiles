@@ -98,7 +98,9 @@ body {
     width: 300px;
     background-color: white;
     margin: 10px;
+    opacity: 0.9;
     vertical-align: top;
+    border-radius: 10px;
 }
 .tile.sort {
     cursor: grab;
@@ -115,6 +117,8 @@ body {
     background-color: transparent;
     width: 100%;
     z-index: 10;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 .tile .top i {
     position: absolute;
@@ -136,6 +140,10 @@ body {
     margin-top: 38%;
     font-size: 28px;
     text-align: center;
+}
+.tile .bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 .tile .back {
     display: none;
