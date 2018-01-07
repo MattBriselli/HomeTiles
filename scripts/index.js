@@ -47,6 +47,18 @@ define("tab", [
                         "left": (19)+parseFloat(direction) + "%",
                         "width": (81-parseInt(direction) + "%")
                     }, 500);
+                    var tiles = $(".tileBody");
+                    Sortable.create(tiles[0], {
+                        animation: 150,
+                        draggable: ".tile.sort",
+                        onUpdate: function(e) {
+                            var oldI = e.oldIndex,
+                                newI = e.newIndex,
+                                target = $(e.currentTarget);
+                            //need to reorder the _configs, _stored and data-indexes
+
+                        }
+                    });
                     $(".tile.sort").on("mousedown", _tileSort);
                 });
                 $(".editBody .tiles button").on("click", function(e) {
@@ -181,18 +193,6 @@ define("tab", [
                 target.addClass("mousedown");
                 target.on("mouseup", function(e) {
                     $(".tile").removeClass("mousedown");
-                });
-                var tiles = $(".tileBody");
-                Sortable.create(tiles[0], {
-                    animation: 150,
-                    draggable: ".tile.sort",
-                    onUpdate: function(e) {
-                        var oldI = e.oldIndex,
-                            newI = e.newIndex,
-                            target = $(e.currentTarget);
-                        //need to reorder the _configs, _stored and data-indexes
-
-                    }
                 });
             };
         return _init;
