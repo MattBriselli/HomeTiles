@@ -211,7 +211,7 @@ define([
                             var target = $(e.currentTarget),
                                 ind = target.parents(".tile").data("index"),
                                 zip = target.parent().find(".zipcode").val(),
-                                city = target.parent().find(".city").val(),
+                                city = target.parent().find("input.city").val(),
                                 count = target.parent().find(".country").val();
                             if ((zip != "" || city != "") && count != "") {
                                 if (!_configs["weather"][ind]) {
