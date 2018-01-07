@@ -47,9 +47,13 @@ define([
                     }
                 } else {
                     //no data, throw an error msg
-                    console.log(error);
+                    var place = (error["city"] ? error["city"] : error["zipcode"]) + ", " + error["country"];
+                    if (!error["country"]) {
+                        place = "Beverly Hills, CA";
+                    }
+
                     newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
-                        (error["city"] ? error["city"] : "Beverly Hills") +"</div></div>");
+                        place + "</div></div>");
                     $(".tileBody").append(newTile);
                 }
             };
