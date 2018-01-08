@@ -223,9 +223,7 @@ define([
                         city = target.parent().find("input.city").val(),
                         count = target.parent().find(".country").val();
                     if ((zip != "" || city != "") && count != "") {
-                        if (!_configs["weather"][ind]) {
-                            _configs["weather"][ind] = {};
-                        }
+                        _configs["weather"][ind] = {};
                         zip ?
                             _configs["weather"][ind]["zipcode"] = zip :
                             _configs["weather"][ind]["city"] = city;
