@@ -187,12 +187,12 @@ define([
                     if (targ.parent().find(".zipcode").length != 0) {
                         targ.parent().find(".zipcode").prev().remove();
                         targ.parent().find(".zipcode").remove();
-                        targ.parent().find(".save").remove();
                     } else if (targ.parent().find(".city").length != 0) {
                         targ.parent().find(".city").prev().remove();
                         targ.parent().find(".city").remove();
-                        targ.parent().find(".save").remove();
-                    } 
+                    }
+
+                    targ.parent().find(".save").remove();
 
                     targ.parent().find(".options .option").on("click", function(e) {
                         var code = $(e.currentTarget).data("code"),
