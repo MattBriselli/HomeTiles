@@ -31,7 +31,7 @@ define([
                 if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
                     //there's old data that's still good
                     tileStyler(_stored["weather"][index]);
-                    _changer();
+                    changer();
                     
                 } else {
                     var url = "http://api.openweathermap.org/data/2.5/weather";
@@ -68,11 +68,11 @@ define([
 
                         _dataStore({"weather": _stored["weather"]});
                         tileStyler(wData);
-                        _changer();
+                        changer();
                     })
                     .fail(function() {
                         tileStyler(undefined, _configs["weather"][index]);
-                        _changer();
+                        changer();
                     });
                 }
 
@@ -84,6 +84,24 @@ define([
                             old = moment(dataWT["time"], "YYYY-MM-DD-HH-mm");
                         return (now.diff(old, "minutes") > 30);
                     }
+                }
+                function changer() {
+                    $(".weather .back input.country").off("keyup").on("keyup", function(e) {
+                        if ($(e.currentTarget).val().length != 0) {
+                            var text = $(e.currentTarget).val();
+                            if (!_cObj) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "../countries.json"
+                                }).done(function(data) {
+                                    _cObj = data;
+                                    _autoComplete($(e.currentTarget), text);
+                                });
+                            } else {
+                                _autoComplete($(e.currentTarget), text);
+                            }
+                        }
+                    });
                 }
                 function tileStyler(wData, errorData) {
                     var tile = $(_tmpl);
@@ -153,24 +171,6 @@ define([
 
                     }
                 }
-            },
-            _changer = function _changer() {
-                $(".weather .back input.country").off("keyup").on("keyup", function(e) {
-                    if ($(e.currentTarget).val().length != 0) {
-                        var text = $(e.currentTarget).val();
-                        if (!_cObj) {
-                            $.ajax({
-                                type: "GET",
-                                url: "../countries.json"
-                            }).done(function(data) {
-                                _cObj = data;
-                                _autoComplete($(e.currentTarget), text);
-                            });
-                        } else {
-                            _autoComplete($(e.currentTarget), text);
-                        }
-                    }
-                });
             },
             _autoComplete = function _autoComplete(targ, text) {
                 targ.parent().find(".options").remove();
@@ -263,8 +263,6 @@ define([
                     _dataStore(_stored);
 
                     $(tile).remove();
-
-                    _changer();
                 });
             },
             _dataStore = function _dataStore(obj) {
