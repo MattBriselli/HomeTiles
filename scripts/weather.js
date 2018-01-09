@@ -219,9 +219,9 @@ define([
                 function newSaver(e) {
                     var target = $(e.currentTarget),
                         ind = target.parents(".tile").data("index"),
-                        zip = target.parent().find(".zipcode").val(),
+                        zip = target.parent().find("input.zipcode").val(),
                         city = target.parent().find("input.city").val(),
-                        count = target.parent().find(".country").val();
+                        count = target.parent().find("input.country").val();
                     if ((zip != "" || city != "") && count != "") {
                         _configs["weather"][ind] = {};
                         zip ?
