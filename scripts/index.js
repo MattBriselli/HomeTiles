@@ -70,7 +70,7 @@ define("tab", [
                     _tiles.push(tVal);
                     _dataStore({"tiles": _tiles});
                     
-                    _configs[tVal][nInd] = {};
+                    _configs[tVal][nInd] = {"country": "US", "zipcode": "90210"};
                     _dataStore({"configs": _configs});
                     _tileLoader(tVal, nInd);
                 });

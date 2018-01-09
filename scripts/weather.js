@@ -239,10 +239,30 @@ define([
             },
             _remover = function _remover(index) {
                 var tile = $(".tile[data-index='"+index+"']"),
-                    index = tile.data("index"),
-                    type = tile.children().attr("class");
+                    index = tile.data("index");
 
-                console.log(tile, index, type);
+                tile.find(".fa-trash-o").on("click", function() {
+
+                    var i = index;
+                    
+                    while (_stored["configs"]["weather"].hasOwnProperty(i+1)) {
+                        _stored["configs"]["weather"][i] = _stored["configs"]["weather"][i+1];
+                        _stored["weather"][i] = _stored["weather"][i+1];
+                        console.log($(".tile[data-index='"+(parseInt(i)+1)+"']"));
+                        i++;
+                    }
+
+                    delete _stored["weather"][i];
+                    delete _stored["configs"]["weather"][i];
+
+                    _stored["tiles"].splice(index, 1);
+                    //the array of the tile types
+                    _dataStore(_stored);
+
+                    $(tile).remove();
+
+                    console.log(_stored);
+                });
             },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
