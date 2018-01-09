@@ -248,20 +248,21 @@ define([
                     while (_stored["configs"]["weather"].hasOwnProperty(i+1)) {
                         _stored["configs"]["weather"][i] = _stored["configs"]["weather"][i+1];
                         _stored["weather"][i] = _stored["weather"][i+1];
-                        console.log($(".tile[data-index='"+(parseInt(i)+1)+"']"));
+
+                        var nextTile = $(".tile[data-index='"+(parseInt(i)+1)+"']");
+                        nextTile.attr("data-index", i);
                         i++;
                     }
 
                     delete _stored["weather"][i];
                     delete _stored["configs"]["weather"][i];
+                    //need to delete the last one as the rest have shifted up
 
                     _stored["tiles"].splice(index, 1);
                     //the array of the tile types
                     _dataStore(_stored);
 
                     $(tile).remove();
-
-                    console.log(_stored);
                 });
             },
             _dataStore = function _dataStore(obj) {
