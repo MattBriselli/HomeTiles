@@ -143,6 +143,7 @@ define([
                     } else {
                         tileJs(tile, index, errorData);
                     }
+                    _remover(index);
                 }
                 function tempConvert(temp) {
                     if (_prefs["unit"] == "imperial") {
@@ -235,6 +236,13 @@ define([
                         _init(ind, _stored, _prefs, _configs);
                     }
                 };
+            },
+            _remover = function _remover(index) {
+                var tile = $(".tile[data-index='"+index+"']"),
+                    index = tile.data("index"),
+                    type = tile.children().attr("class");
+
+                console.log(tile, index, type);
             },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {

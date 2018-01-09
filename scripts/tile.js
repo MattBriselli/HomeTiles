@@ -59,7 +59,7 @@ define([
                         $(".tileBody").append(newTile);
                     }                    
                 }
-            };
+            }
 
     return _init;
 });
