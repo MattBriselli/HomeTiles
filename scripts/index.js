@@ -55,7 +55,6 @@ define("tab", [
                             var oldI = e.oldIndex,
                                 newI = e.newIndex,
                                 target = $(e.currentTarget);
-                            console.log(oldI, newI);
                             //need to reorder the _configs, _stored and data-indexes
 
                         }
@@ -102,7 +101,7 @@ define("tab", [
                 $(".reset").on("click", function() {
                     chrome.storage.sync.clear();
                     $(".background input").focus();
-                    $(".background input").val("http://7wallpapers.net/wp-content/uploads/8_Blue-Rose.jpg");
+                    $(".background input").val("http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg");
                     $(".background input").blur();
                     $(".tile").remove();
                     _init();
@@ -149,8 +148,6 @@ define("tab", [
             _dataLoader = function _dataLoader(keyL) {
                 chrome.storage.sync.get(keyL, function(items) {
                     //null loads all of the data
-                    console.log("Data Loaded: ");
-                    console.log(items);
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     _tiles = items["tiles"];
@@ -158,9 +155,9 @@ define("tab", [
                         _prefLoader(items["prefs"]);
                     } else {
                         _dataStore( {"prefs": {"unit": "imperial", 
-                            "back": "https://static.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg"}} );
+                            "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"}} );
                         _prefs = {"unit": "imperial", 
-                            "back": "https://static.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg"};
+                            "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
                         _prefLoader(items["prefs"]);
                     }
                     if (!items.hasOwnProperty("configs")) {
@@ -184,8 +181,6 @@ define("tab", [
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log("STORED: ");
-                    console.log(obj);
                 });
             },
             _tileSort = function _tileSort(e) {

@@ -56,7 +56,6 @@ define([
                         type: "GET"
                     })
                     .done(function(wData) {
-                        console.log('got weather data');
                         wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
                         var newObj = {"weather": {}};
                         newObj["weather"][index] = wData;
@@ -232,8 +231,6 @@ define([
 
                         _configs["weather"][ind]["country"] = count;
                         _stored["weather"][ind] = {};
-
-                        console.log(ind, target);
                         
                         _dataStore({"configs": _configs});
                         _init(ind, _stored, _prefs, _configs);
@@ -268,8 +265,6 @@ define([
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                    console.log("STORED: ");
-                    console.log(obj);
                 });
             };
 

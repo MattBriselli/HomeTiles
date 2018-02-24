@@ -6,6 +6,7 @@ body {
 .body {
     position: absolute;
     margin: 11px 0px 0px 50px;
+    overflow: hidden;
 }
 /*
  * END GENERAL STYLES
@@ -52,11 +53,11 @@ body {
 .editBody .tiles button {
     display: inline-block;
     float: right;
-    margin: 5px 20% 0 0;
+    margin: 5px 25% 0 0;
 }
 .editBody .tiles .subtitle {
     display: inline-block;
-    margin: 5px 10px 5px 18%;
+    margin: 5px 10px 5px 12%;
 }
 .editBody .subtitle {
     font-size: 15px;
