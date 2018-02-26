@@ -251,8 +251,6 @@ define([
                         i++;
                     }
 
-                    console.log(i);
-
                     delete _stored["weather"][i];
                     delete _stored["configs"]["weather"][i];
                     //need to delete the last one as the rest have shifted up
