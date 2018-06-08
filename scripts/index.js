@@ -68,8 +68,16 @@ define("tab", [
 
                     _tiles.push(tVal);
                     _dataStore({"tiles": _tiles});
+
+                    if (!_configs.hasOwnProperty(target.attr("value"))) {
+                        _configs[target.attr("value")] = {}
+                    }
                     
-                    _configs[tVal][nInd] = {"country": "US", "zipcode": "90210"};
+                    if (target.attr("value") == "weather") {
+                        _configs[tVal][nInd] = {"country": "US", "zipcode": "90210"};
+                    } else if (target.attr("value") == "stock") {
+                        _configs[tVal][nInd] = {};
+                    }
                     _dataStore({"configs": _configs});
                     _tileLoader(tVal, nInd);
                 });

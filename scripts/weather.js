@@ -95,15 +95,7 @@ define([
                                 }).done(function(data) {
                                     _cObj = data;
                                     _autoComplete($(e.currentTarget), text);
-                                }).error(function() {
-                                    $.ajax({
-                                        type: "GET",
-                                        url: "http://country.io/names.json"
-                                    }).done(function(data) {
-                                        _cObj = data;
-                                        _autoComplete($(e.currentTarget), text);
-                                    });
-                                })
+                                });
                             } else {
                                 _autoComplete($(e.currentTarget), text);
                             }
