@@ -130,12 +130,11 @@ body {
     position: relative;
     background-color: transparent;
     width: 100%;
-    z-index: 10;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 .tile .topBar {
-    z-index: 11;
+    z-index: 10;
 }
 .tile .top i {
     position: absolute;
@@ -291,7 +290,7 @@ body {
 .tile .stock.dark {
     background: black;
 }
-.tile .stock .front .top {
+.tile .stock .front .bottom {
     height: 50px;
 }
 .tile .stock.dark .fa-pencil {

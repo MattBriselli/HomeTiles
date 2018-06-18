@@ -31,7 +31,8 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var code = (_configs["stock"][index] && _configs["stock"][index]["stock"]) ? _configs["stock"][index]["stock"] : "AAPL";
+                var code = (_configs["stock"][index] && _configs["stock"][index]["stock"]) ? 
+                    _configs["stock"][index]["stock"] : "AAPL";
 
                 var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
                 url += code + "&types=quote,news,chart&range=1d";
@@ -40,7 +41,6 @@ define([
                     type: "GET"
                 })
                 .done(function(data) {
-                    console.log(data);
                     _tileStyler(data, index);
                     _grapher(index, code, data);
                 })
@@ -54,12 +54,14 @@ define([
 
                 tileJs(tile, index);
 
+                if (_prefs["dark"] == true) {
+                    $(".tile[data-index='"+index+"'] .stock").addClass("dark");
+                }
+
                 $(".tile[data-index='"+index+"'] .stock .back button").on("click", function(e) {
                     var target = $(e.currentTarget),
                         ind = target.parents(".tile").attr("data-index"),
                         text = target.parents(".back").find("input").val();
-
-                    console.log(text);
 
                     if (text && text.length > 0) {
                         if (!_configs["stock"][ind]) {
