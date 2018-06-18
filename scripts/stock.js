@@ -31,17 +31,16 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                console.log(_configs)
-
                 var code = (_configs["stock"][index] && _configs["stock"][index]["stock"]) ? _configs["stock"][index]["stock"] : "AAPL";
 
                 var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
-                url += code + "&types=quote,news,chart&range=1d&chartSimplify=true";
+                url += code + "&types=quote,news,chart&range=1d";
                 $.ajax({
                     url: url,
                     type: "GET"
                 })
                 .done(function(data) {
+                    console.log(data);
                     _tileStyler(data, index);
                     _grapher(index, code, data);
                 })
@@ -71,7 +70,7 @@ define([
 
                         chrome.storage.sync.set({"configs": _configs}, function() {
                             //null loads all of the data
-                            console.log("STORED: "+_configs+" and "+ind);
+                            console.log("STORED: "+text+" and "+ind);
                         });
                     }
                 });
@@ -128,16 +127,20 @@ define([
 
                 g.append("g")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(
-                        d3.axisBottom(x).ticks(5)
-                        )
+                    .call( d3.axisBottom(x).tickArguments([5]) )
+                    .classed("xAxis", true)
                     .select(".domain")
                         .remove();
 
                 g.append("g")
-                    .call(d3.axisLeft(y))
+                    .call(
+                        d3.axisLeft(y)
+                            .tickArguments([8])
+                    )
+                    .classed("yAxis", true)
                     .append("text")
-                        .attr("fill", "#000")
+                        .attr("fill", "white")
+                        .attr("stroke", "white")
                         .attr("transform", "rotate(-90)")
                         .attr("y", 6)
                         .attr("dy", "0.71em")
@@ -149,7 +152,7 @@ define([
                     .attr("stroke", "steelblue")
                     .attr("stroke-linejoin", "round")
                     .attr("stroke-linecap", "round")
-                    .attr("stroke-width", 1.5)
+                    .attr("stroke-width", 3)
                     .attr("d", line);
             };
 

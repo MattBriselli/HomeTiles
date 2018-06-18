@@ -275,6 +275,21 @@ body {
  * STYLES FOR THE STOCK TILE
  */
 .tile .stock {
+    border-radius: 10px;
+}
+.tile .stock.dark {
+    background: black;
+}
+.tile .stock .front .top {
+    height: 50px;
+}
+.tile .stock.dark .fa-pencil {
+    color: white;
+}
+.tile .stock.dark .xAxis, .tile .stock.dark .yAxis,
+.tile .stock.dark .xAxis line, .tile .stock.dark .yAxis line,
+.tile .stock.dark .yAxis path {
+    stroke: white;
 }
 .tile .back {
     width: auto;
