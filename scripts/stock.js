@@ -73,6 +73,7 @@ define([
                         chrome.storage.sync.set({"configs": _configs}, function() {
                             //null loads all of the data
                             console.log("STORED: "+text+" and "+ind);
+                            _init(ind, _stored, _prefs, _configs);
                         });
                     }
                 });
@@ -86,9 +87,8 @@ define([
                     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
                     parseTime = d3.timeParse("%H:%M"),
                     x = d3.scaleTime().rangeRound([0, width]),
-                    y = d3.scaleLinear().rangeRound([height, 0]);
-
-                var lastY = 0;
+                    y = d3.scaleLinear().rangeRound([height, 0]),
+                    lastY = 0;
 
                 var line = d3.line()
                     .x(function(d) {

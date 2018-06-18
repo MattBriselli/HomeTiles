@@ -253,24 +253,24 @@ body {
 .weather .humidity {
     margin-top: 20px;
 }
-.weather .back .title {
+.back .title {
     margin: -5% 0 10% 28%;
     font-size: 25px;
 }
-.weather .back .subtitle {
+.back .subtitle {
     margin-left: 41%;
 }
-.weather .back .subtitle.city {
+.back .subtitle.city {
     margin-left: 45%;
 }
-.weather .back input, .weather .back .options {
+.back input, .weather .back .options {
     margin-left: 25%;
     width: 50%;
 }
-.weather .back .options {
+.back .options {
     background-color: white;
 }
-.weather .back .options > div {
+.back .options > div {
     background-color: white;
     border: 1px solid black;
     border-top: 0;
@@ -304,11 +304,14 @@ body {
 .tile .back {
     width: auto;
 }
-.tile .back .content {
-    position: absolute;
+.tile .stock .back .title {
+    margin: -5% 0 10% 40%;
+}
+.tile .stock .back button {
+    display: inline-block;
 }
 .tile .stock input {
-    width: 100%;
-    margin-left: 5%;
+    width: 40%;
+    margin-left: 29%;
 }
 /*END STOCK STYLES*/
