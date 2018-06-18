@@ -41,47 +41,58 @@ define([
                     type: "GET"
                 })
                 .done(function(data) {
-                    _tileStyler(data, index);
+                    console.log(data);
+                    _tileStyler(data, code, index);
                     _grapher(index, code, data);
                 })
                 .fail(function(error) {
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
             },
-            _tileStyler = function _tileStyler(wData, index) {
+            _tileStyler = function _tileStyler(wData, code, index) {
                 var tile = $(_tmpl),
                     tF = tile.find(".top .front");
 
                 tileJs(tile, index);
 
+                var newTile = $(".tile[data-index='"+index+"']");
+
+                newTile.find(".stockName").text(wData[code]["quote"]["symbol"]);
+
                 if (_prefs["dark"] == true) {
-                    $(".tile[data-index='"+index+"'] .stock").addClass("dark");
+                    newTile.find(".stock").addClass("dark");
                 }
 
-                $(".tile[data-index='"+index+"'] .stock .back button").on("click", function(e) {
-                    var target = $(e.currentTarget),
-                        ind = target.parents(".tile").attr("data-index"),
-                        text = target.parents(".back").find("input").val();
-
-                    if (text && text.length > 0) {
-                        if (!_configs["stock"][ind]) {
-                            _configs["stock"][ind] = {}
-                        }
-
-                        _configs["stock"][ind]["stock"] = text;
-
-                        chrome.storage.sync.set({"configs": _configs}, function() {
-                            //null loads all of the data
-                            console.log("STORED: "+text+" and "+ind);
-                            _init(ind, _stored, _prefs, _configs);
-                        });
+                newTile.find(".stock .back button").on("click", _changer);
+                newTile.find(".stock .back input").on("keyup", function(e) {
+                    if (e.keyCode == 13) {
+                        _changer(e);
                     }
                 });
+            },
+            _changer = function _changer(e) {
+                var target = $(e.currentTarget),
+                    ind = target.parents(".tile").attr("data-index"),
+                    text = target.parents(".back").find("input").val();
+
+                if (text && text.length > 0) {
+                    if (!_configs["stock"][ind]) {
+                        _configs["stock"][ind] = {}
+                    }
+
+                    _configs["stock"][ind]["stock"] = text;
+
+                    chrome.storage.sync.set({"configs": _configs}, function() {
+                        //null loads all of the data
+                        console.log("STORED: "+text+" and "+ind);
+                        _init(ind, _stored, _prefs, _configs);
+                    });
+                }
             },
             _grapher = function _grapher(index, code, data) {
                 var chart = $(".tile[data-index='"+index+"'] svg"),
                     svg = d3.select(chart[0]),
-                    margin = {top: 40, right: 30, bottom: 90, left: 50},
+                    margin = {top: 20, right: 30, bottom: 100, left: 50},
                     width =+ 300 - margin.left - margin.right,
                     height =+ 300 - margin.top - margin.bottom,
                     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
@@ -151,7 +162,7 @@ define([
                 g.append("path")
                     .datum(ddata)
                     .attr("fill", "none")
-                    .attr("stroke", "steelblue")
+                    .attr("stroke", "aquamarine")
                     .attr("stroke-linejoin", "round")
                     .attr("stroke-linecap", "round")
                     .attr("stroke-width", 3)

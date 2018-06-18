@@ -152,7 +152,7 @@ define("tab", [
                             $("body").css("background-image", "url('"+data[index]+"')");
                             $(".background input").val(data[index]);
                         } else if (index == "dark") {
-                            $(".editBody .darkMode input").attr("checked", (data[index]) ? "checked" : "");
+                            $(".editBody .darkMode input").attr("checked", (data[index]) ? "" : "checked");
                         } else {
                             //buttons
                             $(".editBody input."+data[index]).attr("checked", "checked");
