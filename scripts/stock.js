@@ -168,9 +168,26 @@ define([
                     .attr("d", line);
             },
             _dataInfo = function _dataInfo(data, code, index) {
-                var newTile = $(".tile[data-index='"+index+"']");
-                console.log(newTile.find(".bottom"));
+                var left = $(".tile[data-index='"+index+"'] .bottom .left"),
+                    right = $(".tile[data-index='"+index+"'] .bottom .right"),
+                    len = data[code]["chart"].length,
+                    first = data[code]["chart"][0],
+                    last = data[code]["chart"][len - 1],
+                    math = ((last["close"]-first["open"])/first["open"])*100;
 
+                if (Math.abs(math) > 10) {
+                    math = math.toPrecision(4);
+                } else if (Math.abs(math) > 1) {
+                    math = math.toPrecision(3);
+                } else {
+                    math = math.toPrecision(2);
+                }
+
+                left.text("$" +last["close"] + " ("+math+"%)");
+
+
+                
+                
             };
 
         return {

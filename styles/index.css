@@ -314,6 +314,19 @@ body {
 .tile .stock .front .bottom {
     height: 50px;
 }
+.tile .stock .front .bottom .left, .tile .stock .front .bottom .right {
+    width: 49%;
+    height: 100%;
+    display: inline-block;
+}
+.tile .stock .front .bottom .left {
+    float: left;
+    text-align: center;
+    font-size: 15px;
+}
+.tile .stock .front .bottom .right {
+    float: right;
+}
 .tile .stock.dark .fa-pencil {
     color: whitesmoke;
 }
