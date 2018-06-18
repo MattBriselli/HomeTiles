@@ -41,7 +41,6 @@ define([
                     type: "GET"
                 })
                 .done(function(data) {
-                    console.log(data);
                     _tileStyler(data, code, index);
                     _grapher(index, code, data);
                 })
@@ -56,7 +55,6 @@ define([
                 tileJs(tile, index);
 
                 var newTile = $(".tile[data-index='"+index+"']");
-
                 newTile.find(".stockName").text(wData[code]["quote"]["symbol"]);
 
                 if (_prefs["dark"] == true) {

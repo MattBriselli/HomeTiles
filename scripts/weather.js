@@ -136,6 +136,10 @@ define([
                             fB.find(".snow").text();
                         }
                         fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
+
+                        if (_prefs["dark"] == true) {
+                            tile.find(".weather").addClass("dark");
+                        }
                         // fB.find(".feel").html("Feels Like: " +
                             // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
                         tileJs(tile, index);

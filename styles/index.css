@@ -182,6 +182,11 @@ body {
     width: 100%;
     background-color: lightgrey;
     z-index: 2;
+    color: black;
+}
+.tile .weather.dark .front .top {
+    background-color: black;
+    color: whitesmoke;
 }
 .tile .weather .front .bottom {
     height: 50%;
@@ -292,7 +297,7 @@ body {
 }
 .tile .stock.dark {
     background: black;
-    color: white;
+    color: whitesmoke;
 }
 .tile .stock .stockName {
     text-align: center;
@@ -307,12 +312,12 @@ body {
     height: 50px;
 }
 .tile .stock.dark .fa-pencil {
-    color: white;
+    color: whitesmoke;
 }
 .tile .stock.dark .xAxis, .tile .stock.dark .yAxis,
 .tile .stock.dark .xAxis line, .tile .stock.dark .yAxis line,
 .tile .stock.dark .yAxis path {
-    stroke: white;
+    stroke: whitesmoke;
 }
 .tile .back {
     width: auto;

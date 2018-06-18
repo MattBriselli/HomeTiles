@@ -88,7 +88,8 @@ define("tab", [
                 });
                 $(".darkMode input").on("change", function(e) {
                     _prefs["dark"] = e.currentTarget.checked;
-                    $(".tile .stock").toggleClass("dark");
+                    $(".tile .stock, .tile .weather").toggleClass("dark");
+                    console.log(_prefs);
                     _dataStore({"prefs": _prefs});
                 });
                 $(".background input").on("blur", function(e) {
@@ -151,8 +152,8 @@ define("tab", [
                         if (index == "back") {
                             $("body").css("background-image", "url('"+data[index]+"')");
                             $(".background input").val(data[index]);
-                        } else if (index == "dark") {
-                            $(".editBody .darkMode input").attr("checked", (data[index]) ? "" : "checked");
+                        } else if (index == "dark" && data[index] == true) {
+                            $(".editBody .darkMode input").attr("checked", "checked");
                         } else {
                             //buttons
                             $(".editBody input."+data[index]).attr("checked", "checked");
