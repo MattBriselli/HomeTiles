@@ -29,9 +29,8 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
-                    keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
-                url += "GOOG" +"&interval=60min&apikey=" + keys[0];
+                var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
+                url += "GOOG," + "aapl,fb&types=quote,news,chart&range=1d";
                 $.ajax({
                     url: url,
                     type: "GET"
