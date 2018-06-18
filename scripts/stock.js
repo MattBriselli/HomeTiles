@@ -31,17 +31,19 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                console.log(configs);
+                console.log(_configs)
+
+                var code = (_configs["stock"][index] && _configs["stock"][index]["stock"]) ? _configs["stock"][index]["stock"] : "AAPL";
 
                 var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
-                url += "ADBE" + "&types=quote,news,chart&range=1d&chartSimplify=true";
+                url += code + "&types=quote,news,chart&range=1d&chartSimplify=true";
                 $.ajax({
                     url: url,
                     type: "GET"
                 })
                 .done(function(data) {
                     _tileStyler(data, index);
-                    _grapher(index, data);
+                    _grapher(index, code, data);
                 })
                 .fail(function(error) {
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
@@ -50,18 +52,31 @@ define([
             _tileStyler = function _tileStyler(wData, index) {
                 var tile = $(_tmpl),
                     tF = tile.find(".top .front");
-                if (_configs && _configs["stock"]) {
 
-                }
                 tileJs(tile, index);
-            },
-            _dataStore = function _dataStore(obj, index) {
-                chrome.storage.sync.set(obj, function() {
-                    //null loads all of the data
-                    console.log("STORED: "+obj+" and "+index);
+
+                $(".tile[data-index='"+index+"'] .stock .back button").on("click", function(e) {
+                    var target = $(e.currentTarget),
+                        ind = target.parents(".tile").attr("data-index"),
+                        text = target.parents(".back").find("input").val();
+
+                    console.log(text);
+
+                    if (text && text.length > 0) {
+                        if (!_configs["stock"][ind]) {
+                            _configs["stock"][ind] = {}
+                        }
+
+                        _configs["stock"][ind]["stock"] = text;
+
+                        chrome.storage.sync.set({"configs": _configs}, function() {
+                            //null loads all of the data
+                            console.log("STORED: "+_configs+" and "+ind);
+                        });
+                    }
                 });
             },
-            _grapher = function _grapher(index, data) {
+            _grapher = function _grapher(index, code, data) {
                 var chart = $(".tile[data-index='"+index+"'] svg"),
                     svg = d3.select(chart[0]),
                     margin = {top: 40, right: 30, bottom: 90, left: 50},
@@ -90,7 +105,7 @@ define([
                         }
                     });
 
-                var ddata = data["ADBE"]["chart"],
+                var ddata = data[code]["chart"],
                     dRed = ddata.reduce(function(acc, cur, i) {
                       acc[i] = cur;
                       return acc;
