@@ -31,6 +31,8 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
+                console.log(configs);
+
                 var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
                 url += "ADBE" + "&types=quote,news,chart&range=1d&chartSimplify=true";
                 $.ajax({
@@ -70,15 +72,22 @@ define([
                     x = d3.scaleTime().rangeRound([0, width]),
                     y = d3.scaleLinear().rangeRound([height, 0]);
 
+                var lastY = 0;
+
                 var line = d3.line()
                     .x(function(d) {
                         return x(parseTime(d.minute));
                     })
                     .y(function(d) {
-                        if (d.average < 0) {
+                        if (d.average > 0) {
+                            lastY = d.average;
+                            return y(d.average);
+                        } else if (d.marketAverage > 0) {
+                            lastY = d.marketAverage;
                             return y(d.marketAverage);
+                        } else {
+                            return y(lastY);
                         }
-                        return y(d.average);
                     });
 
                 var ddata = data["ADBE"]["chart"],
@@ -90,16 +99,23 @@ define([
 
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
                 y.domain(d3.extent(ddata, function(d) {
-                    if (d.average < 0) {
+                    if (d.average > 0) {
+                        lastY = d.average;
+                        return d.average;
+                    } else if (d.marketAverage > 0) {
+                        lastY = d.marketAverage;
                         return d.marketAverage;
+                    } else {
+                        return lastY;
                     }
-                    return d.average;
                 }));
 
 
                 g.append("g")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x))
+                    .call(
+                        d3.axisBottom(x).ticks(5)
+                        )
                     .select(".domain")
                         .remove();
 
@@ -110,8 +126,7 @@ define([
                         .attr("transform", "rotate(-90)")
                         .attr("y", 6)
                         .attr("dy", "0.71em")
-                        .attr("text-anchor", "end")
-                        .text("Price ($)");
+                        .attr("text-anchor", "end");
 
                 g.append("path")
                     .datum(ddata)

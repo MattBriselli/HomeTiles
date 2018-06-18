@@ -141,6 +141,7 @@ body {
 .tile .top .fa-pencil {
     float: right;
     right: 5px;
+    z-index: 11;
 }
 .tile .top .error {
     margin-top: 38%;
