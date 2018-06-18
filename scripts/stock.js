@@ -3,8 +3,8 @@ define([
     "underscore",
     "moment",
     "Sortable",
-    "d3",
     "tile",
+    "d3",
     "text!../tiles/stock.html"
     ],
     function(
@@ -12,8 +12,8 @@ define([
         _,
         moment,
         Sortable,
-        d3,
         tileJs,
+        d3,
         tmpl
     ){
         var _stored,
@@ -31,39 +31,18 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=",
-                    keys = ["AK45C9WF40HN3PRW", "LYSB01MBM0109645"];
-                url += "GOOG" +"&interval=5min&apikey=" + keys[0];
+                var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
+                url += "ADBE" + "&types=quote,news,chart&range=1d&chartSimplify=true";
                 $.ajax({
                     url: url,
                     type: "GET"
                 })
                 .done(function(data) {
-                    _dataDraw(data);
-                    var dataSet = data["Time Series (5min)"],
-                        minD = Number.MAX_SAFE_INTEGER,
-                        maxD = 0,
-                        newest = _.values(dataSet)[0];
-
-                    for (var j in dataSet) {
-                        var targ = dataSet[j];
-
-                        if (targ["3. low"] < minD) {
-                            minD = targ["3. low"];
-                        }
-                        if (targ["2. high"] > maxD) {
-                            maxD = targ["2. high"];
-                        }
-                    }
-
-                    console.log(data, Object.values(dataSet).length, newest, minD, maxD);
-
                     _tileStyler(data, index);
+                    _grapher(index, data);
                 })
                 .fail(function(error) {
-                    console.log('ERROR');
-                    console.log(error);
-                    console.log('FAILED TO LOAD STOCK DATA');
+                    console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
             },
             _tileStyler = function _tileStyler(wData, index) {
@@ -74,14 +53,74 @@ define([
                 }
                 tileJs(tile, index);
             },
-            _dataDraw = function _dataDraw(data) {
-                console.log(d3.select("svg"));
-            },
             _dataStore = function _dataStore(obj, index) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
                     console.log("STORED: "+obj+" and "+index);
                 });
+            },
+            _grapher = function _grapher(index, data) {
+                var chart = $(".tile[data-index='"+index+"'] svg"),
+                    svg = d3.select(chart[0]),
+                    margin = {top: 40, right: 30, bottom: 90, left: 50},
+                    width =+ 300 - margin.left - margin.right,
+                    height =+ 300 - margin.top - margin.bottom,
+                    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+                    parseTime = d3.timeParse("%H:%M"),
+                    x = d3.scaleTime().rangeRound([0, width]),
+                    y = d3.scaleLinear().rangeRound([height, 0]);
+
+                var line = d3.line()
+                    .x(function(d) {
+                        return x(parseTime(d.minute));
+                    })
+                    .y(function(d) {
+                        if (d.average < 0) {
+                            return y(d.marketAverage);
+                        }
+                        return y(d.average);
+                    });
+
+                var ddata = data["ADBE"]["chart"],
+                    dRed = ddata.reduce(function(acc, cur, i) {
+                      acc[i] = cur;
+                      return acc;
+                    }, {});
+
+
+                x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
+                y.domain(d3.extent(ddata, function(d) {
+                    if (d.average < 0) {
+                        return d.marketAverage;
+                    }
+                    return d.average;
+                }));
+
+
+                g.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x))
+                    .select(".domain")
+                        .remove();
+
+                g.append("g")
+                    .call(d3.axisLeft(y))
+                    .append("text")
+                        .attr("fill", "#000")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", 6)
+                        .attr("dy", "0.71em")
+                        .attr("text-anchor", "end")
+                        .text("Price ($)");
+
+                g.append("path")
+                    .datum(ddata)
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-linejoin", "round")
+                    .attr("stroke-linecap", "round")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line);
             };
 
         return {

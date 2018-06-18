@@ -4,7 +4,7 @@ require.config({
         moment: "../node_modules/moment/moment",
         Sortable: "../node_modules/sortablejs/Sortable",
         underscore: "../node_modules/underscore/underscore-min",
-        d3: "../libraries/d3.v5.min",
+        d3: "../libraries/d3.v4.min",
         text: "../node_modules/text/text",
         tab: "index"
     }
