@@ -69,6 +69,14 @@ body {
     font-weight: bold;
     margin: 30px 0 0 25%;
 }
+.editBody .subtitle {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 30px 0 0 25%;
+}
+.editBody .darkMode .subtitle, .editBody .darkMode input {
+    display: inline-block;
+}
 .editBody .rButton {
     width: 33%;
     display: inline-block;

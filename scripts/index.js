@@ -162,8 +162,11 @@ define("tab", [
                     if (items.hasOwnProperty("prefs")) {
                         _prefLoader(items["prefs"]);
                     } else {
-                        _dataStore( {"prefs": {"unit": "imperial", 
+                        _dataStore({"prefs": {"unit": "imperial", 
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"}} );
+                        $("body").css("background-image",
+                            "url('http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg')");
+                        $(".background input").val("http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg");
                         _prefs = {"unit": "imperial", 
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
                         _prefLoader(items["prefs"]);
