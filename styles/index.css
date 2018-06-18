@@ -134,6 +134,9 @@ body {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
+.tile .topBar {
+    z-index: 11;
+}
 .tile .top i {
     position: absolute;
     cursor: pointer;
