@@ -156,8 +156,9 @@ define([
 
                 g.append("path")
                     .datum(ddata)
+                    .attr("class", "curve")
                     .attr("fill", "none")
-                    .attr("stroke", "aquamarine")
+                    .attr("stroke", "green")
                     .attr("stroke-linejoin", "round")
                     .attr("stroke-linecap", "round")
                     .attr("stroke-width", 3)
@@ -194,6 +195,10 @@ define([
                 } else {
                     $(left).css("color", "red");
                     $(right).css("color", "red");
+                }
+
+                if (prefix !== "+") {
+                    left.parents(".tile").find(".curve").attr("stroke", "red");
                 }
             },
             _decFormat = function _decFormat(num) {
