@@ -337,9 +337,6 @@ body {
 .tile .stock .front .bottom .left {
     float: left;
 }
-.tile .stock .front .bottom .right {
-    float: right;
-}
 .tile .dark .fa-pencil, .tile .dark .fa-trash-o {
     color: whitesmoke;
 }

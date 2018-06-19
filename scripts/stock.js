@@ -183,7 +183,19 @@ define([
                     changeP = 100 * (last["close"] / (first["open"]) -1);
 
                 left.text("$" + _decFormat(last["close"]));
-                right.text(_decFormat(change)+" ("+_decFormat(changeP)+"%)");
+
+                var rightString = "";
+                
+                if (change > 0) {
+                    rightString += "+";
+                }
+
+                rightString += _decFormat(change)+" (";
+                if (change > 0) {
+                    rightString += "+";
+                }
+                rightString += _decFormat(changeP)+"%)";
+                right.text(rightString);
 
                 if (change > 0) {
                     $(left, right).css("color", "green");
