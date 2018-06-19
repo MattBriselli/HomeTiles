@@ -37,7 +37,6 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
-                    console.log(data);
                     _tileStyler(data, code, index);
                     _grapher(data, code, index);
                     _dataInfo(data, code, index);
@@ -210,8 +209,8 @@ define([
 
                 var prefix = (change > 0) ? "+" : "",
                     rightString = prefix + _decFormat(change)+" (";
-
                 rightString += prefix + _decFormat(changeP)+"%)";
+                
                 right.text(rightString);
 
                 if (change > 0) {
