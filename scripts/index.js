@@ -89,7 +89,6 @@ define("tab", [
                 $(".darkMode input").on("change", function(e) {
                     _prefs["dark"] = e.currentTarget.checked;
                     $(".tile .stock, .tile .weather").toggleClass("dark");
-                    console.log(_prefs);
                     _dataStore({"prefs": _prefs});
                 });
                 $(".background input").on("blur", function(e) {
@@ -170,12 +169,14 @@ define("tab", [
                     if (items.hasOwnProperty("prefs")) {
                         _prefLoader(items["prefs"]);
                     } else {
-                        _dataStore({"prefs": {"unit": "imperial", 
+                        _dataStore({"prefs": {"unit": "imperial", "dark": true,
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"}} );
                         $("body").css("background-image",
                             "url('http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg')");
                         $(".background input").val("http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg");
-                        _prefs = {"unit": "imperial", 
+                        $(".tile .weather").addClass("dark");
+                        $(".darkMode input").attr("checked", "checked");
+                        _prefs = {"unit": "imperial", "dark": true,
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
                         _prefLoader(items["prefs"]);
                     }
