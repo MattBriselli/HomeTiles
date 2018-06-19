@@ -31,7 +31,7 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var code = _configs["stock"][index]["stock"],
+                var code = _configs["stock"][index]["stock"].toUpperCase(),
                     url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + code + "&types=quote,news,chart&range=1d";
                 $.ajax({
                     url: url,
@@ -174,8 +174,6 @@ define([
                         last = data[code]["chart"][len];
                     }
                 }
-
-                console.log(data);
 
                 var change = (last["close"] - first),
                     changeP = 100 * (last["close"] / (first) -1);
