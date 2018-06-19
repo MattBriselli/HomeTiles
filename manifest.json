@@ -9,7 +9,8 @@
         "newtab": "index.html"
     },
     "permissions": [
-      "storage", "geolocation"
+        "storage",
+        "geolocation"
     ],
     "content_security_policy": "script-src 'self' https://apis.google.com/js/api.js; object-src 'self'"
 }
