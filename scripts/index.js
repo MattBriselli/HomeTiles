@@ -171,9 +171,7 @@ define("tab", [
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     _tiles = items["tiles"];
-                    if (items.hasOwnProperty("prefs")) {
-                        _prefLoader(items["prefs"]);
-                    } else {
+                    if (!items.hasOwnProperty("prefs")) {
                         _dataStore({"prefs": {"unit": "imperial", "dark": true,
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"}} );
                         $("body").css("background-image",
@@ -183,8 +181,8 @@ define("tab", [
                         $(".darkMode input").attr("checked", "checked");
                         _prefs = {"unit": "imperial", "dark": true,
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
-                        _prefLoader(items["prefs"]);
                     }
+                    _prefLoader(_prefs);
                     if (!items.hasOwnProperty("configs")) {
                         var loadObj = {"configs": {"weather": {0: {}}}};
                         loadObj["configs"]["weather"][0]["country"] = "us";
@@ -195,12 +193,12 @@ define("tab", [
 
                     if (items.hasOwnProperty("tiles")) {
                         _stored = items;
-                        _tileLoader(items["tiles"]);
                     } else {
                         _tiles = ["weather"];
                         _dataStore( {"tiles": ["weather"]} );
-                        _tileLoader(["weather"]);
+                        _stored = {"prefs": _prefs, "configs": _configs, "tiles": _tiles};
                     }
+                    _tileLoader(_tiles);
                 });
             },
             _dataStore = function _dataStore(obj) {
