@@ -168,7 +168,9 @@ define([
                     right = $(".tile[data-index='"+index+"'] .bottom .right"),
                     len = data[code]["chart"].length,
                     last = data[code]["chart"][len-1],
-                    first = data[code]["chart"][0];
+                    first = data[code]["quote"]["close"];
+
+                console.log(data);
 
                 if (last["close"] < 0) {
                     while (len > 0) {
@@ -177,8 +179,8 @@ define([
                     }
                 }
 
-                var change = (last["close"] - first["open"]),
-                    changeP = 100 * (last["close"] / (first["open"]) -1);
+                var change = (last["close"] - first),
+                    changeP = 100 * (last["close"] / (first) -1);
 
                 left.text("$" + _decFormat(last["close"]));
 
