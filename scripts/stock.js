@@ -31,7 +31,7 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var code = _configs["stock"][index]["stock"].toUpperCase(),
+                var code = _configs["stock"][index]["stock"],
                     url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + code + "&types=quote,news,chart&range=1d";
                 $.ajax({
                     url: url,
@@ -76,12 +76,23 @@ define([
                         _configs["stock"][ind] = {}
                     }
 
-                    _configs["stock"][ind]["stock"] = text;
+                    _configs["stock"][ind]["stock"] = text.toUpperCase();
 
-                    chrome.storage.sync.set({"configs": _configs}, function() {
-                        //null loads all of the data
-                        console.log("STORED: "+text+" and "+ind);
-                        _init(ind, _stored, _prefs, _configs);
+                    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + text + "&types=quote&range=1d";
+                    $.ajax({
+                        url: url,
+                        type: "GET"
+                    }).done(function(data, textStatus, jqXHR) {
+                        if (!$.isEmptyObject(data)) {
+                            chrome.storage.sync.set({"configs": _configs}, function() {
+                                //null loads all of the data
+                                console.log("STORED: "+text+" and "+ind);
+                                _init(ind, _stored, _prefs, _configs);
+                            });
+                        } else if (target.parents(".back").find(".error").length == 0) {
+                            target.parents(".back").find("button")
+                                .after("<div class='error' style='text-align:center;'>Enter a Valid Code</div>");
+                        }
                     });
                 }
             },
