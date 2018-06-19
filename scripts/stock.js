@@ -144,11 +144,7 @@ define([
                     .select(".domain")
                         .remove();
 
-                g.append("g")
-                    .call(
-                        d3.axisLeft(y)
-                            .tickArguments([8])
-                    )
+                g.append("g").call(d3.axisLeft(y).tickArguments([8]))
                     .classed("yAxis", true)
                     .append("text")
                         .attr("fill", "white")
@@ -171,23 +167,32 @@ define([
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
                     right = $(".tile[data-index='"+index+"'] .bottom .right"),
                     len = data[code]["chart"].length,
-                    first = data[code]["chart"][0],
-                    last = data[code]["chart"][len - 1],
-                    math = ((last["close"]-first["open"])/first["open"])*100;
+                    last = data[code]["chart"][len-1],
+                    first = data[code]["chart"][0];
 
-                if (Math.abs(math) > 10) {
-                    math = math.toPrecision(4);
-                } else if (Math.abs(math) > 1) {
-                    math = math.toPrecision(3);
-                } else {
-                    math = math.toPrecision(2);
+                console.log(data[code]);
+
+                if (last["close"] < 0) {
+                    while (len > 0) {
+                        len -= 1;
+                        last = data[code]["chart"][len];
+                    }
                 }
 
-                left.text("$" +last["close"] + " ("+math+"%)");
+                var change = (last["close"] - first["open"]),
+                    changeP = 100 * (last["close"] / (first["open"]) -1);
 
+                left.text("$" + _decFormat(last["close"]));
+                right.text(_decFormat(change)+" ("+_decFormat(changeP)+"%)");
 
-                
-                
+                if (change > 0) {
+                    $(left, right).css("color", "green");
+                } else {
+                    $(left, right).css("color", "red");
+                }
+            },
+            _decFormat = function _decFormat(num) {
+                return Math.round(num * 100) / 100;
             };
 
         return {

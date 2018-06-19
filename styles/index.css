@@ -318,11 +318,11 @@ body {
     width: 49%;
     height: 100%;
     display: inline-block;
+    text-align: center;
+    font-size: 20px;
 }
 .tile .stock .front .bottom .left {
     float: left;
-    text-align: center;
-    font-size: 15px;
 }
 .tile .stock .front .bottom .right {
     float: right;
