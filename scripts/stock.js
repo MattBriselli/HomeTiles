@@ -168,12 +168,14 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["quote"]["close"];
 
-                if (last["close"] < 0) {
+                if (!last["close"] || last["close"] < 0) {
                     while (len > 0) {
                         len -= 1;
                         last = data[code]["chart"][len];
                     }
                 }
+
+                console.log(data);
 
                 var change = (last["close"] - first),
                     changeP = 100 * (last["close"] / (first) -1);

@@ -125,12 +125,12 @@ define("tab", [
                     switcher(data, index);
                 } else if (data && data.length != 0) {
                     data.forEach(function(elem, index) {
-                        if (_configs[elem][index]) {
+                        // if (_configs[elem][index]) {
                             switcher(elem, index);
-                        } else {
-                            _tiles.splice(index, 1);
-                            _dataStore({"tiles": _tiles});
-                        }
+                        // } else {
+                        //     _tiles.splice(index, 1);
+                        //     _dataStore({"tiles": _tiles});
+                        // }
                     });
                 }
                 function switcher(elem, index) {
