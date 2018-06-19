@@ -31,11 +31,8 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
-                var code = (_configs["stock"][index] && _configs["stock"][index]["stock"]) ? 
-                    _configs["stock"][index]["stock"] : "AAPL";
-
-                var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=";
-                url += code + "&types=quote,news,chart&range=1d";
+                var code = _configs["stock"][index]["stock"],
+                    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + code + "&types=quote,news,chart&range=1d";
                 $.ajax({
                     url: url,
                     type: "GET"
