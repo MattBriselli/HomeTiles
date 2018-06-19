@@ -31,6 +31,8 @@ define([
                 _configs = configs;
                 _tmpl = tmpl;
 
+                console.log(index, _stored, _prefs, _configs);
+
                 var code = _configs["stock"][index]["stock"],
                     url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + code + "&types=quote,news,chart&range=1d";
                 $.ajax({
@@ -63,6 +65,7 @@ define([
                         _changer(e);
                     }
                 });
+                _remover(index);
             },
             _changer = function _changer(e) {
                 var target = $(e.currentTarget),
@@ -82,15 +85,34 @@ define([
                         type: "GET"
                     }).done(function(data, textStatus, jqXHR) {
                         if (!$.isEmptyObject(data)) {
-                            chrome.storage.sync.set({"configs": _configs}, function() {
-                                _init(ind, _stored, _prefs, _configs);
-                            });
+                            _dataStore({"configs": _configs}, ind, true);
                         } else if (target.parents(".back").find(".error").length == 0) {
                             target.parents(".back").find("button")
                                 .after("<div class='error' style='text-align:center;'>Enter a Valid Code</div>");
                         }
                     });
                 }
+            },
+            _remover = function _remover(index) {
+                var tile = $(".tile[data-index='"+index+"']"),
+                    index = tile.data("index");
+
+                tile.find(".fa-trash-o").on("click", function() {
+                    var i = index;
+                    
+                    while (_stored["configs"]["stock"].hasOwnProperty(i+1)) {
+                        _stored["configs"]["stock"][i] = _stored["configs"]["stock"][i+1];
+                        i++;
+                    }
+                    delete _stored["configs"]["stock"][i];
+                    //need to delete the last one as the rest have shifted up
+
+                    _stored["tiles"].splice(index, 1);
+                    //the array of the tile types
+                    _dataStore(_stored, index, false);
+
+                    $(tile).remove();
+                });
             },
             _grapher = function _grapher(data, code, index) {
                 var chart = $(".tile[data-index='"+index+"'] svg"),
@@ -204,6 +226,13 @@ define([
                 if (prefix !== "+") {
                     left.parents(".tile").find(".curve").attr("stroke", "red");
                 }
+            },
+            _dataStore = function _dataStore(obj, index, refresh) {
+                chrome.storage.sync.set(obj, function() {
+                    if (refresh) {
+                        _init(index, _stored, _prefs, _configs);
+                    }
+                });
             },
             _decFormat = function _decFormat(num) {
                 return Math.round(num * 100) / 100;

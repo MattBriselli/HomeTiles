@@ -246,7 +246,6 @@ define([
                     index = tile.data("index");
 
                 tile.find(".fa-trash-o").on("click", function() {
-
                     var i = index;
                     
                     while (_stored["configs"]["weather"].hasOwnProperty(i+1)) {
