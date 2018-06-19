@@ -2,12 +2,14 @@ body {
     background-color: blue;
     background-size: cover;
     background-repeat: no-repeat;
+    overflow-x: hidden;
 }
 .body {
     position: absolute;
     margin: 11px 0px 0px 50px;
     overflow: hidden;
     height: 100%;
+    width: 100%;
 }
 .tileBody {
     overflow-y: scroll;
