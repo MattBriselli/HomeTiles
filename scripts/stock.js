@@ -36,13 +36,11 @@ define([
                 $.ajax({
                     url: url,
                     type: "GET"
-                })
-                .done(function(data) {
+                }).done(function(data) {
                     _tileStyler(data, code, index);
                     _grapher(data, code, index);
                     _dataInfo(data, code, index);
-                })
-                .fail(function(error) {
+                }).fail(function(error) {
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
             },
@@ -85,8 +83,6 @@ define([
                     }).done(function(data, textStatus, jqXHR) {
                         if (!$.isEmptyObject(data)) {
                             chrome.storage.sync.set({"configs": _configs}, function() {
-                                //null loads all of the data
-                                console.log("STORED: "+text+" and "+ind);
                                 _init(ind, _stored, _prefs, _configs);
                             });
                         } else if (target.parents(".back").find(".error").length == 0) {
