@@ -170,8 +170,6 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["chart"][0];
 
-                console.log(data[code]);
-
                 if (last["close"] < 0) {
                     while (len > 0) {
                         len -= 1;
@@ -185,7 +183,7 @@ define([
                 left.text("$" + _decFormat(last["close"]));
 
                 var rightString = "";
-                
+
                 if (change > 0) {
                     rightString += "+";
                 }
@@ -198,9 +196,11 @@ define([
                 right.text(rightString);
 
                 if (change > 0) {
-                    $(left, right).css("color", "green");
+                    $(left).css("color", "green");
+                    $(right).css("color", "green");
                 } else {
-                    $(left, right).css("color", "red");
+                    $(left).css("color", "red");
+                    $(right).css("color", "red");
                 }
             },
             _decFormat = function _decFormat(num) {
