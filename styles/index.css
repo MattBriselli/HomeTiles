@@ -303,10 +303,7 @@ body {
     border-top: 0;
     padding: 2px 4px;
     cursor: pointer;
-    color: white;
-}
-.dark .options > div {
-    color: black;   
+    color: black;
 }
 /*
  * END STYLES FOR THE WEATHER TILE
