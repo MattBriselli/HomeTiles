@@ -37,6 +37,7 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
+                    console.log(data);
                     _tileStyler(data, code, index);
                     _grapher(data, code, index);
                     _dataInfo(data, code, index);
@@ -196,7 +197,7 @@ define([
                     first = data[code]["quote"]["close"];
 
                 if (!last["close"] || last["close"] < 0) {
-                    while (len > 0) {
+                    while (len > 0 && (!last["close"] || last["close"] < 0)) {
                         len -= 1;
                         last = data[code]["chart"][len];
                     }

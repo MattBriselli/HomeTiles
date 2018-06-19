@@ -20,7 +20,6 @@ define("tab", [
             _prefs,
             _configs,
             _tiles,
-            _weather,
             /*
              * a brslli labs application
              * made by Matt Briselli
@@ -55,11 +54,16 @@ define("tab", [
                             var oldI = e.oldIndex,
                                 newI = e.newIndex,
                                 target = $(e.currentTarget);
-                            //need to reorder the _configs, _stored and data-indexes
+                                _tileSwapper(oldI, newI);
 
                         }
                     });
-                    $(".tile.sort").on("mousedown", _tileSort);
+                    $(".tile.sort").on("mousedown", function(e) {
+                        $(e.currentTarget).addClass("mousedown");
+                    });
+                    $(".tile.sort").on("mouseup", function(e) {
+                        $(e.currentTarget).removeClass("mousedown");
+                    });
                 });
                 $(".editBody .tiles button").on("click", function(e) {
                     var target = $(e.currentTarget),
@@ -183,6 +187,7 @@ define("tab", [
                             "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
                     }
                     _prefLoader(_prefs);
+
                     if (!items.hasOwnProperty("configs")) {
                         var loadObj = {"configs": {"weather": {0: {}}}};
                         loadObj["configs"]["weather"][0]["country"] = "us";
@@ -201,17 +206,13 @@ define("tab", [
                     _tileLoader(_tiles);
                 });
             },
+            _tileSwapper = function _tileSwapper(o, n) {
+                console.log(o, n);
+                console.log(_stored, _prefs, _configs, _tiles);
+            },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
                     //null loads all of the data
-                });
-            },
-            _tileSort = function _tileSort(e) {
-                e.stopImmediatePropagation();
-                var target = $(e.currentTarget);
-                target.addClass("mousedown");
-                target.on("mouseup", function(e) {
-                    $(".tile").removeClass("mousedown");
                 });
             };
         return _init;
