@@ -180,6 +180,15 @@ body {
  *
  * STYLES FOR THE WEATHER TILE
  */
+.tile .weather {
+    height: inherit;
+    color: black;
+}
+.tile .weather.dark {
+    background-color: black;
+    color: whitesmoke;
+    border-radius: 10px;
+}
 .tile .weather .front .top {
     height: 50%;
     width: 100%;
@@ -188,13 +197,17 @@ body {
     color: black;
 }
 .tile .weather.dark .front .top {
+    height: 50%;
+    width: 100%;
     background-color: black;
+    z-index: 2;
     color: whitesmoke;
 }
 .tile .weather .front .bottom {
     height: 50%;
     width: 100%;
     background-color: aquamarine;
+    color: black;
 }
 .tile .weather .front .bottom .left {
     height: 100%;
@@ -327,7 +340,7 @@ body {
 .tile .stock .front .bottom .right {
     float: right;
 }
-.tile .dark .fa-pencil {
+.tile .dark .fa-pencil, .tile .dark .fa-trash-o {
     color: whitesmoke;
 }
 .tile .stock.dark .xAxis, .tile .stock.dark .yAxis,
