@@ -76,7 +76,7 @@ define("tab", [
                     if (target.attr("value") == "weather") {
                         _configs[tVal][nInd] = {"country": "US", "zipcode": "90210"};
                     } else if (target.attr("value") == "stock") {
-                        _configs[tVal][nInd] = {};
+                        _configs[tVal][nInd] = {"stock": "AAPL"};
                     }
                     _dataStore({"configs": _configs});
                     _tileLoader(tVal, nInd);

@@ -170,8 +170,6 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["quote"]["close"];
 
-                console.log(data);
-
                 if (last["close"] < 0) {
                     while (len > 0) {
                         len -= 1;
@@ -184,17 +182,10 @@ define([
 
                 left.text("$" + _decFormat(last["close"]));
 
-                var rightString = "";
+                var prefix = (change > 0) ? "+" : "",
+                    rightString = prefix + _decFormat(change)+" (";
 
-                if (change > 0) {
-                    rightString += "+";
-                }
-
-                rightString += _decFormat(change)+" (";
-                if (change > 0) {
-                    rightString += "+";
-                }
-                rightString += _decFormat(changeP)+"%)";
+                rightString += prefix + _decFormat(changeP)+"%)";
                 right.text(rightString);
 
                 if (change > 0) {
