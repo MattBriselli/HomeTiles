@@ -10,15 +10,12 @@ define([
         moment,
         Sortable
     ){
-        var _stored,
-            _prefs,
-            _configs,
-            /*
-             * a brslli labs application
-             * made by Matt Briselli
-             * brslli.com
-             */
-            _init = function _init(tile, index, error) {
+        /*
+         * a brslli labs application
+         * made by Matt Briselli
+         * brslli.com
+         */
+        var _init = function _init(tile, index, error) {
                 var newTile = $(tile).find(".tile");
                 newTile.find(".fa-pencil").on("click", function() {
                     $(newTile).find(".front, .back, .fa-trash-o").toggle();
@@ -59,7 +56,9 @@ define([
                         $(".tileBody").append(newTile);
                     }                    
                 }
-            }
+            };
 
-    return _init;
+    return {
+        init: _init
+    };
 });

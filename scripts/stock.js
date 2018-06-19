@@ -48,7 +48,7 @@ define([
                 var tile = $(_tmpl),
                     tF = tile.find(".top .front");
 
-                tileJs(tile, index);
+                tileJs.init(tile, index);
 
                 var newTile = $(".tile[data-index='"+index+"']");
                 newTile.find(".stockName").text(wData[code]["quote"]["symbol"]);

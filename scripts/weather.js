@@ -135,9 +135,9 @@ define([
                         }
                         // fB.find(".feel").html("Feels Like: " +
                             // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
-                        tileJs(tile, index);
+                        tileJs.init(tile, index);
                     } else {
-                        tileJs(tile, index, errorData);
+                        tileJs.init(tile, index, errorData);
                     }
                     _remover(index);
                 }
