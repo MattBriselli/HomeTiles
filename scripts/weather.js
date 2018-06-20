@@ -90,7 +90,6 @@ define([
                     $(".weather .back input.country").off("keyup").on("keyup", function(e) {
                         if ($(e.currentTarget).val().length != 0) {
                             var text = $(e.currentTarget).val();
-                            console.log(text);
                             _autoComplete($(e.currentTarget), text);
                         }
                     });

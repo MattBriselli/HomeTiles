@@ -37,9 +37,13 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
-                    _tileStyler(data, code, index);
-                    _grapher(data, code, index);
-                    _dataInfo(data, code, index);
+                    console.log(data[code]);
+                    if (data[code]["chart"].length > 0) {
+                        //only true on error or at 9:30am
+                        _tileStyler(data, code, index);
+                        _grapher(data, code, index);
+                        _dataInfo(data, code, index);
+                    }
                 }).fail(function(error) {
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
