@@ -19,6 +19,7 @@ define([
                 var newTile = $(tile).find(".tile");
                 newTile.find(".fa-pencil").on("click", function() {
                     $(newTile).find(".front, .back, .fa-trash-o").toggle();
+                    $(newTile).find(".back input").first().focus();
                 });
                 newTile.attr("data-index", index);
 
