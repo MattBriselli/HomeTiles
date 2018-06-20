@@ -37,7 +37,6 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
-                    console.log(data[code]);
                     if (data[code]["chart"].length > 0) {
                         //only true on error or at 9:30am
                         _tileStyler(data, code, index);
