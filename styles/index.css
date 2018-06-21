@@ -1,8 +1,9 @@
 body {
-    background-color: blue;
+    background-color: #1B191917;
     background-size: cover;
     background-repeat: no-repeat;
-    overflow-x: hidden;
+    overflow: hidden;
+    height: 100%;
 }
 .body {
     position: absolute;
