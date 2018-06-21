@@ -95,31 +95,8 @@ define("tab", [
                     $(".tile .stock, .tile .weather").toggleClass("dark");
                     _dataStore({"prefs": _prefs});
                 });
-                $(".background input").on("blur", function(e) {
-                    var link = $(e.currentTarget);
-                    
-                    if (isValidURL(link.val())) {
-                        $("body").css("background-image", "url('"+link.val()+"')");
-                        _prefs["back"] = link.val();
-                        _dataStore({"prefs": _prefs});
-                    } else {
-                        link.text("Please Enter a Valid Url");
-                    }
-
-                    function isValidURL(url){
-                        var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-                        if(RegExp.test(url)){
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    } 
-                });
                 $(".reset").on("click", function() {
                     chrome.storage.sync.clear();
-                    $(".background input").focus();
-                    $(".background input").val("http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg");
-                    $(".background input").blur();
                     $(".tile").remove();
                     _init();
                 });
@@ -158,7 +135,6 @@ define("tab", [
                 if (data && data.length != 0) {
                     for (index in data) {
                         if (index == "back") {
-                            $("body").css("background-image", "url('"+data[index]+"')");
                             $(".background input").val(data[index]);
                         } else if (index == "dark" && data[index] == true) {
                             $(".editBody .darkMode input").attr("checked", "checked");
@@ -176,15 +152,10 @@ define("tab", [
                     _configs = items["configs"];
                     _tiles = items["tiles"];
                     if (!items.hasOwnProperty("prefs")) {
-                        _dataStore({"prefs": {"unit": "imperial", "dark": true,
-                            "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"}} );
-                        $("body").css("background-image",
-                            "url('http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg')");
-                        $(".background input").val("http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg");
+                        _dataStore({"prefs": {"unit": "imperial", }} );
                         $(".tile .weather").addClass("dark");
                         $(".darkMode input").attr("checked", "checked");
-                        _prefs = {"unit": "imperial", "dark": true,
-                            "back": "http://wallpaper-gallery.net/images/weather-wallpaper/weather-wallpaper-1.jpg"};
+                        _prefs = {"unit": "imperial", "dark": true};
                     }
                     _prefLoader(_prefs);
 
