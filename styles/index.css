@@ -1,5 +1,6 @@
 body {
     background-color: #1B191917;
+    background-image: url(http://s1.1zoom.me/big3/863/Japan_Rain_datsunStreet_448567.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     overflow: hidden;
@@ -29,6 +30,7 @@ body {
     top: 25px;
     left: 15px;
     font-size: 18px;
+    color: white;
     cursor: pointer;
     z-index: 5;
 }
