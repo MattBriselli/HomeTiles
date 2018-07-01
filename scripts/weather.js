@@ -216,11 +216,11 @@ define([
                     });
                 }
                 function newSaver(e) {
-                    var target = $(e.currentTarget),
-                        ind = target.parents(".tile").data("index"),
-                        zip = target.parent().find("input.zipcode").val(),
-                        city = target.parent().find("input.city").val(),
-                        count = target.parent().find("input.country").val();
+                    var parent = $(e.currentTarget).parents(".tile"), 
+                        ind = parent.data("index"),
+                        zip = parent.find("input.zipcode").val(),
+                        city = parent.find("input.city").val(),
+                        count = parent.find("input.country").val();
 
                     if ((zip != "" || city != "") && count != "") {
                         _configs["weather"][ind] = {};
