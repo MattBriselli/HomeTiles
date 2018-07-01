@@ -167,6 +167,9 @@ define([
                     }
                 }
             },
+            _currentLocation = function _currentLocation() {
+
+            },
             _autoComplete = function _autoComplete(targ, text) {
                 targ.parent().find(".options").remove();
                 var rData = _.filter(_cObj, function(elem) {
@@ -192,16 +195,16 @@ define([
 
                     targ.parent().find(".options .option").on("click", function(e) {
                         var code = $(e.currentTarget).data("code"),
-                            usH = '<div class="subtitle">Zipcode</div>\
+                            usH = '<div class="inpCountry"><div class="subtitle">Zipcode</div>\
                                     <input type="text" class="zipcode">\
-                                    <button class="save" type="save">Save</button>',
-                            oH = '<div class="subtitle city">City</div>\
+                                    <button class="save" type="save">Save</button></div>',
+                            oH = '<div class="inpCountry"><div class="subtitle city">City</div>\
                                     <input type="text" class="city">\
-                                    <button class="save" type="save">Save</button>';
+                                    <button class="save" type="save">Save</button></div>';
                         targ.val(code);
                         targ.parent().find(".options").remove();
 
-                        code == "US" ? targ.after(usH) : targ.after(oH);
+                        code == "US" ? targ.parent().after(usH) : targ.parent().after(oH);
 
                         $(".weather .back button").off("click").on("click", newSaver);
                         $(".weather .back input.city, .weather .back input.zipcode").on("keypress", function(e) {
