@@ -190,6 +190,22 @@ define([
                     .attr("stroke-linecap", "round")
                     .attr("stroke-width", 3)
                     .attr("d", line);
+                
+                chart.find(".curve").on("mouseover", function(e) {
+                    var svgRect = chart[0].getBoundingClientRect(),
+                        x = svgRect["x"],
+                        y = svgRect["height"] - svgRect["y"];
+                    g.append("line")
+                        .attr("x1", e["clientX"])
+                        .attr("x2", e["clientX"])
+                        .attr("y1", svgRect["y"])
+                        .attr("y2", y)
+                        .attr("stroke", "white")
+                        .attr("class", "line");
+
+                    console.log(e);
+                    console.log(chart[0].getBoundingClientRect());
+                })
             },
             _dataInfo = function _dataInfo(data, code, index) {
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
