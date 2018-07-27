@@ -373,9 +373,6 @@ body {
 .tile .back {
     width: auto;
 }
-.tile .stock .back .title {
-    margin: -5% 0 10% 40%;
-}
 .tile .stock .back button {
     display: inline-block;
 }
