@@ -180,6 +180,15 @@ define([
                         .attr("dy", "0.71em")
                         .attr("text-anchor", "end");
 
+                var xTicks = $(chart).find(".xAxis .tick");
+                if (xTicks.length > 8) {
+                    for (var i = 0; i < xTicks.length; i++) {
+                        if (i % 2 == 0) {
+                            $(xTicks[i]).remove();
+                        }
+                    }
+                }
+
                 g.append("path")
                     .datum(ddata)
                     .attr("class", "curve")
@@ -213,9 +222,11 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["chart"][0];
 
-                if (!first["close"] || first["close"] < 0) {
+                console.log(data);
+
+                if (!first["open"] || first["open"] < 0) {
                     var ind = 0;
-                    while (ind < len && (!data[code]["chart"][ind]["close"] || data[code]["chart"][ind]["close"] < 0)) {
+                    while (ind < len && (!data[code]["chart"][ind]["open"] || data[code]["chart"][ind]["open"] < 0)) {
                         ind++;
                     }
                     first = data[code]["chart"][ind];
@@ -228,8 +239,8 @@ define([
                     }
                 }
 
-                var change = (last["close"] - first["close"]),
-                    changeP = 100 * (last["close"] / (first["close"]) -1);
+                var change = (last["close"] - first["open"]),
+                    changeP = 100 * (last["close"] / (first["open"]) -1);
 
                 left.text("$" + _decFormat(last["close"]));
 
