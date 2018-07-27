@@ -149,9 +149,6 @@ define([
                       return acc;
                     }, {});
 
-                console.log(data);
-
-
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
                 y.domain(d3.extent(ddata, function(d) {
                     if (d.average > 0) {
