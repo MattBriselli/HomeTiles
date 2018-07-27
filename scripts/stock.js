@@ -149,6 +149,8 @@ define([
                       return acc;
                     }, {});
 
+                console.log(data);
+
 
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
                 y.domain(d3.extent(ddata, function(d) {
@@ -196,7 +198,15 @@ define([
                     right = $(".tile[data-index='"+index+"'] .bottom .right"),
                     len = data[code]["chart"].length,
                     last = data[code]["chart"][len-1],
-                    first = data[code]["quote"]["close"];
+                    first = data[code]["chart"][0];
+
+                if (!first["close"] || first["close"] < 0) {
+                    var ind = 0;
+                    while (ind < len && (!data[code]["chart"][ind]["close"] || data[code]["chart"][ind]["close"] < 0)) {
+                        ind++;
+                    }
+                    first = data[code]["chart"][ind];
+                }
 
                 if (!last["close"] || last["close"] < 0) {
                     while (len > 0 && (!last["close"] || last["close"] < 0)) {
@@ -205,8 +215,8 @@ define([
                     }
                 }
 
-                var change = (last["close"] - first),
-                    changeP = 100 * (last["close"] / (first) -1);
+                var change = (last["close"] - first["close"]),
+                    changeP = 100 * (last["close"] / (first["close"]) -1);
 
                 left.text("$" + _decFormat(last["close"]));
 
