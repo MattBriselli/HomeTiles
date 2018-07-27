@@ -145,8 +145,11 @@ define([
 
                 var ddata = data[code]["chart"],
                     dRed = ddata.reduce(function(acc, cur, i) {
-                      acc[i] = cur;
-                      return acc;
+                        //need to remove all of the -1 values from the array
+                        if (cur.hasOwnProperty("open") && cur.hasOwnProperty("close") && cur["open"] > 0 && cur["close"] > 0) {
+                            acc[i] = cur;
+                        }
+                        return acc;
                     }, {});
 
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
@@ -221,8 +224,6 @@ define([
                     len = data[code]["chart"].length,
                     last = data[code]["chart"][len-1],
                     first = data[code]["chart"][0];
-
-                console.log(data);
 
                 if (!first["open"] || first["open"] < 0) {
                     var ind = 0;
