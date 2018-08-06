@@ -209,7 +209,7 @@ define([
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
                 chart.parents(".tileBody").find(".line, .lineText").remove();
-                    if (e["offsetX"] > 50) {
+                    if (e["offsetX"] > 50 && e["offsetX"] < 270) {
                         var svgRect = chart[0].getBoundingClientRect(),
                             y = svgRect["height"] - svgRect["y"],
                             xPos = e["offsetX"] - 50,
@@ -219,7 +219,7 @@ define([
                             .attr("x1", xPos)
                             .attr("x2", xPos)
                             .attr("y1", 0)
-                            .attr("y2", 150)
+                            .attr("y2", 162)
                             .attr("stroke", "white")
                             .attr("class", "line");
                         
@@ -257,7 +257,7 @@ define([
                             .attr("y", -10)
                             .attr("class", "lineText")
                             .attr("fill", "white")
-                            .text(dVal);
+                            .text(_decFormat(dVal));
                     }
             },
             _dataInfo = function _dataInfo(data, code, index) {
