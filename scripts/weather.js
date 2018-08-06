@@ -232,7 +232,7 @@ define([
                         _dataStore({"configs": _configs});
                         _init(ind, _stored, _prefs, _configs);
                     }
-                };
+                }
             },
             _remover = function _remover(index) {
                 var tile = $(".tile[data-index='"+index+"']"),

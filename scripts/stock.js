@@ -207,8 +207,8 @@ define([
                     var svgRect = chart[0].getBoundingClientRect(),
                         y = svgRect["height"] - svgRect["y"];
                     g.append("line")
-                        .attr("x1", e["clientX"])
-                        .attr("x2", e["clientX"])
+                        .attr("x1", e["offsetX"] - 50)
+                        .attr("x2", e["offsetX"] - 50)
                         .attr("y1", svgRect["y"])
                         .attr("y2", y)
                         .attr("stroke", "white")
