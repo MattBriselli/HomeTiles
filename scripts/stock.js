@@ -205,17 +205,41 @@ define([
                 
                 chart.find(".curve").on("mouseover", function(e) {
                     var svgRect = chart[0].getBoundingClientRect(),
-                        y = svgRect["height"] - svgRect["y"];
+                        y = svgRect["height"] - svgRect["y"],
+                        xPos = e["offsetX"] - 50,
+                        xPort = xPos/220;
+
+                    chart.parents(".tileBody").find(".line, .lineText").remove();
+
                     g.append("line")
-                        .attr("x1", e["offsetX"] - 50)
-                        .attr("x2", e["offsetX"] - 50)
-                        .attr("y1", svgRect["y"])
-                        .attr("y2", y)
+                        .attr("x1", xPos)
+                        .attr("x2", xPos)
+                        .attr("y1", 0)
+                        .attr("y2", 150)
                         .attr("stroke", "white")
                         .attr("class", "line");
+                    
 
-                    console.log(e);
-                    console.log(chart[0].getBoundingClientRect());
+                    var dataIndex = Math.floor(xPort * ddata.length);
+                    if (dataIndex < 0) {
+                        dataIndex = 0;
+                    } else if (dataIndex >= ddata.length) {
+                        dataIndex = ddata.length - 1;
+                    }
+
+
+                    var dVal = ddata[dataIndex]["average"];
+                    // if (dVal == -1) {}
+
+                    var text = g.append("text")
+                        .attr("x", xPos - 14)
+                        .attr("y", -10)
+                        .attr("class", "lineText")
+                        .attr("fill", "white")
+                        .text(dVal);
+
+                    console.log(ddata[dataIndex]);
+
                 })
             },
             _dataInfo = function _dataInfo(data, code, index) {
