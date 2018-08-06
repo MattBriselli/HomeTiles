@@ -126,8 +126,6 @@ define([
                     y = d3.scaleLinear().rangeRound([height, 0]),
                     lastY = 0;
 
-                console.log(data);
-
                 var line = d3.line()
                     .x(function(d) {
                         return x(parseTime(d.minute));
@@ -144,14 +142,7 @@ define([
                         }
                     });
 
-                var ddata = data[code]["chart"],
-                    dRed = ddata.reduce(function(acc, cur, i) {
-                        //need to remove all of the -1 values from the array
-                        if (cur.hasOwnProperty("open") && cur.hasOwnProperty("close") && cur["open"] > 0 && cur["close"] > 0) {
-                            acc[i] = cur;
-                        }
-                        return acc;
-                    }, {});
+                var ddata = data[code]["chart"];
 
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
                 y.domain(d3.extent(ddata, function(d) {
@@ -203,62 +194,64 @@ define([
                     .attr("stroke-width", 3)
                     .attr("d", line);
                 
-                chart.on("mouseover", function(e) {
+                chart.parent().find("svg").on("mouseover", function(e) {
                     _hoverLine(e, g, chart, ddata);
+                }).on("mouseout", function(e) {
+
                 });
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
-                chart.parents(".tileBody").find(".line, .lineText").remove();
-                    if (e["offsetX"] > 50 && e["offsetX"] < 270) {
-                        var svgRect = chart[0].getBoundingClientRect(),
-                            y = svgRect["height"] - svgRect["y"],
-                            xPos = e["offsetX"] - 50,
-                            xPort = xPos/220;
+                if (e["offsetX"] > 50 && e["offsetX"] < 270 && !$(e["target"]).hasClass("line")) {
+                    chart.parents(".tileBody").find(".line, .lineText").remove();
+                    var svgRect = chart[0].getBoundingClientRect(),
+                        y = svgRect["height"] - svgRect["y"],
+                        xPos = e["offsetX"] - 50,
+                        xPort = xPos/220;
 
-                        g.append("line")
-                            .attr("x1", xPos)
-                            .attr("x2", xPos)
-                            .attr("y1", 0)
-                            .attr("y2", 162)
-                            .attr("stroke", "white")
-                            .attr("class", "line");
-                        
+                    g.append("line")
+                        .attr("x1", xPos)
+                        .attr("x2", xPos)
+                        .attr("y1", 0)
+                        .attr("y2", 162)
+                        .attr("stroke", "white")
+                        .attr("class", "line");
+                    
 
-                        var dataIndex = Math.floor(xPort * ddata.length);
-                        if (dataIndex < 0) {
-                            dataIndex = 0;
-                        } else if (dataIndex >= ddata.length) {
-                            dataIndex = ddata.length - 1;
-                        }
-
-                        var dVal = ddata[dataIndex]["average"];
-                        if (dVal == -1) {
-                            var off = 1;
-                            while (!dVal || dVal < 0) {
-                                var first = dataIndex + off,
-                                    sec = dataIndex - off,
-                                    firstV = -1,
-                                    secV = -1;
-
-                                off++;
-                                if (first < ddata.length) {
-                                    firstV = ddata[first]["average"];
-                                }
-                                if (sec > 0) {
-                                    secV = ddata[sec]["average"];
-                                }
-                                dVal = Math.max(firstV, secV);
-                            }
-
-                        }
-
-                        var text = g.append("text")
-                            .attr("x", xPos - 14)
-                            .attr("y", -10)
-                            .attr("class", "lineText")
-                            .attr("fill", "white")
-                            .text(_decFormat(dVal));
+                    var dataIndex = Math.floor(xPort * ddata.length);
+                    if (dataIndex < 0) {
+                        dataIndex = 0;
+                    } else if (dataIndex >= ddata.length) {
+                        dataIndex = ddata.length - 1;
                     }
+
+                    var dVal = ddata[dataIndex]["average"];
+                    if (dVal == -1) {
+                        var off = 1;
+                        while (!dVal || dVal < 0) {
+                            var first = dataIndex + off,
+                                sec = dataIndex - off,
+                                firstV = -1,
+                                secV = -1;
+
+                            off++;
+                            if (first < ddata.length) {
+                                firstV = ddata[first]["average"];
+                            }
+                            if (sec > 0) {
+                                secV = ddata[sec]["average"];
+                            }
+                            dVal = Math.max(firstV, secV);
+                        }
+
+                    }
+
+                    g.append("text")
+                        .attr("x", xPos - 14)
+                        .attr("y", -10)
+                        .attr("class", "lineText")
+                        .attr("fill", "white")
+                        .text(_decFormat(dVal));
+                }
             },
             _dataInfo = function _dataInfo(data, code, index) {
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
