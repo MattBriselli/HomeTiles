@@ -208,12 +208,11 @@ define([
                         xPos = e["offsetX"] - 50,
                         xPort = xPos/220;
 
-                    g.append("line")
+                    var dataLine = g.append("line")
                         .attr("x1", xPos)
                         .attr("x2", xPos)
                         .attr("y1", 0)
                         .attr("y2", 162)
-                        .attr("stroke", "white")
                         .attr("class", "line");
                     
 
@@ -245,12 +244,21 @@ define([
 
                     }
 
-                    g.append("text")
+                    var dataText = g.append("text")
                         .attr("x", xPos - 14)
                         .attr("y", -10)
                         .attr("class", "lineText")
-                        .attr("fill", "white")
                         .text(_decFormat(dVal));
+
+
+                    if (_prefs["dark"]) {
+                        dataText.attr("fill", "white");
+                        dataLine.attr("stroke", "white");
+                    } else {
+                        dataText.attr("fill", "black");
+                        dataLine.attr("stroke", "black");
+                    }
+                    
                 }
             },
             _dataInfo = function _dataInfo(data, code, index) {
