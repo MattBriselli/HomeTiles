@@ -353,7 +353,6 @@ body {
     height: 50px;
 }
 .tile .stock .front .bottom .left, .tile .stock .front .bottom .right {
-    width: 49%;
     height: 100%;
     display: inline-block;
     text-align: center;
@@ -361,6 +360,10 @@ body {
 }
 .tile .stock .front .bottom .left {
     float: left;
+    width: 40%;
+}
+.tile .stock .front .bottom .right {
+    width: 60%;
 }
 .tile .dark .fa-pencil, .tile .dark .fa-trash-o {
     color: whitesmoke;
