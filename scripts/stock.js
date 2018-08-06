@@ -203,8 +203,12 @@ define([
                     .attr("stroke-width", 3)
                     .attr("d", line);
                 
-                chart.parent().find("svg").on("mouseover", function(e) {
-                    chart.parents(".tileBody").find(".line, .lineText").remove();
+                chart.on("mouseover", function(e) {
+                    _hoverLine(e, g, chart, ddata);
+                });
+            },
+            _hoverLine = function _hoverLine(e, g, chart, ddata) {
+                chart.parents(".tileBody").find(".line, .lineText").remove();
                     if (e["offsetX"] > 50) {
                         var svgRect = chart[0].getBoundingClientRect(),
                             y = svgRect["height"] - svgRect["y"],
@@ -255,7 +259,6 @@ define([
                             .attr("fill", "white")
                             .text(dVal);
                     }
-                });
             },
             _dataInfo = function _dataInfo(data, code, index) {
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
