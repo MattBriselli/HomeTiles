@@ -203,44 +203,59 @@ define([
                     .attr("stroke-width", 3)
                     .attr("d", line);
                 
-                chart.find(".curve").on("mouseover", function(e) {
-                    var svgRect = chart[0].getBoundingClientRect(),
-                        y = svgRect["height"] - svgRect["y"],
-                        xPos = e["offsetX"] - 50,
-                        xPort = xPos/220;
-
+                chart.parent().find("svg").on("mouseover", function(e) {
                     chart.parents(".tileBody").find(".line, .lineText").remove();
+                    if (e["offsetX"] > 50) {
+                        var svgRect = chart[0].getBoundingClientRect(),
+                            y = svgRect["height"] - svgRect["y"],
+                            xPos = e["offsetX"] - 50,
+                            xPort = xPos/220;
 
-                    g.append("line")
-                        .attr("x1", xPos)
-                        .attr("x2", xPos)
-                        .attr("y1", 0)
-                        .attr("y2", 150)
-                        .attr("stroke", "white")
-                        .attr("class", "line");
-                    
+                        g.append("line")
+                            .attr("x1", xPos)
+                            .attr("x2", xPos)
+                            .attr("y1", 0)
+                            .attr("y2", 150)
+                            .attr("stroke", "white")
+                            .attr("class", "line");
+                        
 
-                    var dataIndex = Math.floor(xPort * ddata.length);
-                    if (dataIndex < 0) {
-                        dataIndex = 0;
-                    } else if (dataIndex >= ddata.length) {
-                        dataIndex = ddata.length - 1;
+                        var dataIndex = Math.floor(xPort * ddata.length);
+                        if (dataIndex < 0) {
+                            dataIndex = 0;
+                        } else if (dataIndex >= ddata.length) {
+                            dataIndex = ddata.length - 1;
+                        }
+
+                        var dVal = ddata[dataIndex]["average"];
+                        if (dVal == -1) {
+                            var off = 1;
+                            while (!dVal || dVal < 0) {
+                                var first = dataIndex + off,
+                                    sec = dataIndex - off,
+                                    firstV = -1,
+                                    secV = -1;
+
+                                off++;
+                                if (first < ddata.length) {
+                                    firstV = ddata[first]["average"];
+                                }
+                                if (sec > 0) {
+                                    secV = ddata[sec]["average"];
+                                }
+                                dVal = Math.max(firstV, secV);
+                            }
+
+                        }
+
+                        var text = g.append("text")
+                            .attr("x", xPos - 14)
+                            .attr("y", -10)
+                            .attr("class", "lineText")
+                            .attr("fill", "white")
+                            .text(dVal);
                     }
-
-
-                    var dVal = ddata[dataIndex]["average"];
-                    // if (dVal == -1) {}
-
-                    var text = g.append("text")
-                        .attr("x", xPos - 14)
-                        .attr("y", -10)
-                        .attr("class", "lineText")
-                        .attr("fill", "white")
-                        .text(dVal);
-
-                    console.log(ddata[dataIndex]);
-
-                })
+                });
             },
             _dataInfo = function _dataInfo(data, code, index) {
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
