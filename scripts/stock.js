@@ -194,10 +194,8 @@ define([
                     .attr("stroke-width", 3)
                     .attr("d", line);
                 
-                chart.parent().find("svg").on("mouseover", function(e) {
+                chart.on("mouseover mousemove", function(e) {
                     _hoverLine(e, g, chart, ddata);
-                }).on("mouseout", function(e) {
-
                 });
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
