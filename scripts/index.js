@@ -89,6 +89,7 @@ define("tab", [
                     var val = $(e.currentTarget).attr("class");
                     _prefs["unit"] = val; 
                     _dataStore({"prefs": _prefs});
+                    _init();
                 });
                 $(".darkMode input").on("change", function(e) {
                     _prefs["dark"] = e.currentTarget.checked;
