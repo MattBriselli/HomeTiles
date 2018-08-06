@@ -48,8 +48,7 @@ define([
                 });
             },
             _tileStyler = function _tileStyler(wData, code, index) {
-                var tile = $(_tmpl),
-                    tF = tile.find(".top .front");
+                var tile = $(_tmpl);
 
                 tileJs.init(tile, index);
 
@@ -80,7 +79,7 @@ define([
 
                     _configs["stock"][ind]["stock"] = text.toUpperCase();
 
-                    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + text + "&types=quote&range=1d";
+                    var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + text + "&types=quote&range=1d";
                     $.ajax({
                         url: url,
                         type: "GET"
@@ -96,10 +95,10 @@ define([
             },
             _remover = function _remover(index) {
                 var tile = $(".tile[data-index='"+index+"']"),
-                    index = tile.data("index");
+                    tileInd = tile.data("index");
 
                 tile.find(".fa-trash-o").on("click", function() {
-                    var i = index;
+                    var i = tileInd;
                     
                     while (_stored["configs"]["stock"].hasOwnProperty(i+1)) {
                         _stored["configs"]["stock"][i] = _stored["configs"]["stock"][i+1];
@@ -108,9 +107,9 @@ define([
                     delete _stored["configs"]["stock"][i];
                     //need to delete the last one as the rest have shifted up
 
-                    _stored["tiles"].splice(index, 1);
+                    _stored["tiles"].splice(tileInd, 1);
                     //the array of the tile types
-                    _dataStore(_stored, index, false);
+                    _dataStore(_stored, tileInd, false);
 
                     $(tile).remove();
                 });
@@ -126,6 +125,8 @@ define([
                     x = d3.scaleTime().rangeRound([0, width]),
                     y = d3.scaleLinear().rangeRound([height, 0]),
                     lastY = 0;
+
+                console.log(data);
 
                 var line = d3.line()
                     .x(function(d) {
@@ -204,7 +205,6 @@ define([
                 
                 chart.find(".curve").on("mouseover", function(e) {
                     var svgRect = chart[0].getBoundingClientRect(),
-                        x = svgRect["x"],
                         y = svgRect["height"] - svgRect["y"];
                     g.append("line")
                         .attr("x1", e["clientX"])

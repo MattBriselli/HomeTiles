@@ -151,7 +151,7 @@ define([
                 function windDir(dir) {
                     dir = Math.round(dir/27.5);
                     // there are 27.5 degrees separating each of the depth 3 direction
-                    dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+                    var dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
                     return dirArr[dir % dirArr.length];
                 }
                 function realFeel(t, h) {
@@ -162,8 +162,6 @@ define([
                             (-6.83783*Math.pow(10, -3)*t*t)+(-5.481717*Math.pow(10,-2)*h*h)+
                             (1.22874*Math.pow(10,-3)*t*t*h)+(8.5282*Math.pow(10,-4)*t*h*h)+
                             (-1.99*Math.pow(10,-6)*t*t*h*h)).toPrecision(3) + " &#8457;");
-                    } else {
-
                     }
                 }
             },
@@ -238,10 +236,10 @@ define([
             },
             _remover = function _remover(index) {
                 var tile = $(".tile[data-index='"+index+"']"),
-                    index = tile.data("index");
+                    tileInd = tile.data("index");
 
                 tile.find(".fa-trash-o").on("click", function() {
-                    var i = index;
+                    var i = tileInd;
                     
                     while (_stored["configs"]["weather"].hasOwnProperty(i+1)) {
                         _stored["configs"]["weather"][i] = _stored["configs"]["weather"][i+1];
@@ -253,7 +251,7 @@ define([
                     delete _stored["configs"]["weather"][i];
                     //need to delete the last one as the rest have shifted up
 
-                    _stored["tiles"].splice(index, 1);
+                    _stored["tiles"].splice(tileInd, 1);
                     //the array of the tile types
                     _dataStore(_stored);
 

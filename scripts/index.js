@@ -41,11 +41,11 @@ define("tab", [
                     }
                     $(".editPanel").animate({
                         "left": direction
-                    }, 500);
+                    }, 350);
                     $(".body").animate({
                         "left": (19)+parseFloat(direction) + "%",
                         "width": (81-parseInt(direction) + "%")
-                    }, 500);
+                    }, 350);
                     var tiles = $(".tileBody");
                     Sortable.create(tiles[0], {
                         animation: 150,
