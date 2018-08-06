@@ -313,7 +313,12 @@ define([
                 });
             },
             _decFormat = function _decFormat(num) {
-                return Math.round(num * 100) / 100;
+                var numRound = Math.round(num * 100) / 100;
+                if (num < 1) {
+                    numRound = Math.round(num * 1000) / 1000;
+                }
+                
+                return numRound;
             };
 
         return {
