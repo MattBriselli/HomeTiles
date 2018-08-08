@@ -313,7 +313,7 @@ define([
             },
             _decFormat = function _decFormat(num) {
                 var numRound = Math.round(num * 100) / 100;
-                if (num < 1) {
+                if (num < 0.1) {
                     numRound = Math.round(num * 1000) / 1000;
                 }
                 
