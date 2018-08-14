@@ -30,51 +30,46 @@ define([
                 
                 _cObjLoad();
 
+                console.log(_stored, _configs, index);
+
                 if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
                     //there's old data that's still good
-                    tileStyler(_stored["weather"][index]);
-                    changer();
-                    
+                    _tileStyler(_stored["weather"][index], index);
+                    _changer();
                 } else {
-                    var url = "http://api.openweathermap.org/data/2.5/weather";
+                    var url = "http://api.openweathermap.org/data/2.5/weather?id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
                     if (_configs["weather"] && _configs["weather"][index] && _configs["weather"][index]["country"]) {
                         //the user has assigned values
                         if (_configs["weather"][index]["zipcode"]) {
-                            url += "?zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
+                            url += "&zip=" + _configs["weather"][index]["zipcode"] + "," + _configs["weather"][index]["country"];
                         } else if (_configs["weather"][index]["city"]) {
-                            url += "?q=" + _configs["weather"][index]["city"] + "," + _configs["weather"][index]["country"];
-                        } else  {
+                            url += "&q=" + _configs["weather"][index]["city"] + "," + _configs["weather"][index]["country"];
+                        } else {
                             //lets go with malibu
-                            url += "?zip=90210,us"
+                            url += "&zip=90210,us";
+                        }
+                        _apiCall(url, index);
+                    } else if (_configs["weather"] && _configs["weather"][index] && _configs["weather"][index]["current"]) {
+                        if (!_configs["weather"][index]["lat"] || !_configs["weather"][index]["long"]) {
+                            navigator.geolocation.getCurrentPosition(function(location) {
+                                var lat = location.coords.latitude,
+                                    long = location.coords.longitude;
+                                url += "&lat="+lat+"&lon="+long;
+                                _configs["weather"][index]["lat"] = lat;
+                                _configs["weather"][index]["lon"] = long;
+                                _dataStore({"configs": _configs});
+                                _apiCall(url, index);
+                            });
+                        } else {
+                            url += "&lat="+_configs["weather"][index]["lat"]+"&lon="+!_configs["weather"][index]["long"];
+                            _apiCall(url, index);
                         }
                     } else {
                         //lets go with malibu
-                        url += "?zip=90210,us"
+                        url += "&zip=90210,us";
+                        console.log('malibu');
+                        _apiCall(url, index);
                     }
-                    url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
-
-                    $.ajax({
-                        url: url,
-                        type: "GET"
-                    })
-                    .done(function(wData) {
-                        wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
-                        var newObj = {"weather": {}};
-                        newObj["weather"][index] = wData;
-
-                        if (!_stored["weather"]) {
-                            _stored["weather"] = {};
-                        }
-                        _stored["weather"][index] = wData;
-
-                        _dataStore({"weather": _stored["weather"]});
-                        tileStyler(wData);
-                        changer();
-                    })
-                    .fail(function() {
-                        tileStyler(undefined, _configs["weather"][index]);
-                        changer();
-                    });
                 }
 
                 function oldData(dataWT) {
@@ -86,87 +81,123 @@ define([
                         return (now.diff(old, "minutes") > 30);
                     }
                 }
-                function changer() {
-                    $(".weather .back input.country").off("keyup").on("keyup", function(e) {
-                        if ($(e.currentTarget).val().length != 0) {
-                            var text = $(e.currentTarget).val();
-                            _autoComplete($(e.currentTarget), text);
-                        }
-                    });
-                }
-                function tileStyler(wData, errorData) {
-                    var tile = $(_tmpl);
-                    if (wData) {
-                        //Load tile's top stuff
-                        tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
-                        tile.find(".conditions").text(wData["weather"][0]["description"]);
-                        tile.find(".clouds").text("Cloud Cover: " + wData["clouds"]["all"] +"%");
-                        var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
-                        condSrc += wData["weather"][0]["icon"] + ".png";
-                        tile.find("img.condition").attr("src", condSrc);
-                        //Load tile's bottom left
-                        var fB = tile.find(".front .bottom");
-                        fB.find(".temp").html(tempConvert(wData["main"]["temp"]));
-                        fB.find(".high").html(tempConvert(wData["main"]["temp_max"])+"<br/>High");
-                        fB.find(".low").html(tempConvert(wData["main"]["temp_min"])+"<br/>Low");
+            },
+            _changer = function changer() {
+                $(".weather .back input.country").off("keyup").on("keyup", function(e) {
+                    if ($(e.currentTarget).val().length != 0) {
+                        var text = $(e.currentTarget).val();
+                        _autoComplete($(e.currentTarget), text);
+                    }
+                });
+                $(".weather .back .fa-location-arrow").on("click", _currentLocation);
+            },
+            _tileStyler = function _tileStyler(wData, index, errorData) {
+                var tile = $(_tmpl);
+                if (wData) {
+                    //Load tile's top stuff
+                    tile.find(".location").text(wData["name"]+", "+wData["sys"]["country"]);
+                    tile.find(".conditions").text(wData["weather"][0]["description"]);
+                    tile.find(".clouds").text("Cloud Cover: " + wData["clouds"]["all"] +"%");
+                    var condSrc = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/";
+                    condSrc += wData["weather"][0]["icon"] + ".png";
+                    tile.find("img.condition").attr("src", condSrc);
+                    //Load tile's bottom left
+                    var fB = tile.find(".front .bottom");
+                    fB.find(".temp").html(_tempConvert(wData["main"]["temp"]));
+                    fB.find(".high").html(_tempConvert(wData["main"]["temp_max"])+"<br/>High");
+                    fB.find(".low").html(_tempConvert(wData["main"]["temp_min"])+"<br/>Low");
 
-                        if (_prefs["unit"] == "imperial"){
-                            fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
-                                "mph " + windDir(wData["wind"]["deg"]));
-                            fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
-                            fB.find(".pressure").text("Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
-                        } else {
-                            fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
-                                windDir(wData["wind"]["deg"]));
-                            fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
-                            fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
-                        }
-                        if (wData["rain"]) {
-                            fB.find(".rain").text();
-                        }
-                        if (wData["snow"]) {
-                            fB.find(".snow").text();
-                        }
-                        fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
+                    if (_prefs["unit"] == "imperial"){
+                        fB.find(".wind").text("Wind: " + (2.23694 * wData["wind"]["speed"]).toPrecision(2) +
+                            "mph " + _windDir(wData["wind"]["deg"]));
+                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]*0.000621371).toPrecision(3) +"mi");
+                        fB.find(".pressure").text("Pressure: "+(wData["main"]["pressure"]*0.02953).toPrecision(4) +"inHg");
+                    } else {
+                        fB.find(".wind").text("Wind: " + wData["wind"]["speed"].toPrecision(2) + "m/s " +
+                            _windDir(wData["wind"]["deg"]));
+                        fB.find(".visibility").text("Visibility: "+(wData["visibility"]/1000).toPrecision(3) +"km");
+                        fB.find(".pressure").text("Pressure: "+ Math.round(wData["main"]["pressure"]) +"mb");
+                    }
+                    if (wData["rain"]) {
+                        fB.find(".rain").text();
+                    }
+                    if (wData["snow"]) {
+                        fB.find(".snow").text();
+                    }
+                    fB.find(".humidity").text("Humidity: "+wData["main"]["humidity"] +"%");
 
-                        if (_prefs["dark"] == true) {
-                            tile.find(".weather").addClass("dark");
-                        }
-                        // fB.find(".feel").html("Feels Like: " +
-                            // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
-                        tileJs.init(tile, index);
-                    } else {
-                        tileJs.init(tile, index, errorData);
+                    if (_prefs["dark"] == true) {
+                        tile.find(".weather").addClass("dark");
                     }
-                    _remover(index);
+                    // fB.find(".feel").html("Feels Like: " +
+                        // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
+                    tileJs.init(tile, index);
+                } else {
+                    tileJs.init(tile, index, errorData);
                 }
-                function tempConvert(temp) {
-                    if (_prefs["unit"] == "imperial") {
-                        //let's assume F bc i'm american
-                        return (1.8 * (temp - 273) + 32).toPrecision(3) + " &#8457;";
-                    } else {
-                        return (temp - 273.15).toPrecision(2) + " &#8451;";
-                    }
-                }
-                function windDir(dir) {
-                    dir = Math.round(dir/27.5);
-                    // there are 27.5 degrees separating each of the depth 3 direction
-                    var dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
-                    return dirArr[dir % dirArr.length];
-                }
-                function realFeel(t, h) {
-                    // source https://en.wikipedia.org/wiki/Heat_index
-                    t = parseFloat(tempConvert(t));
-                    if (_prefs["unit"] == "imperial") {
-                        return ((-42.379+(2.04901523*t)+(10.1433127*h)+(-0.22475541*t*h) +
-                            (-6.83783*Math.pow(10, -3)*t*t)+(-5.481717*Math.pow(10,-2)*h*h)+
-                            (1.22874*Math.pow(10,-3)*t*t*h)+(8.5282*Math.pow(10,-4)*t*h*h)+
-                            (-1.99*Math.pow(10,-6)*t*t*h*h)).toPrecision(3) + " &#8457;");
-                    }
+                _remover(index);
+            },
+            _tempConvert = function _tempConvert(temp) {
+                if (_prefs["unit"] == "imperial") {
+                    //let's assume F bc i'm american
+                    return (1.8 * (temp - 273) + 32).toPrecision(3) + " &#8457;";
+                } else {
+                    return (temp - 273.15).toPrecision(2) + " &#8451;";
                 }
             },
-            _currentLocation = function _currentLocation() {
+            _windDir = function _windDir(dir) {
+                dir = Math.round(dir/27.5);
+                // there are 27.5 degrees separating each of the depth 3 direction
+                var dirArr = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+                return dirArr[dir % dirArr.length];
+            },
+            _realFeel = function _realFeel(t, h) {
+                // source https://en.wikipedia.org/wiki/Heat_index
+                t = parseFloat(_tempConvert(t));
+                if (_prefs["unit"] == "imperial") {
+                    return ((-42.379+(2.04901523*t)+(10.1433127*h)+(-0.22475541*t*h) +
+                        (-6.83783*Math.pow(10, -3)*t*t)+(-5.481717*Math.pow(10,-2)*h*h)+
+                        (1.22874*Math.pow(10,-3)*t*t*h)+(8.5282*Math.pow(10,-4)*t*h*h)+
+                        (-1.99*Math.pow(10,-6)*t*t*h*h)).toPrecision(3) + " &#8457;");
+                }
+            },
+            _apiCall = function _apiCall(url, index) {
+                $.ajax({
+                    url: url,
+                    type: "GET"
+                }).done(function(wData) {
+                    wData["time"] = moment().format("YYYY-MM-DD-HH-mm");
+                    var newObj = {"weather": {}};
+                    newObj["weather"][index] = wData;
 
+                    if (!_stored["weather"]) {
+                        _stored["weather"] = {};
+                    }
+                    _stored["weather"][index] = wData;
+
+                    _dataStore({"weather": _stored["weather"]});
+                    _tileStyler(wData, index);
+                    _changer();
+                }).fail(function() {
+                    _tileStyler(undefined, index, _configs["weather"][index]);
+                    _changer();
+                });
+            },
+            _currentLocation = function _currentLocation(e) {
+                navigator.geolocation.getCurrentPosition(function(location) {
+                    var target = $(e.currentTarget),
+                        lat = location.coords.latitude,
+                        long = location.coords.longitude,
+                        tileIndex = target.parents(".tile").data("index"),
+                        url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long;
+                    url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
+
+                    delete _stored["weather"][tileIndex];
+                    delete _stored["configs"]["weather"][tileIndex];
+                    delete _configs["weather"][tileIndex];
+                    _configs["weather"][tileIndex] = {"current": true};
+                    _init(tileIndex, _stored, _prefs, _configs);
+                });
             },
             _autoComplete = function _autoComplete(targ, text) {
                 targ.parent().find(".options").remove();
@@ -267,7 +298,7 @@ define([
                 _cObj = [ 
                     {"name": "Afghanistan", "code": "AF"}, {"name": "Albania", "code": "AL"}, 
                     {"name": "Algeria", "code": "DZ"}, {"name": "American Samoa", "code": "AS"}, 
-                    {"name": "AndorrA", "code": "AD"}, {"name": "Angola", "code": "AO"}, 
+                    {"name": "Andorra", "code": "AD"}, {"name": "Angola", "code": "AO"}, 
                     {"name": "Anguilla", "code": "AI"}, {"name": "Antigua and Barbuda", "code": "AG"}, 
                     {"name": "Argentina", "code": "AR"}, {"name": "Armenia", "code": "AM"}, 
                     {"name": "Aruba", "code": "AW"}, {"name": "Australia", "code": "AU"}, 
