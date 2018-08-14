@@ -181,7 +181,10 @@ define([
                 });
             },
             _currentLocation = function _currentLocation(e) {
-                var tileIndex = $(e.currentTarget).parents(".tile").data("index");
+                var tile = $(e.currentTarget).parents(".tile"),
+                    tileIndex = tile.data("index");
+
+                tile.find("input").attr("disabled", "disabled");
 
                 delete _stored["weather"][tileIndex];
                 delete _stored["configs"]["weather"][tileIndex];
