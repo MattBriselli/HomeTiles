@@ -286,6 +286,11 @@ define([
 
                 left.text("$" + _decFormat(last["close"]));
 
+                if (data[code]["quote"]["calculationPrice"] == "tops") {
+                    change = data[code]["quote"]["change"];
+                    changeP = data[code]["quote"]["changePercent"];
+                }
+
                 var prefix = (change > 0) ? "+" : "",
                     rightString = prefix + _decFormat(change)+" (";
                 rightString += prefix + _decFormat(changeP)+"%)";

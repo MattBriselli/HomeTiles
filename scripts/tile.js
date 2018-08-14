@@ -34,6 +34,7 @@ define([
                             //0 will always be first
                             $(".tileBody").prepend(newTile);
                         } else if ($(".tile[data-index='"+parseInt(index-1)+"']").length != 0) {
+                            //TODO make this work outside of off by 1
                             $(".tile[data-index='"+parseInt(index-1)+"']").after(newTile);
                         } else if ($(".tile[data-index='"+parseInt(index+1)+"']").length != 0) {
                             $(".tile[data-index='"+parseInt(index+1)+"']").before(newTile);
