@@ -54,7 +54,7 @@ body {
     margin: 15px 0 0 21%;
 }
 .editBody .title.tiles {
-    margin: 75px 0 0 30%;
+    margin: 25px 0 0 30%;
 }
 .editBody .tiles:not(.title) {
     width: 80%;
@@ -286,6 +286,11 @@ body {
     text-align: center;
     font-size: 25px;
 }
+.back .title .fa-location-arrow {
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px;
+}
 .back .subtitle {
     margin-bottom: 10px;
     text-align: center;
@@ -293,11 +298,6 @@ body {
 .back .inpCountry {
     text-align: center;
     margin-bottom: 10px;
-}
-.back .fa-location-arrow {
-    left: 50px;
-    cursor: pointer;
-    position: absolute;
 }
 .back input, .weather .back .options {
     width: 50%;
