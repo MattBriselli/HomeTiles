@@ -185,6 +185,7 @@ define([
                     tileIndex = tile.data("index");
 
                 tile.find("input").attr("disabled", "disabled");
+                tile.find(".fa").off("click").css("cursor", "default");
 
                 delete _stored["weather"][tileIndex];
                 delete _stored["configs"]["weather"][tileIndex];
