@@ -30,8 +30,6 @@ define([
                 
                 _cObjLoad();
 
-                console.log(_stored, _configs, index);
-
                 if (_stored["weather"] && _stored["weather"][index] && !oldData(_stored["weather"][index])) {
                     //there's old data that's still good
                     _tileStyler(_stored["weather"][index], index);
@@ -67,7 +65,6 @@ define([
                     } else {
                         //lets go with malibu
                         url += "&zip=90210,us";
-                        console.log('malibu');
                         _apiCall(url, index);
                     }
                 }
@@ -184,20 +181,13 @@ define([
                 });
             },
             _currentLocation = function _currentLocation(e) {
-                navigator.geolocation.getCurrentPosition(function(location) {
-                    var target = $(e.currentTarget),
-                        lat = location.coords.latitude,
-                        long = location.coords.longitude,
-                        tileIndex = target.parents(".tile").data("index"),
-                        url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long;
-                    url += "&id=524901&APPID=a77b08a6d315fb4d974c16345ae1ba70";
+                var tileIndex = $(e.currentTarget).parents(".tile").data("index");
 
-                    delete _stored["weather"][tileIndex];
-                    delete _stored["configs"]["weather"][tileIndex];
-                    delete _configs["weather"][tileIndex];
-                    _configs["weather"][tileIndex] = {"current": true};
-                    _init(tileIndex, _stored, _prefs, _configs);
-                });
+                delete _stored["weather"][tileIndex];
+                delete _stored["configs"]["weather"][tileIndex];
+                delete _configs["weather"][tileIndex];
+                _configs["weather"][tileIndex] = {"current": true};
+                _init(tileIndex, _stored, _prefs, _configs);
             },
             _autoComplete = function _autoComplete(targ, text) {
                 targ.parent().find(".options").remove();
@@ -374,7 +364,7 @@ define([
                     {"name": "Philippines", "code": "PH"}, {"name": "Pitcairn", "code": "PN"}, {"name": "Poland", "code": "PL"}, 
                     {"name": "Portugal", "code": "PT"}, {"name": "Puerto Rico", "code": "PR"}, {"name": "Qatar", "code": "QA"}, 
                     {"name": "Reunion", "code": "RE"}, {"name": "Romania", "code": "RO"}, {"name": "Russian Federation", "code": "RU"}, 
-                    {"name": "RWANDA", "code": "RW"}, {"name": "Saint Helena", "code": "SH"}, {"name": "Saint Kitts and Nevis", "code": "KN"}, 
+                    {"name": "Rwanda", "code": "RW"}, {"name": "Saint Helena", "code": "SH"}, {"name": "Saint Kitts and Nevis", "code": "KN"}, 
                     {"name": "Saint Lucia", "code": "LC"}, {"name": "Saint Pierre and Miquelon", "code": "PM"}, 
                     {"name": "Saint Vincent and the Grenadines", "code": "VC"}, {"name": "Samoa", "code": "WS"}, 
                     {"name": "San Marino", "code": "SM"}, {"name": "Sao Tome and Principe", "code": "ST"}, 
