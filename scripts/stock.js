@@ -288,7 +288,7 @@ define([
 
                 if (data[code]["quote"]["calculationPrice"] == "tops") {
                     change = data[code]["quote"]["change"];
-                    changeP = data[code]["quote"]["changePercent"];
+                    changeP = data[code]["quote"]["changePercent"] * 100;
                 }
 
                 var prefix = (change > 0) ? "+" : "",
