@@ -48,7 +48,7 @@ define([
                         }
                         _apiCall(url, index);
                     } else if (_configs["weather"] && _configs["weather"][index] && _configs["weather"][index]["current"]) {
-                        if (!_configs["weather"][index]["lat"] || !_configs["weather"][index]["long"]) {
+                        if (!_configs["weather"][index]["lat"] || !_configs["weather"][index]["lon"]) {
                             navigator.geolocation.getCurrentPosition(function(location) {
                                 var lat = location.coords.latitude,
                                     long = location.coords.longitude;
@@ -59,7 +59,7 @@ define([
                                 _apiCall(url, index);
                             });
                         } else {
-                            url += "&lat="+_configs["weather"][index]["lat"]+"&lon="+!_configs["weather"][index]["long"];
+                            url += "&lat="+_configs["weather"][index]["lat"]+"&lon="+_configs["weather"][index]["lon"];
                             _apiCall(url, index);
                         }
                     } else {
