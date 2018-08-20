@@ -234,7 +234,6 @@ define([
                         }
 
                     }
-
                     
                     var openP = ddata["quote"]["open"],
                         curr = _decFormat(dVal),
