@@ -264,7 +264,7 @@ define([
                         .attr("class", "line");
 
                     g.append("text")
-                        .attr("x", xPos - 35)
+                        .attr("x", xPos - 45)
                         .attr("y", -10)
                         .attr("class", "lineText")
                         .attr("fill", color)
