@@ -281,14 +281,15 @@ define([
                     }
                 }
 
-                var change = (last["close"] - first["open"]),
-                    changeP = 100 * (last["close"] / (first["open"]) -1);
 
                 left.text("$" + _decFormat(last["close"]));
 
                 if (data[code]["quote"]["calculationPrice"] == "tops") {
-                    change = data[code]["quote"]["change"];
-                    changeP = data[code]["quote"]["changePercent"] * 100;
+                    var change = data[code]["quote"]["change"],
+                        changeP = data[code]["quote"]["changePercent"] * 100;
+                } else if (first && first.hasOwnProperty("open")){
+                    var change = (last["close"] - first["open"]),
+                        changeP = 100 * (last["close"] / (first["open"]) -1);
                 }
 
                 var prefix = (change > 0) ? "+" : "",
