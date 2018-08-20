@@ -195,7 +195,7 @@ define([
                     .attr("d", line);
                 
                 chart.on("mouseover mousemove", function(e) {
-                    _hoverLine(e, g, chart, ddata);
+                    _hoverLine(e, g, chart, data[code]);
                 });
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
@@ -204,24 +204,17 @@ define([
                     var svgRect = chart[0].getBoundingClientRect(),
                         y = svgRect["height"] - svgRect["y"],
                         xPos = e["offsetX"] - 50,
-                        xPort = xPos/220;
+                        xPort = xPos/220,
+                        dchart = ddata["chart"];
 
-                    var dataLine = g.append("line")
-                        .attr("x1", xPos)
-                        .attr("x2", xPos)
-                        .attr("y1", 0)
-                        .attr("y2", 162)
-                        .attr("class", "line");
-                    
-
-                    var dataIndex = Math.floor(xPort * ddata.length);
+                    var dataIndex = Math.floor(xPort * dchart.length);
                     if (dataIndex < 0) {
                         dataIndex = 0;
-                    } else if (dataIndex >= ddata.length) {
-                        dataIndex = ddata.length - 1;
+                    } else if (dataIndex >= dchart.length) {
+                        dataIndex = dchart.length - 1;
                     }
 
-                    var dVal = ddata[dataIndex]["average"];
+                    var dVal = dchart[dataIndex]["average"];
                     if (dVal == -1) {
                         var off = 1;
                         while (!dVal || dVal < 0) {
@@ -231,32 +224,51 @@ define([
                                 secV = -1;
 
                             off++;
-                            if (first < ddata.length) {
-                                firstV = ddata[first]["average"];
+                            if (first < dchart.length) {
+                                firstV = dchart[first]["average"];
                             }
                             if (sec > 0) {
-                                secV = ddata[sec]["average"];
+                                secV = dchart[sec]["average"];
                             }
                             dVal = Math.max(firstV, secV);
                         }
 
                     }
 
-                    var dataText = g.append("text")
-                        .attr("x", xPos - 14)
-                        .attr("y", -10)
-                        .attr("class", "lineText")
-                        .text(_decFormat(dVal));
-
+                    
+                    var openP = ddata["quote"]["open"],
+                        curr = _decFormat(dVal),
+                        diff = (curr - openP);
 
                     if (_prefs["dark"]) {
-                        dataText.attr("fill", "white");
-                        dataLine.attr("stroke", "white");
+                        var color = "white";
                     } else {
-                        dataText.attr("fill", "black");
-                        dataLine.attr("stroke", "black");
+                        var color = "black";
                     }
-                    
+                        
+                    if (openP && curr) {
+                        if (diff < 0) {
+                            color = "red";
+                        } else if (diff > 0) {
+                            //same price will use default colors
+                            color = "green";
+                        }
+                    }
+
+                    g.append("line")
+                        .attr("x1", xPos)
+                        .attr("x2", xPos)
+                        .attr("y1", 0)
+                        .attr("y2", 162)
+                        .attr("stroke", color)
+                        .attr("class", "line");
+
+                    g.append("text")
+                        .attr("x", xPos - 35)
+                        .attr("y", -10)
+                        .attr("class", "lineText")
+                        .attr("fill", color)
+                        .text(curr + " (" + _decFormat(diff)+ ")");
                 }
             },
             _dataInfo = function _dataInfo(data, code, index) {
