@@ -237,7 +237,8 @@ define([
                     
                     var openP = ddata["quote"]["open"],
                         curr = _decFormat(dVal),
-                        diff = (curr - openP);
+                        diff = (curr - openP),
+                        symbol = "";
 
                     if (_prefs["dark"]) {
                         var color = "white";
@@ -250,6 +251,7 @@ define([
                             color = "red";
                         } else if (diff > 0) {
                             //same price will use default colors
+                            symbol = "+";
                             color = "green";
                         }
                     }
@@ -267,7 +269,7 @@ define([
                         .attr("y", -10)
                         .attr("class", "lineText")
                         .attr("fill", color)
-                        .text(curr + " (" + _decFormat(diff)+ ")");
+                        .text(curr + " (" + symbol + _decFormat(diff)+ ")");
 
                     var textWid = chart.find(".lineText")[0].getBoundingClientRect()["width"];
                     if (xPos - 35 + textWid >= svgRect["width"] - 55) {
