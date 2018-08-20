@@ -263,11 +263,18 @@ define([
                         .attr("class", "line");
 
                     g.append("text")
-                        .attr("x", xPos - 45)
+                        .attr("x", xPos - 35)
                         .attr("y", -10)
                         .attr("class", "lineText")
                         .attr("fill", color)
                         .text(curr + " (" + _decFormat(diff)+ ")");
+
+                    var textWid = chart.find(".lineText")[0].getBoundingClientRect()["width"];
+                    if (xPos - 35 + textWid >= svgRect["width"] - 55) {
+                        //xPos - 35 is the textBox's left
+                        //parWid - 50 is the chart width minus the right margin
+                        chart.find(".lineText").attr("x", svgRect["width"] - 55 - textWid);
+                    }
                 }
             },
             _dataInfo = function _dataInfo(data, code, index) {
