@@ -320,13 +320,23 @@ define([
                         changeP = 100 * (last["close"] / (first["open"]) -1);
                 }
 
-                var prefix = (change > 0) ? "+" : "",
+                var prefix = (change >= 0) ? "+" : "",
                     middleString = prefix + _decFormat(change);
                     rightString = "(" + prefix + _decFormat(changeP)+"%)";
 
                 if (data[code]["quote"]["calculationPrice"] == "close") {
-                    middle.text(middleString);
-                    right.text(rightString);
+                    middle.append("<div>" + middleString + "</div><div>" + rightString + "</div>");
+                    middle.css("margin-top", "-6px");
+                    var extChange = data[code]["quote"]["extendedChange"],
+                        extPerc = data[code]["quote"]["extendedChangePercent"] * 100,
+                        extPrefix = (extChange >= 0) ? "+" : "",
+                        extString = "<div style='font-size: 10px; color: white;'>After Hours</div>";
+
+                    extString += "<div>" + extPrefix + _decFormat(extChange) + "</div>";
+                    extString += "<div>(" + extPrefix + _decFormat(extPerc)+"%)</div>";
+
+                    right.append(extString);
+                    right.css("margin-top", "-7px").css("font-size", "14px");
                 } else {
                     middle.text(middleString);
                     right.text(rightString);
