@@ -339,8 +339,8 @@ define([
                 } else {
                     left.text("$" + _decFormat(last["close"]));
                     middle.hide();
-                    left.css("width", "50%");
-                    right.css("width", "50%");
+                    left.css("width", "45%");
+                    right.css("width", "55%");
                     right.text(middleString + " " + rightString);
                 }
 
