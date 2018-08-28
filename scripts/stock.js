@@ -370,6 +370,12 @@ define([
                 if (num < 0.1) {
                     numRound = Math.round(num * 1000) / 1000;
                 }
+
+                var numS = numRound.toString(),
+                    numSplit = numS.split(".");
+                if (numSplit[1].length == 1) {
+                    return numS + "0";
+                }
                 
                 return numRound;
             };
