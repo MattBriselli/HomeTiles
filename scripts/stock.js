@@ -200,13 +200,19 @@ define([
                 });
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
-                if (e["offsetX"] > 50 && e["offsetX"] < 270 && !$(e["target"]).hasClass("line")) {
+                if (!$(e["target"]).hasClass("line")) {
                     chart.parents(".tileBody").find(".line, .lineText").remove();
                     var svgRect = chart[0].getBoundingClientRect(),
                         y = svgRect["height"] - svgRect["y"],
                         xPos = e["offsetX"] - 50,
                         xPort = xPos/220,
                         dchart = ddata["chart"];
+
+                    if (xPos > 222) {
+                        xPos = 222;
+                    } else if (xPos < 0) {
+                        xPos = 0;
+                    }
 
                     var dataIndex = Math.floor(xPort * dchart.length);
                     if (dataIndex < 0) {
@@ -215,8 +221,8 @@ define([
                         dataIndex = dchart.length - 1;
                     }
 
-                    var dVal = dchart[dataIndex]["average"];
-                    if (dVal == -1) {
+                    var dVal = dchart[dataIndex]["close"];
+                    if (!dVal || dVal == -1) {
                         var off = 1;
                         while (!dVal || dVal < 0) {
                             var first = dataIndex + off,
@@ -236,7 +242,7 @@ define([
 
                     }
                     
-                    var openP = ddata["quote"]["open"],
+                    var openP = ddata["quote"]["previousClose"],
                         curr = _decFormat(dVal),
                         diff = (curr - openP),
                         symbol = "";
