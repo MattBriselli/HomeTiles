@@ -336,23 +336,40 @@ define([
 
                     right.append(extString);
                     right.css("margin-top", "-7px").css("font-size", "14px");
+
+                    if (change > 0) {
+                        $(left).css("color", "green");
+                        $(middle).css("color", "green");
+                        
+                    } else {
+                        $(left).css("color", "red");
+                        $(middle).css("color", "red");
+                        
+                    }
+
+                    (extChange > 0) ?
+                        $(right).css("color", "green") : $(right).css("color", "red");
+
                 } else {
                     left.text("$" + _decFormat(last["close"]));
                     middle.hide();
                     left.css("width", "45%");
                     right.css("width", "55%");
                     right.text(middleString + " " + rightString);
+
+                    (change > 0) ?
+                        $(right).css("color", "green") : $(right).css("color", "red");
                 }
 
                 if (change > 0) {
-                    $(left).css("color", "green");
-                    $(middle).css("color", "green");
-                    $(right).css("color", "green");
-                } else {
-                    $(left).css("color", "red");
-                    $(middle).css("color", "red");
-                    $(right).css("color", "red");
-                }
+                        $(left).css("color", "green");
+                        $(middle).css("color", "green");
+                    } else {
+                        $(left).css("color", "red");
+                        $(middle).css("color", "red");
+                    }
+
+
 
                 if (prefix !== "+") {
                     left.parents(".tile").find(".curve").attr("stroke", "red");
@@ -373,7 +390,7 @@ define([
 
                 var numS = numRound.toString(),
                     numSplit = numS.split(".");
-                if (numSplit[1].length == 1) {
+                if (numSplit && numSplit.length > 1 && numSplit[1].length == 1) {
                     return numS + "0";
                 }
                 
