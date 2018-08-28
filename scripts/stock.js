@@ -330,7 +330,7 @@ define([
                     var extChange = data[code]["quote"]["extendedChange"],
                         extPerc = data[code]["quote"]["extendedChangePercent"] * 100,
                         extPrefix = (extChange >= 0) ? "+" : "",
-                        extString = "<div style='font-size: 10px; color: white;'>After Hours</div>";
+                        extString = "<div class='aH' style='font-size: 10px;'>After Hours</div>";
 
                     extString += "<div>" + extPrefix + _decFormat(extChange) + "</div>";
                     extString += "<div>(" + extPrefix + _decFormat(extPerc)+"%)</div>";

@@ -371,7 +371,10 @@ body {
     width: 30%;
     float: right;
 }
-.tile .dark .fa-pencil, .tile .dark .fa-trash-o {
+.tile .stock:not(.dark) .front .bottom .right .aH {
+    color: black;
+}
+.tile .dark .fa-pencil, .tile .dark .fa-trash-o,  .tile .stock.dark .aH {
     color: whitesmoke;
 }
 .tile .stock.dark .xAxis, .tile .stock.dark .yAxis,
