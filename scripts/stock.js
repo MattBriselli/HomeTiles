@@ -338,8 +338,9 @@ define([
                     right.css("margin-top", "-7px").css("font-size", "14px");
                 } else {
                     left.text("$" + _decFormat(last["close"]));
-                    middle.text(middleString);
-                    right.text(rightString);
+                    middle.hide();
+                    right.css("width", "60%");
+                    right.text(middleString + " " + rightString);
                 }
 
                 if (change > 0) {
