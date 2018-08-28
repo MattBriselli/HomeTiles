@@ -310,8 +310,6 @@ define([
                     }
                 }
 
-                left.text("$" + _decFormat(last["close"]));
-
                 if (data[code]["quote"]["calculationPrice"] == "tops" || data[code]["quote"]["calculationPrice"] == "close") {
                     var change = data[code]["quote"]["change"],
                         changeP = data[code]["quote"]["changePercent"] * 100;
@@ -325,6 +323,7 @@ define([
                     rightString = "(" + prefix + _decFormat(changeP)+"%)";
 
                 if (data[code]["quote"]["calculationPrice"] == "close") {
+                    left.text("$" + _decFormat(data[code]["quote"]["extendedPrice"]));
                     middle.append("<div>" + middleString + "</div><div>" + rightString + "</div>");
                     middle.css("margin-top", "-6px");
                     var extChange = data[code]["quote"]["extendedChange"],
@@ -338,6 +337,7 @@ define([
                     right.append(extString);
                     right.css("margin-top", "-7px").css("font-size", "14px");
                 } else {
+                    left.text("$" + _decFormat(last["close"]));
                     middle.text(middleString);
                     right.text(rightString);
                 }
