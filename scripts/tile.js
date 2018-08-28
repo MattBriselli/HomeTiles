@@ -37,7 +37,6 @@ define([
                             var added = false;
                             $(".tile").each(function() {
                                 var thisIndex = $(this).data("index");
-                                console.log(thisIndex);
                                 if (thisIndex == index - 1 && !added) {
                                     $(this).after(newTile);
                                     added = true;

@@ -37,6 +37,7 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
+                    console.log(data);
                     if (data[code]["chart"].length > 0) {
                         //only true on error or at 9:30am
                         _tileStyler(data, code, index);
@@ -288,6 +289,7 @@ define([
             },
             _dataInfo = function _dataInfo(data, code, index) {
                 var left = $(".tile[data-index='"+index+"'] .bottom .left"),
+                    middle = $(".tile[data-index='"+index+"'] .bottom .middle"),
                     right = $(".tile[data-index='"+index+"'] .bottom .right"),
                     len = data[code]["chart"].length,
                     last = data[code]["chart"][len-1],
@@ -308,7 +310,6 @@ define([
                     }
                 }
 
-
                 left.text("$" + _decFormat(last["close"]));
 
                 if (data[code]["quote"]["calculationPrice"] == "tops" || data[code]["quote"]["calculationPrice"] == "close") {
@@ -320,16 +321,24 @@ define([
                 }
 
                 var prefix = (change > 0) ? "+" : "",
-                    rightString = prefix + _decFormat(change)+" (";
-                rightString += prefix + _decFormat(changeP)+"%)";
-                
-                right.text(rightString);
+                    middleString = prefix + _decFormat(change);
+                    rightString = "(" + prefix + _decFormat(changeP)+"%)";
+
+                if (data[code]["quote"]["calculationPrice"] == "close") {
+                    middle.text(middleString);
+                    right.text(rightString);
+                } else {
+                    middle.text(middleString);
+                    right.text(rightString);
+                }
 
                 if (change > 0) {
                     $(left).css("color", "green");
+                    $(middle).css("color", "green");
                     $(right).css("color", "green");
                 } else {
                     $(left).css("color", "red");
+                    $(middle).css("color", "red");
                     $(right).css("color", "red");
                 }
 

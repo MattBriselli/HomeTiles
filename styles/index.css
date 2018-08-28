@@ -352,7 +352,7 @@ body {
 .tile .stock .front .bottom {
     height: 50px;
 }
-.tile .stock .front .bottom .left, .tile .stock .front .bottom .right {
+.tile .stock .front .bottom .left, .tile .stock .front .bottom .middle, .tile .stock .front .bottom .right {
     height: 100%;
     display: inline-block;
     text-align: center;
@@ -361,9 +361,15 @@ body {
 .tile .stock .front .bottom .left {
     float: left;
     width: 40%;
+    font-size: 30px;
+    margin-top: -6px;
+}
+.tile .stock .front .bottom .middle {
+    width: 30%;
 }
 .tile .stock .front .bottom .right {
-    width: 60%;
+    width: 30%;
+    float: right;
 }
 .tile .dark .fa-pencil, .tile .dark .fa-trash-o {
     color: whitesmoke;
