@@ -237,11 +237,11 @@ body {
     width: auto;
     font-size: 14px;
 }
-.tile .low {
+.tile .high {
     margin-left: 8%;
     float: left;
 }
-.tile .high {
+.tile .low {
     float: right;
     margin-right: 5%;
 }
