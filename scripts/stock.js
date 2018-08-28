@@ -39,7 +39,6 @@ define([
                 }).done(function(data) {
                     if (data[code]["chart"].length > 0) {
                         //only true on error or at 9:30am
-                        console.log(data);
                         _tileStyler(data, code, index);
                         _grapher(data, code, index);
                         _dataInfo(data, code, index);
