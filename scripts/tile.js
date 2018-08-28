@@ -50,7 +50,7 @@ define([
                             }
                         }
                     }
-                } else {
+                } else if ($(tile).find(".weather").length > 0) {
                     //no data, throw an error msg
                     var place = (error["city"] ? error["city"] + ", " + error["country"] : error["zipcode"]);
                     if (!error["country"]) {
@@ -63,7 +63,15 @@ define([
                         $(".tile[data-index='"+index+"']").replaceWith(newTile);
                     } else {
                         $(".tileBody").append(newTile);
-                    }                    
+                    }
+                } else {
+                    newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
+                        error["stock"] + "</div></div>");
+                    if ($(".tile[data-index='"+index+"']").length != 0) {
+                        $(".tile[data-index='"+index+"']").replaceWith(newTile);
+                    } else {
+                        $(".tileBody").append(newTile);
+                    }
                 }
             };
 

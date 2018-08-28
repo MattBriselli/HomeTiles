@@ -37,7 +37,6 @@ define([
                     url: url,
                     type: "GET"
                 }).done(function(data) {
-                    console.log(data);
                     if (data[code]["chart"].length > 0) {
                         //only true on error or at 9:30am
                         _tileStyler(data, code, index);
@@ -45,6 +44,7 @@ define([
                         _dataInfo(data, code, index);
                     }
                 }).fail(function(error) {
+                    tileJs.init($(_tmpl), index, _configs["stock"][index]);
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
             },
