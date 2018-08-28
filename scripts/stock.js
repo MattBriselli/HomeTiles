@@ -244,6 +244,7 @@ define([
                     
                     var openP = ddata["quote"]["previousClose"],
                         curr = _decFormat(dVal),
+                        currP = _decFormat(100 * (curr / openP -1)),
                         diff = (curr - openP),
                         symbol = "";
 
@@ -276,7 +277,7 @@ define([
                         .attr("y", -10)
                         .attr("class", "lineText")
                         .attr("fill", color)
-                        .text(curr + " (" + symbol + _decFormat(diff)+ ")");
+                        .text(" " + symbol + _decFormat(diff)+ " ("+currP+"%)");
 
                     var textWid = chart.find(".lineText")[0].getBoundingClientRect()["width"];
                     if (xPos - 35 + textWid >= svgRect["width"] - 55) {
