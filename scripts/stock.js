@@ -39,6 +39,7 @@ define([
                 }).done(function(data) {
                     if (data[code]["chart"].length > 0) {
                         //only true on error or at 9:30am
+                        console.log(data);
                         _tileStyler(data, code, index);
                         _grapher(data, code, index);
                         _dataInfo(data, code, index);
@@ -304,7 +305,7 @@ define([
 
                 left.text("$" + _decFormat(last["close"]));
 
-                if (data[code]["quote"]["calculationPrice"] == "tops") {
+                if (data[code]["quote"]["calculationPrice"] == "tops" || data[code]["quote"]["calculationPrice"] == "close") {
                     var change = data[code]["quote"]["change"],
                         changeP = data[code]["quote"]["changePercent"] * 100;
                 } else if (first && first.hasOwnProperty("open")){
