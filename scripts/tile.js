@@ -33,14 +33,22 @@ define([
                         if (index == 0) {
                             //0 will always be first
                             $(".tileBody").prepend(newTile);
-                        } else if ($(".tile[data-index='"+parseInt(index-1)+"']").length != 0) {
-                            //TODO make this work outside of off by 1
-                            $(".tile[data-index='"+parseInt(index-1)+"']").after(newTile);
-                        } else if ($(".tile[data-index='"+parseInt(index+1)+"']").length != 0) {
-                            $(".tile[data-index='"+parseInt(index+1)+"']").before(newTile);
                         } else {
-                            //very weird order, just stick it at the end and hope for the best
-                            $(".tileBody").append(newTile);
+                            var added = false;
+                            $(".tile").each(function() {
+                                var thisIndex = $(this).data("index");
+                                console.log(thisIndex);
+                                if (thisIndex == index - 1 && !added) {
+                                    $(this).after(newTile);
+                                    added = true;
+                                } else if (!added && thisIndex > index) {
+                                    $(this).before(newTile);
+                                    added = true;
+                                }
+                            });
+                            if (!added) {
+                                $(".tileBody").append(newTile);
+                            }
                         }
                     }
                 } else {
