@@ -31,20 +31,20 @@ define([
                 //no data, throw an error msg
                 var place = (error["city"] ? error["city"] + ", " + error["country"] : error["zipcode"]);
                 if (!error["country"]) {
-                    place = "Beverly Hills, CA";
+                    place = "Current Location";
                 }
+                var weatherHTML = "<div class='error'><div>Error Loading Data for</div><div>"+place+"</div></div>",
+                    existingTile = $(".tile[data-index='"+index+"']");
+                newTile.find(".front .top").html(weatherHTML);
 
-                newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
-                    place + "</div></div>");
-                if ($(".tile[data-index='"+index+"']").length != 0) {
-                    $(".tile[data-index='"+index+"']").replaceWith(newTile);
+                if (existingTile.length != 0) {
+                    existingTile.replaceWith(newTile);
                 } else {
                     $(".tileBody").append(newTile);
                 }
             } else {
-                newTile.find(".front .top").html("<div class='error'><div>Error Loading Data for</div><div>" +
-                    error["stock"] + "</div></div>");
-
+                var stockHTML = "<div class='error'><div>Error Loading Data for</div><div>"+error["stock"]+"</div></div>";
+                newTile.find(".front .top").html(stockHTML);
                 _tileSet(newTile, index);
             }
         },
