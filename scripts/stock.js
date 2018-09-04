@@ -42,6 +42,8 @@ define([
                         _tileStyler(data, code, index);
                         _grapher(data, code, index);
                         _dataInfo(data, code, index);
+                    } else {
+                        tileJs.init($(_tmpl), index, _configs["stock"][index]);
                     }
                 }).fail(function(error) {
                     tileJs.init($(_tmpl), index, _configs["stock"][index]);
