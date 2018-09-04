@@ -31,7 +31,7 @@ define("tab", [
                 _bindListener();
             },
             _bindListener = function _bindListener() {
-                $(".editMode .fa-bars").on("click", function() {
+                $(".editMode .fa-bars").off("click").on("click", function() {
                     if ($(".editPanel").css("left") == "0px" || $(".editPanel").css("left") == "0%") {
                         direction = '-19%';
                         $(".tile").removeClass("sort mousedown");
@@ -65,7 +65,7 @@ define("tab", [
                         $(e.currentTarget).removeClass("mousedown");
                     });
                 });
-                $(".editBody .tiles button").on("click", function(e) {
+                $(".editBody .tiles button").off("click").on("click", function(e) {
                     var target = $(e.currentTarget),
                         tVal = target.attr("value"),
                         nInd = $(".tileBody .tile").length;
@@ -85,18 +85,18 @@ define("tab", [
                     _dataStore({"configs": _configs});
                     _tileLoader(tVal, nInd);
                 });
-                $(".units input").on("change", function(e) {
+                $(".units input").off("change").on("change", function(e) {
                     var val = $(e.currentTarget).attr("class");
                     _prefs["unit"] = val; 
                     _dataStore({"prefs": _prefs});
                     _init();
                 });
-                $(".darkMode input").on("change", function(e) {
+                $(".darkMode input").off("change").on("change", function(e) {
                     _prefs["dark"] = e.currentTarget.checked;
                     $(".tile .stock, .tile .weather").toggleClass("dark");
                     _dataStore({"prefs": _prefs});
                 });
-                $(".reset").on("click", function() {
+                $(".reset").off("click").on("click", function() {
                     chrome.storage.sync.clear();
                     $(".tile").remove();
                     _init();
@@ -179,8 +179,71 @@ define("tab", [
                 });
             },
             _tileSwapper = function _tileSwapper(o, n) {
-                console.log(o, n);
-                console.log(_stored, _prefs, _configs, _tiles);
+                var low, hi;
+
+                if (o < n) {
+                    low = o;
+                    hi = n;
+                } else {
+                    low = n;
+                    hi = o;
+                }
+
+                while (low < hi) {
+                    //Grab the two switching tiles
+                    var lowTile = $(".tile[data-index='"+low+"']"),
+                        nextTile = $(".tile[data-index='"+(low + 1)+"']");
+
+                    //switch their data-indexes
+                    lowTile.attr("data-index", low+1);
+                    nextTile.attr("data-index", low);
+
+                    //need to swap the associated config files
+                    var lowConfig, lowConfigKey, hiConfig, hiConfigKey;
+
+                    if (_configs["weather"].hasOwnProperty(low)) {
+                        console.log('low is weather');
+                        lowConfig = _configs["weather"][low];
+                        lowConfigKey = "weather";
+                        delete _configs["weather"][low];
+                        delete _stored["weather"][low];
+                    } else {
+                        console.log('low is stock');
+                        lowConfig = _configs["stock"][low];
+                        lowConfigKey = "stock";
+                        delete _configs["stock"][low];
+                    }
+
+                    if (_configs["weather"].hasOwnProperty(low + 1)) {
+                        console.log('hi is weather');
+                        hiConfig = _configs["weather"][low+1];
+                        hiConfigKey = "weather";
+                        delete _configs["weather"][low+1];
+                        delete _stored["weather"][low+1];
+                    } else {
+                        console.log('hi is stock');
+                        hiConfig = _configs["stock"][low+1];
+                        hiConfigKey = "stock";
+                        delete _configs["stock"][low+1];
+                    }
+
+                    _configs[lowConfigKey][low + 1] = lowConfig;
+                    _configs[hiConfigKey][low] = hiConfig;
+
+                    //lastly swap in the tiles array
+                    var oldLow = _tiles[low];
+                    _tiles[low] = _tiles[low+1];
+                    _tiles[low+1] = oldLow;
+
+                    low++;
+                }
+
+                _stored["configs"] = _configs;
+                _stored["tiles"] = _tiles;
+                _dataStore({"configs": _configs});
+                _dataStore({"tiles": _tiles});
+
+                console.log(_stored, _configs, _tiles);
             },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
