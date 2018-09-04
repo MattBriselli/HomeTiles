@@ -79,6 +79,11 @@ define([
                     }
                 }
             },
+            _resetter = function _resetter(stored, prefs, configs) {
+                _stored = stored;
+                _prefs = prefs;
+                _configs = configs;
+            },
             _changer = function changer() {
                 $(".weather .back input.country").off("keyup").on("keyup", function(e) {
                     if ($(e.currentTarget).val().length != 0) {
@@ -245,6 +250,8 @@ define([
                         city = parent.find("input.city").val(),
                         count = parent.find("input.country").val();
 
+                    console.log(e, parent.data("index"), parent.attr("data-index"));
+
                     if ((zip != "" || city != "") && count != "") {
                         _configs["weather"][ind] = {};
                         zip ?
@@ -397,6 +404,7 @@ define([
             };
 
         return {
-            init: _init
+            init: _init,
+            resetter: _resetter
         };
 });

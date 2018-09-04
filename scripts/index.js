@@ -152,6 +152,7 @@ define("tab", [
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     _tiles = items["tiles"];
+                    console.log(items);
                     if (!items.hasOwnProperty("prefs")) {
                         _dataStore({"prefs": {"unit": "imperial", "dark": true}} );
                         $(".tile .weather").addClass("dark");
@@ -179,71 +180,75 @@ define("tab", [
                 });
             },
             _tileSwapper = function _tileSwapper(o, n) {
-                var low, hi;
+                var low,
+                    hi,
+                    opp;
 
                 if (o < n) {
+                    //moved a tile right
                     low = o;
                     hi = n;
+                    opp = 1;
                 } else {
-                    low = n;
-                    hi = o;
+                    //moved a tile left
+                    low = o;
+                    hi = n;
+                    opp = -1;
                 }
 
-                while (low < hi) {
+                while (low != hi) {
                     //Grab the two switching tiles
-                    var lowTile = $(".tile[data-index='"+low+"']"),
-                        nextTile = $(".tile[data-index='"+(low + 1)+"']");
+                    var tileLen = $(".tile").length,
+                        next = (low + (1 * opp));
+                        lowTile = $(".tile[data-index='"+low+"']"),
+                        nextTile = $(".tile[data-index='"+(next)+"']");
 
                     //switch their data-indexes
-                    lowTile.attr("data-index", low+1);
-                    nextTile.attr("data-index", low);
+                    lowTile.data("index", next).attr("data-index", next);
+                    nextTile.data("index", low).attr("data-index", low);
 
                     //need to swap the associated config files
-                    var lowConfig, lowConfigKey, hiConfig, hiConfigKey;
+                    var oldConfig, oldConfigKey, newConfig, newConfigKey;
 
                     if (_configs["weather"].hasOwnProperty(low)) {
-                        console.log('low is weather');
-                        lowConfig = _configs["weather"][low];
-                        lowConfigKey = "weather";
+                        oldConfig = _configs["weather"][low];
+                        oldConfigKey = "weather";
                         delete _configs["weather"][low];
                         delete _stored["weather"][low];
                     } else {
-                        console.log('low is stock');
-                        lowConfig = _configs["stock"][low];
-                        lowConfigKey = "stock";
+                        oldConfig = _configs["stock"][low];
+                        oldConfigKey = "stock";
                         delete _configs["stock"][low];
                     }
 
-                    if (_configs["weather"].hasOwnProperty(low + 1)) {
-                        console.log('hi is weather');
-                        hiConfig = _configs["weather"][low+1];
-                        hiConfigKey = "weather";
-                        delete _configs["weather"][low+1];
-                        delete _stored["weather"][low+1];
+                    if (_configs["weather"].hasOwnProperty(next)) {
+                        newConfig = _configs["weather"][next];
+                        newConfigKey = "weather";
+                        delete _configs["weather"][next];
+                        delete _stored["weather"][next];
                     } else {
-                        console.log('hi is stock');
-                        hiConfig = _configs["stock"][low+1];
-                        hiConfigKey = "stock";
-                        delete _configs["stock"][low+1];
+                        newConfig = _configs["stock"][next];
+                        newConfigKey = "stock";
+                        delete _configs["stock"][next];
                     }
 
-                    _configs[lowConfigKey][low + 1] = lowConfig;
-                    _configs[hiConfigKey][low] = hiConfig;
+                    _configs[oldConfigKey][next] = oldConfig;
+                    _configs[newConfigKey][low] = newConfig;
 
                     //lastly swap in the tiles array
                     var oldLow = _tiles[low];
-                    _tiles[low] = _tiles[low+1];
-                    _tiles[low+1] = oldLow;
+                    _tiles[low] = _tiles[next];
+                    _tiles[next] = oldLow;
 
-                    low++;
+                    low += (1 * opp);
                 }
 
                 _stored["configs"] = _configs;
                 _stored["tiles"] = _tiles;
                 _dataStore({"configs": _configs});
                 _dataStore({"tiles": _tiles});
-
-                console.log(_stored, _configs, _tiles);
+                _dataStore({"weather": _configs["weather"]});
+                weatherJs.resetter(_stored, _prefs, _configs);
             },
             _dataStore = function _dataStore(obj) {
                 chrome.storage.sync.set(obj, function() {
