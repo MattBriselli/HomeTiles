@@ -129,8 +129,6 @@ define([
                     y = d3.scaleLinear().rangeRound([height, 0]),
                     lastY = data["open"];
 
-                console.log(data, code);
-
                 var line = d3.line()
                     .x(function(d) {
                         return x(parseTime(d.minute));
@@ -181,7 +179,7 @@ define([
                         .attr("text-anchor", "end");
 
                 var xTicks = $(chart).find(".xAxis .tick");
-                if (xTicks.length > 8) {
+                if (xTicks.length >= 8) {
                     for (var i = 0; i < xTicks.length; i++) {
                         if (i % 2 == 0) {
                             $(xTicks[i]).remove();
