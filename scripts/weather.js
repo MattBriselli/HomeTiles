@@ -130,7 +130,7 @@ define([
                         // realFeel(wData["main"]["temp"], wData["main"]["humidity"]));
                     tileJs.init(tile, index);
                 } else {
-                    tileJs.init(tile, index, errorData);
+                    tileJs.error(tile, index, errorData);
                 }
                 _remover(index);
             },

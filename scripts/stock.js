@@ -43,10 +43,10 @@ define([
                         _grapher(data, code, index);
                         _dataInfo(data, code, index);
                     } else {
-                        tileJs.init($(_tmpl), index, _configs["stock"][index]);
+                        tileJs.error($(_tmpl), index, _configs["stock"][index]);
                     }
                 }).fail(function(error) {
-                    tileJs.init($(_tmpl), index, _configs["stock"][index]);
+                    tileJs.error($(_tmpl), index, _configs["stock"][index]);
                     console.log('ERROR' + error + 'FAILED TO LOAD STOCK DATA');
                 });
             },
