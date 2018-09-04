@@ -127,7 +127,7 @@ define([
                     parseTime = d3.timeParse("%H:%M"),
                     x = d3.scaleTime().rangeRound([0, width]),
                     y = d3.scaleLinear().rangeRound([height, 0]),
-                    lastY = data["close"];
+                    lastY = data["open"];
 
                 console.log(data, code);
 
