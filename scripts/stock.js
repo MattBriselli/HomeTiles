@@ -127,7 +127,9 @@ define([
                     parseTime = d3.timeParse("%H:%M"),
                     x = d3.scaleTime().rangeRound([0, width]),
                     y = d3.scaleLinear().rangeRound([height, 0]),
-                    lastY = 0;
+                    lastY = data["close"];
+
+                console.log(data, code);
 
                 var line = d3.line()
                     .x(function(d) {
@@ -226,7 +228,7 @@ define([
                     var dVal = dchart[dataIndex]["close"];
                     if (!dVal || dVal == -1) {
                         var off = 1;
-                        while (!dVal || dVal < 0) {
+                        while (!dVal || dVal <= 0) {
                             var first = dataIndex + off,
                                 sec = dataIndex - off,
                                 firstV = -1,
@@ -306,7 +308,7 @@ define([
                 }
 
                 if (!last["close"] || last["close"] < 0) {
-                    while (len > 0 && (!last["close"] || last["close"] < 0)) {
+                    while (len > 0 && (!last["close"] || last["close"] <= 0)) {
                         len -= 1;
                         last = data[code]["chart"][len];
                     }
