@@ -152,7 +152,6 @@ define("tab", [
                     _prefs = items["prefs"];
                     _configs = items["configs"];
                     _tiles = items["tiles"];
-                    console.log(items);
                     if (!items.hasOwnProperty("prefs")) {
                         _dataStore({"prefs": {"unit": "imperial", "dark": true}} );
                         $(".tile .weather").addClass("dark");
