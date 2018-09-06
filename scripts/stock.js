@@ -322,6 +322,7 @@ define([
                     middleString = prefix + _decFormat(change);
                     rightString = "(" + prefix + _decFormat(changeP)+"%)";
 
+
                 if (data[code]["quote"]["calculationPrice"] == "close") {
                     left.text("$" + _decFormat(data[code]["quote"]["extendedPrice"]));
                     middle.append("<div>" + middleString + "</div><div>" + rightString + "</div>");
@@ -351,7 +352,11 @@ define([
                         $(right).css("color", "green") : $(right).css("color", "red");
 
                 } else {
-                    left.text("$" + _decFormat(last["close"]));
+                    if (data[code]["quote"]["calculationPrice"] == "previousclose") {
+                        left.text("$" + _decFormat(data[code]["quote"]["previousClose"]));
+                    } else {
+                        left.text("$" + _decFormat(last["close"]));
+                    }
                     middle.hide();
                     left.css("width", "45%");
                     right.css("width", "55%");
@@ -362,12 +367,12 @@ define([
                 }
 
                 if (change > 0) {
-                        $(left).css("color", "green");
-                        $(middle).css("color", "green");
-                    } else {
-                        $(left).css("color", "red");
-                        $(middle).css("color", "red");
-                    }
+                    $(left).css("color", "green");
+                    $(middle).css("color", "green");
+                } else {
+                    $(left).css("color", "red");
+                    $(middle).css("color", "red");
+                }
 
 
 
