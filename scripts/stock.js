@@ -127,25 +127,23 @@ define([
                     parseTime = d3.timeParse("%H:%M"),
                     x = d3.scaleTime().rangeRound([0, width]),
                     y = d3.scaleLinear().rangeRound([height, 0]),
-                    lastY = data["open"];
-
-                var line = d3.line()
-                    .x(function(d) {
-                        return x(parseTime(d.minute));
-                    })
-                    .y(function(d) {
-                        if (d.average > 0) {
-                            lastY = d.average;
-                            return y(d.average);
-                        } else if (d.marketAverage > 0) {
-                            lastY = d.marketAverage;
-                            return y(d.marketAverage);
-                        } else {
-                            return y(lastY);
-                        }
-                    });
-
-                var ddata = data[code]["chart"];
+                    lastY = data["open"],
+                    ddata = data[code]["chart"],
+                    line = d3.line()
+                        .x(function(d) {
+                            return x(parseTime(d.minute));
+                        })
+                        .y(function(d) {
+                            if (d.average > 0) {
+                                lastY = d.average;
+                                return y(d.average);
+                            } else if (d.marketAverage > 0) {
+                                lastY = d.marketAverage;
+                                return y(d.marketAverage);
+                            } else {
+                                return y(lastY);
+                            }
+                        });
 
                 x.domain(d3.extent(ddata, function(d) { return parseTime(d.minute); }));
                 y.domain(d3.extent(ddata, function(d) {
@@ -202,7 +200,7 @@ define([
                 });
             },
             _hoverLine = function _hoverLine(e, g, chart, ddata) {
-                if (!$(e["target"]).hasClass("line")) {
+                if (!$(e["target"]).hasClass("line") && !$(e["target"]).hasClass("lineText")) {
                     chart.parents(".tileBody").find(".line, .lineText").remove();
                     var svgRect = chart[0].getBoundingClientRect(),
                         y = svgRect["height"] - svgRect["y"],
