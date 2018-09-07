@@ -395,8 +395,11 @@ define([
 
                 var numS = numRound.toString(),
                     numSplit = numS.split(".");
+                console.log(numSplit);
                 if (numSplit && numSplit.length > 1 && numSplit[1].length == 1) {
                     return numS + "0";
+                } else if (numSplit && numSplit.length == 1) {
+                    return numS + ".00";
                 }
                 
                 return numRound;
