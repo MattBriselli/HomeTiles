@@ -318,7 +318,7 @@ define([
                         changeP = 100 * (last["close"] / (first["open"]) -1);
                 }
 
-                var prefix = (change >= 0) ? "+" : "",
+                var prefix = (change > 0) ? "+" : "",
                     middleString = prefix + _decFormat(change);
                     rightString = "(" + prefix + _decFormat(changeP)+"%)";
 
@@ -329,7 +329,7 @@ define([
                     middle.css("margin-top", "-6px");
                     var extChange = data[code]["quote"]["extendedChange"],
                         extPerc = data[code]["quote"]["extendedChangePercent"] * 100,
-                        extPrefix = (extChange >= 0) ? "+" : "",
+                        extPrefix = (extChange > 0) ? "+" : "",
                         extString = "<div class='aH' style='font-size: 10px;'>After Hours</div>";
 
                     extString += "<div>" + extPrefix + _decFormat(extChange) + "</div>";
@@ -338,7 +338,7 @@ define([
                     right.append(extString);
                     right.css("margin-top", "-7px").css("font-size", "14px");
 
-                    if (change > 0) {
+                    if (change >= 0) {
                         $(left).css("color", "green");
                         $(middle).css("color", "green");
                         
@@ -348,7 +348,7 @@ define([
                         
                     }
 
-                    (extChange > 0) ?
+                    (extChange >= 0) ?
                         $(right).css("color", "green") : $(right).css("color", "red");
 
                 } else {
@@ -362,11 +362,11 @@ define([
                     right.css("width", "55%");
                     right.text(middleString + " " + rightString);
 
-                    (change > 0) ?
+                    (change >= 0) ?
                         $(right).css("color", "green") : $(right).css("color", "red");
                 }
 
-                if (change > 0) {
+                if (change >= 0) {
                     $(left).css("color", "green");
                     $(middle).css("color", "green");
                 } else {
@@ -397,7 +397,7 @@ define([
                     numSplit = numS.split(".");
                 if (numSplit && numSplit.length > 1 && numSplit[1].length == 1) {
                     return numS + "0";
-                } else if (numSplit && numSplit.length == 1) {
+                } else if (numSplit && numSplit.length == 1 && numSplit[0] != "0") {
                     return numS + ".00";
                 }
                 
