@@ -252,7 +252,7 @@ body {
     display: inline-block;
 }
 .weather .location {
-    font: 24px Arial;
+    font: 22px Arial;
     margin: 15% 0 0 3%;
 }
 .tile .location, .tile .conditions, .tile .clouds {
