@@ -295,6 +295,8 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["chart"][0];
 
+                console.log(data);
+
                 if (!first["open"] || first["open"] < 0) {
                     var ind = 0;
                     while (ind < len && (!data[code]["chart"][ind]["open"] || data[code]["chart"][ind]["open"] < 0)) {
@@ -323,7 +325,8 @@ define([
                     rightString = "(" + prefix + _decFormat(changeP)+"%)";
 
 
-                if (data[code]["quote"]["calculationPrice"] == "close") {
+                if (data[code]["quote"]["calculationPrice"] == "close" || 
+                    (data[code]["quote"]["calculationPrice"] == "previousclose" && data[code]["quote"]["extendedChange"] != 0)) {
                     left.text("$" + _decFormat(data[code]["quote"]["extendedPrice"]));
                     middle.append("<div>" + middleString + "</div><div>" + rightString + "</div>");
                     middle.css("margin-top", "-6px");
@@ -352,11 +355,7 @@ define([
                         $(right).css("color", "green") : $(right).css("color", "red");
 
                 } else {
-                    if (data[code]["quote"]["calculationPrice"] == "previousclose") {
-                        left.text("$" + _decFormat(data[code]["quote"]["previousClose"]));
-                    } else {
-                        left.text("$" + _decFormat(last["close"]));
-                    }
+                    left.text("$" + _decFormat(last["close"]));
                     middle.hide();
                     left.css("width", "45%");
                     right.css("width", "55%");
