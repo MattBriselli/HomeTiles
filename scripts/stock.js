@@ -396,6 +396,8 @@ define([
                     return numS + "0";
                 } else if (numSplit && numSplit.length == 1 && numSplit[0] != "0") {
                     return numS + ".00";
+                } else if (numS == "0") {
+                    return "0.00";
                 }
                 
                 return numRound;
