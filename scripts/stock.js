@@ -295,8 +295,6 @@ define([
                     last = data[code]["chart"][len-1],
                     first = data[code]["chart"][0];
 
-                console.log(data);
-
                 if (!first["open"] || first["open"] < 0) {
                     var ind = 0;
                     while (ind < len && (!data[code]["chart"][ind]["open"] || data[code]["chart"][ind]["open"] < 0)) {
