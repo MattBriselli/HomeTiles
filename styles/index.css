@@ -5,6 +5,7 @@ body {
     background-repeat: no-repeat;
     overflow: hidden;
     height: 100%;
+    font-family: sans-serif;
 }
 .body {
     position: absolute;
