@@ -22,7 +22,7 @@
     "requirejs": "^2.3.5",
     "sortablejs": "^1.7.0",
     "text": "github:requirejs/text",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {}
 }
