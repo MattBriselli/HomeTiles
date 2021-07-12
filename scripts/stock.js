@@ -32,7 +32,8 @@ define([
                 _tmpl = tmpl;
 
                 var code = _configs["stock"][index]["stock"],
-                    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=" + code + "&types=quote,news,chart&range=1d";
+                    url = "https://cloud.iexapis.com/v1/stock/market/batch?format=json&symbols=" + code + "&types=quote,news,chart&range=1d";
+                    url = "https://cloud-sse.iexapis.com/stable/stocksUS?token=pk_7872ba9a73e1414fbb38092003e6e895 &symbols="+code;
                 $.ajax({
                     url: url,
                     type: "GET"
@@ -370,8 +371,6 @@ define([
                     $(left).css("color", "red");
                     $(middle).css("color", "red");
                 }
-
-
 
                 if (prefix !== "+") {
                     left.parents(".tile").find(".curve").attr("stroke", "red");
