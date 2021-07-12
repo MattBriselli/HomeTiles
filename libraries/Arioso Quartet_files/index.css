@@ -1,0 +1,8 @@
+.rightCol a img {
+    height: 175px;
+    width: 175px;
+    padding: 5px 0;
+}
+.rightCol img.handLogo {
+    margin-left: 10%;
+}
